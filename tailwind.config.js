@@ -22,7 +22,10 @@ export default {
       },
       colors: {
         "dark-1": "#1A1B1F",
+        "dark-2": "#1E212B",
         "bright-1": "#9FFF05",
+        "bright-2": "#84D200",
+        "font-white": "#FEFEFF",
       },
       keyframes: {
         "accordion-down": {

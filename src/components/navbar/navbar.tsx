@@ -13,7 +13,7 @@ export const Navbar: FC = (): ReactElement => {
   ];
 
   return (
-    <nav className="flex w-full items-center justify-between pt-5">
+    <nav className="flex h-[15%] w-full items-center justify-between">
       <section>
         <img
           src={path === "/login" ? "logo/white.png" : "logo/black.png"}
@@ -27,7 +27,7 @@ export const Navbar: FC = (): ReactElement => {
             <li key={index}>
               <Link
                 to={link.to}
-                className={`hover:bg-dark-1 hover:text-bright-1 flex items-center justify-center gap-1 rounded-md ${link.text === "Login" ? "bg-bright-1 underline underline-offset-2" : "bg-white"}  px-4 py-2`}
+                className={`flex items-center justify-center gap-1 rounded-md hover:bg-dark-1 hover:text-bright-1 ${link.text === "Login" ? "bg-bright-1 underline underline-offset-2" : "bg-white"}  px-4 py-2`}
               >
                 {link.text} {link.text === "Login" && <FiLogIn />}
               </Link>
