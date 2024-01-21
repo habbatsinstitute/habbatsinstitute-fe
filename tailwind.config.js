@@ -17,6 +17,13 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+      },
+      colors: {
+        "dark-1": "#1A1B1F",
+        "bright-1": "#9FFF05",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
