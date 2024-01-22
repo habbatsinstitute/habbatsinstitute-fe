@@ -77,7 +77,7 @@ export const Team: FC = (): ReactElement => {
               <img
                 src="illustrations/doctor.png"
                 alt="doctor"
-                className="relative -top-14 scale-75"
+                className="relative -right-24 -top-14 scale-75"
               />
             </section>
           </section>
