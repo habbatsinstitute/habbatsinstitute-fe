@@ -28,6 +28,8 @@ export default {
         "font-white": "#FEFEFF",
         "font-black-1": "#1E212B",
         "font-black-2": "#707075",
+        "font-black-3": "#043F49",
+        "light-2": "#F8F7F5",
       },
       keyframes: {
         "accordion-down": {

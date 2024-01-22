@@ -14,7 +14,7 @@ export const Navbar: FC = (): ReactElement => {
   ];
 
   return (
-    <nav className="my-5 flex h-[56px] w-full items-center justify-between">
+    <nav className="container my-5 flex h-[56px] w-full items-center justify-between">
       <section className="cursor-pointer" onClick={() => navigate("/")}>
         <img
           src={path === "/login" ? "logos/white.png" : "logos/black.png"}
