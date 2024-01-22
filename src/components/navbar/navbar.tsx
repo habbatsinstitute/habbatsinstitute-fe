@@ -1,9 +1,10 @@
 import { FC, ReactElement } from "react";
 import { FiLogIn } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Navbar: FC = (): ReactElement => {
   const path = window.location.pathname;
+  const navigate = useNavigate();
 
   const links = [
     { to: "/", text: "Home" },
@@ -14,9 +15,9 @@ export const Navbar: FC = (): ReactElement => {
 
   return (
     <nav className="my-5 flex h-[56px] w-full items-center justify-between">
-      <section>
+      <section className="cursor-pointer" onClick={() => navigate("/")}>
         <img
-          src={path === "/login" ? "logo/white.png" : "logo/black.png"}
+          src={path === "/login" ? "logos/white.png" : "logos/black.png"}
           alt="logo"
           className="w-24"
         />

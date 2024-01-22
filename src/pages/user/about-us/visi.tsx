@@ -14,14 +14,14 @@ export const Visi: FC = (): ReactElement => {
         internasional.
       </h2>
       <img
-        src="/image/about-us.png"
+        src="/images/about-us.png"
         alt="about us"
         className="scale-90 object-cover"
       />
       <section className="flex w-full">
         <section className="grid h-full w-1/2 place-items-center">
           <img
-            src="/logo/sehat-nabawi.png"
+            src="/logos/sehat-nabawi.png"
             alt="logo"
             className="scale-75 object-cover"
           />
@@ -49,7 +49,7 @@ export const Visi: FC = (): ReactElement => {
         </section>
         <section className="grid h-full w-1/2 place-items-center">
           <img
-            src="/image/doctor.png"
+            src="/images/doctor.png"
             alt="doctor"
             className="scale-75 object-cover"
           />

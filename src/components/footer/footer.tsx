@@ -8,7 +8,7 @@ export const Footer: FC = (): ReactElement => {
     <footer className="bg-dark-2 absolute bottom-0 flex h-[258px] w-full">
       <section className="flex h-full w-1/2 flex-col justify-evenly pl-[5vw]">
         <section className="flex flex-col gap-3 text-white">
-          <img src="/logo/white.png" alt="logo" className="w-20" />
+          <img src="/logos/white.png" alt="logo" className="w-20" />
           <section className="flex gap-3">
             <FaInstagram />
             <FaTiktok />
