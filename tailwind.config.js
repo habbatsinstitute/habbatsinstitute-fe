@@ -26,6 +26,8 @@ export default {
         "bright-1": "#9FFF05",
         "bright-2": "#84D200",
         "font-white": "#FEFEFF",
+        "font-black-1": "#1E212B",
+        "font-black-2": "#707075",
       },
       keyframes: {
         "accordion-down": {

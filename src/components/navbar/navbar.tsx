@@ -13,7 +13,7 @@ export const Navbar: FC = (): ReactElement => {
   ];
 
   return (
-    <nav className="flex h-[15%] w-full items-center justify-between">
+    <nav className="my-5 flex h-[56px] w-full items-center justify-between">
       <section>
         <img
           src={path === "/login" ? "logo/white.png" : "logo/black.png"}

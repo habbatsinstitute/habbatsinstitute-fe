@@ -4,10 +4,10 @@ import { CardLogin, ImgLogin } from ".";
 
 export const Login: FC = (): ReactElement => {
   return (
-    <main className="flex h-[130vh] w-full flex-col bg-[url('/background/green.png')] font-inter">
-      <section className="container h-[70%] w-full">
+    <main className="relative flex h-[850px] w-full flex-col bg-[url('/background/green.png')] font-inter">
+      <section className="container h-full w-full">
         <Navbar />
-        <section className="flex h-[85%] w-full">
+        <section className="flex h-[60%] w-full">
           <CardLogin />
           <ImgLogin />
         </section>

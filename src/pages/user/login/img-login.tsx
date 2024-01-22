@@ -6,7 +6,7 @@ export const ImgLogin: FC = (): ReactElement => {
       <img
         src="/illustration/login.png"
         alt="login"
-        className="w-full object-cover"
+        className="h-full w-full object-cover"
       />
     </section>
   );
