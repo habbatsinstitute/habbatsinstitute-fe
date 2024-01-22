@@ -2,7 +2,7 @@ import { Button } from "@/components";
 import { FC, ReactElement } from "react";
 
 export const Team: FC = (): ReactElement => {
-  const team = [
+  const teams = [
     {
       name: "Dr. Insan Agung Nugroho",
       position: "Konsultan Medis",
@@ -36,17 +36,17 @@ export const Team: FC = (): ReactElement => {
   ];
 
   return (
-    <section className="flex h-[30%] w-full flex-col items-center justify-between">
+    <section className="flex h-[30%] w-full flex-col gap-10">
       <section className="container flex w-full flex-col items-center justify-center gap-2 pt-20">
         <h1 className="text-font-black-1 text-[1.5rem] font-bold">Tim Kami</h1>
-        <p className="text-font-black-2">
+        <p className="text-font-black-2 w-1/2 text-center">
           Memiliki team yang kuat di bidang produksi, marketing, perizinan yang
           menguasai bidangnya dan terbaik di kelasnya.
         </p>
       </section>
 
       <section className="container flex w-full justify-center gap-3">
-        {team.map(({ name, position, image, alt }, index) => (
+        {teams.map(({ name, position, image, alt }, index) => (
           <section
             key={index}
             className="flex flex-col items-center justify-center"
@@ -77,7 +77,7 @@ export const Team: FC = (): ReactElement => {
               <img
                 src="illustrations/doctor.png"
                 alt="doctor"
-                className="relative -right-24 -top-14 scale-75"
+                className="relative -right-24 -top-16 scale-75"
               />
             </section>
           </section>

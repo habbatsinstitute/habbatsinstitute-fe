@@ -27,7 +27,7 @@ export const Footer: FC = (): ReactElement => {
             <Link to={"/about-us"}>About</Link>
             <Link to={"/login"}>Login</Link>
           </section>
-          <p className="text-font-white mr-[5%] mt-[5%] w-[40%]">
+          <p className="text-font-white mr-[30%] mt-[5%] w-[40%]">
             Arcamanik Endah Ruko 01 No.07 Bandung, Jawa Barat.
           </p>
         </section>
