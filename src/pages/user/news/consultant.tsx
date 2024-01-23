@@ -17,7 +17,7 @@ export const Consultant: FC = (): ReactElement => {
 
           <section className="flex w-1/2 items-center justify-center">
             <img
-              src="illustrations/doctor.png"
+              src="/illustrations/doctor.png"
               alt="doctor"
               className="relative -right-24 -top-20 scale-75"
             />

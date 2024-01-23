@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Crash, NotFound } from "./components";
-import { AboutUs, Course, Home, Login, News } from "./pages";
+import { AboutUs, Course, Home, Login, News, NewsDetail } from "./pages";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +16,11 @@ export const router = createBrowserRouter([
   {
     path: "/news",
     element: <News />,
+    errorElement: <Crash />,
+  },
+  {
+    path: "/news/:id",
+    element: <NewsDetail />,
     errorElement: <Crash />,
   },
   {
