@@ -1,4 +1,4 @@
 export * from "./news";
-export * from "./header";
+export * from "./news-header";
 export * from "./all-news";
 export * from "./consultant";

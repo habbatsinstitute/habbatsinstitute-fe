@@ -2,7 +2,7 @@ import { Button, Trend } from "@/components";
 import { FC, ReactElement } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 
-export const Body: FC = (): ReactElement => {
+export const NewsDetailBody: FC = (): ReactElement => {
   return (
     <section className="container flex w-full flex-col items-center">
       <hr className="h-[2px] w-[93%] bg-[#36373C]" />

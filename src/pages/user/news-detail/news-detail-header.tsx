@@ -1,6 +1,6 @@
 import { FC, ReactElement } from "react";
 
-export const Header: FC = (): ReactElement => {
+export const NewsDetailHeader: FC = (): ReactElement => {
   return (
     <section className="container flex h-[510px] w-full flex-col items-center justify-evenly gap-1">
       <img

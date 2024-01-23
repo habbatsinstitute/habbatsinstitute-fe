@@ -1,6 +1,6 @@
 import { FC, ReactElement } from "react";
 
-export const Header: FC = (): ReactElement => {
+export const NewsHeader: FC = (): ReactElement => {
   const labels = [
     { name: "Tanaman Herbal" },
     { name: "Teknologi Pengobatan" },
