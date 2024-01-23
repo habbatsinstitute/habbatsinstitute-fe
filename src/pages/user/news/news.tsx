@@ -1,11 +1,16 @@
-import { Navbar } from "@/components";
+import { Footer, Navbar, Trend } from "@/components";
 import { FC, ReactElement } from "react";
+import { AllNews, Consultant, Header } from ".";
 
 export const News: FC = (): ReactElement => {
   return (
-    <main className="flex h-[120vh] w-full flex-col font-inter">
+    <main className="relative flex h-[3000px] w-full flex-col font-inter">
       <Navbar />
-      News
+      <Header />
+      <Trend />
+      <AllNews />
+      <Consultant />
+      <Footer />
     </main>
   );
 };

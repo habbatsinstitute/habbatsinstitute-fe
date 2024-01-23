@@ -1,9 +1,18 @@
+import {
+  Button,
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components";
 import { FC, ReactElement } from "react";
-import { Button } from "..";
 import { FaArrowRightLong } from "react-icons/fa6";
 
-export const Trend: FC = (): ReactElement => {
-  const trends = [
+export const AllNews: FC = (): ReactElement => {
+  const news = [
     {
       title: "Si Kuning Kunyit Kaya Manfaat",
       description:
@@ -26,16 +35,35 @@ export const Trend: FC = (): ReactElement => {
       label: "Teknologi Pengobatan",
       posted: "02 jan 2024",
     },
+    {
+      title: "Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.",
+      description: "Tingkat keberhasilan pengobatan kanker..",
+      image: "/images/mannotriose.png",
+      label: "Teknologi Pengobatan",
+      posted: "02 jan 2024",
+    },
+    {
+      title: "Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.",
+      description: "Tingkat keberhasilan pengobatan kanker..",
+      image: "/images/mannotriose.png",
+      label: "Teknologi Pengobatan",
+      posted: "02 jan 2024",
+    },
+    {
+      title: "Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.",
+      description: "Tingkat keberhasilan pengobatan kanker..",
+      image: "/images/mannotriose.png",
+      label: "Teknologi Pengobatan",
+      posted: "02 jan 2024",
+    },
   ];
 
   return (
-    <section className="container flex h-[25%] w-full flex-col bg-white">
+    <section className="container flex h-[40%] w-full flex-col bg-white">
       <hr className="h-[2px] w-full bg-[#36373C]" />
-      <h1 className="mt-7 text-[2rem] font-bold text-font-black-1">
-        News Trend
-      </h1>
-      <section className="mt-10 flex w-full justify-between gap-10">
-        {trends.map((trend, index) => (
+      <h1 className="mt-7 text-[2rem] font-bold text-font-black-1">All News</h1>
+      <section className="mt-10 flex w-full flex-wrap justify-between gap-10">
+        {news.map((trend, index) => (
           <section className="flex h-[470px] w-[30%] flex-col" key={index}>
             <img
               src={trend.image}
@@ -60,6 +88,22 @@ export const Trend: FC = (): ReactElement => {
             </section>
           </section>
         ))}
+        <Pagination className="flex w-full justify-start">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious href="#" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </section>
     </section>
   );
