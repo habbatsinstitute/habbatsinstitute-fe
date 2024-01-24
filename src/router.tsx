@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Crash, NotFound } from "./components";
 import { AboutUs, Course, Home, Login, News, NewsDetail } from "./pages";
+import { Dashboard } from "./pages/admin";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,11 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+    errorElement: <Crash />,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
     errorElement: <Crash />,
   },
   {
