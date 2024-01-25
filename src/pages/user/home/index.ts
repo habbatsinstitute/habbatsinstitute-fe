@@ -1,3 +1,1 @@
-export * from "./home";
-export * from "./home-header";
-export * from "./home-body";
+export * from "./main";

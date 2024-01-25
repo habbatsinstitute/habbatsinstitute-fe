@@ -1,11 +1,10 @@
-import { Navbar } from "@/components";
 import { FC, ReactElement } from "react";
-import { NewsDetailBody, NewsDetailHeader } from ".";
+import { NewsDetailHeader } from "./news-detail-header";
+import { NewsDetailBody } from "./news-detail-body";
 
 export const NewsDetail: FC = (): ReactElement => {
   return (
     <main className="relative flex h-auto w-full flex-col font-inter">
-      <Navbar />
       <NewsDetailHeader />
       <NewsDetailBody />
     </main>
