@@ -3,56 +3,87 @@ import { FiUsers } from "react-icons/fi";
 import { GoBook } from "react-icons/go";
 import { LuNewspaper } from "react-icons/lu";
 import { PiDiamondsFour } from "react-icons/pi";
-import { NavLink } from "react-router-dom";
-
-const navLinksData = [
-  {
-    to: "/dashboard",
-    icon: <PiDiamondsFour className="text-bright-1" />,
-    label: "Dashboard",
-  },
-  {
-    to: "/dashboard/courses",
-    icon: <GoBook className="text-bright-1" />,
-    label: "Courses",
-  },
-  {
-    to: "/dashboard/news",
-    icon: <LuNewspaper className="text-bright-1" />,
-    label: "News",
-  },
-  {
-    to: "/dashboard/users",
-    icon: <FiUsers className="text-bright-1" />,
-    label: "Users",
-  },
-];
-
-const getLinkClassName = (isActive: boolean) => {
-  return `py-3 font-semibold gap-2 items-center border border-bright-1 flex pl-[30%] hover:bg-slate-800 items-center ${isActive ? "bg-white text-dark-3 hover:bg-white" : "text-white"}`;
-};
+import { Link, useLocation } from "react-router-dom";
+import clsx from "clsx";
 
 export const SideBar: FC = (): ReactElement => {
+  const location = useLocation();
+
+  const navLinksData = [
+    {
+      to: "/dashboard",
+      icon: (
+        <PiDiamondsFour
+          className={clsx({
+            "text-bright-1": location.pathname !== "/dashboard",
+          })}
+        />
+      ),
+      label: "Dashboard",
+    },
+    {
+      to: "/dashboard/courses",
+      icon: (
+        <GoBook
+          className={clsx({
+            "text-bright-1": location.pathname !== "/dashboard/courses",
+          })}
+        />
+      ),
+      label: "Courses",
+    },
+    {
+      to: "/dashboard/news",
+      icon: (
+        <LuNewspaper
+          className={clsx({
+            "text-bright-1": location.pathname !== "/dashboard/news",
+          })}
+        />
+      ),
+      label: "News",
+    },
+    {
+      to: "/dashboard/users",
+      icon: (
+        <FiUsers
+          className={clsx({
+            "text-bright-1": location.pathname !== "/dashboard/users",
+          })}
+        />
+      ),
+      label: "Users",
+    },
+  ];
+
   return (
     <aside className="flex h-full w-[20%] flex-col justify-between bg-font-black-1">
-      <section className="grid h-40 place-items-center">
+      <section className="grid h-52 place-items-center">
         <img src="/logos/bright.png" alt="logo" className="w-28 object-cover" />
       </section>
 
       <section className="flex h-full w-full flex-col">
-        {navLinksData.map(({ to, icon, label }) => (
-          <NavLink
-            key={to}
+        {navLinksData.map(({ to, icon, label }, index) => (
+          <Link
+            key={index}
             to={to}
-            className={({ isActive }) => getLinkClassName(isActive)}
+            className={clsx(
+              "flex items-center justify-center gap-2 border-y border-bright-1 py-3 font-semibold",
+              {
+                "bg-light-2 text-dark-3": location.pathname === to,
+                "text-font-white hover:bg-slate-800": location.pathname !== to,
+                "pr-5": label === "Courses",
+                "pr-10": label === "News" || label === "Users",
+              },
+            )}
           >
             {icon}
             {label}
-          </NavLink>
+          </Link>
         ))}
       </section>
 
-      <p className="mb-10 w-3/4 text-font-white opacity-50">
+      <p className="mb-10 w-3/4 pl-[10%] text-font-white opacity-50">
         © 2024 - Habbats Institute. All rights reserved.
       </p>
     </aside>
