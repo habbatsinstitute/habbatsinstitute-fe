@@ -15,7 +15,8 @@ export const SideBar: FC = (): ReactElement => {
       icon: (
         <PiDiamondsFour
           className={clsx({
-            "text-bright-1": location.pathname !== "/dashboard",
+            "text-bright-1":
+              !location.pathname.startsWith("/dashboard/courses"),
           })}
         />
       ),
@@ -26,7 +27,8 @@ export const SideBar: FC = (): ReactElement => {
       icon: (
         <GoBook
           className={clsx({
-            "text-bright-1": location.pathname !== "/dashboard/courses",
+            "text-bright-1":
+              !location.pathname.startsWith("/dashboard/courses"),
           })}
         />
       ),
@@ -37,7 +39,7 @@ export const SideBar: FC = (): ReactElement => {
       icon: (
         <LuNewspaper
           className={clsx({
-            "text-bright-1": location.pathname !== "/dashboard/news",
+            "text-bright-1": !location.pathname.startsWith("/dashboard/news"),
           })}
         />
       ),
@@ -70,8 +72,22 @@ export const SideBar: FC = (): ReactElement => {
             className={clsx(
               "flex items-center justify-center gap-2 border-y border-bright-1 py-3 font-semibold",
               {
-                "bg-light-2 text-dark-3": location.pathname === to,
-                "text-font-white hover:bg-slate-800": location.pathname !== to,
+                "bg-light-2 text-dark-3":
+                  location.pathname === to ||
+                  (to === "/dashboard/courses" &&
+                    location.pathname.startsWith("/dashboard/courses")) ||
+                  (to === "/dashboard/news" &&
+                    location.pathname.startsWith("/dashboard/news")),
+                "text-font-white hover:bg-slate-800":
+                  location.pathname !== to &&
+                  !(
+                    to === "/dashboard/courses" &&
+                    location.pathname.startsWith("/dashboard/courses")
+                  ) &&
+                  !(
+                    to === "/dashboard/news" &&
+                    location.pathname.startsWith("/dashboard/news")
+                  ),
                 "pr-5": label === "Courses",
                 "pr-10": label === "News" || label === "Users",
               },
