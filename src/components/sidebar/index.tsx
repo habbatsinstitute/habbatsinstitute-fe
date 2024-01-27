@@ -15,8 +15,8 @@ export const SideBar: FC = (): ReactElement => {
       icon: (
         <PiDiamondsFour
           className={clsx({
-            "text-bright-1":
-              !location.pathname.startsWith("/dashboard/courses"),
+            "text-bright-1": location.pathname !== "/dashboard",
+            "text-dark-3": location.pathname === "/dashboard",
           })}
         />
       ),
