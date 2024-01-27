@@ -14,29 +14,24 @@ import { ColumnDef } from "@tanstack/react-table";
 import { LuTrash } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
-export type Payment = {
+export type News = {
   id: string;
-  videos: string;
-  title: string;
-  author: string;
+  news: string;
+  category: string;
   uploadTime: string;
   manageButton?: () => void;
   deleteButton?: () => void;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<News>[] = [
   { accessorKey: "id", header: "No" },
   {
-    accessorKey: "videos",
-    header: "Videos",
+    accessorKey: "news",
+    header: "News Title",
   },
   {
-    accessorKey: "title",
-    header: "Title",
-  },
-  {
-    accessorKey: "author",
-    header: "Author",
+    accessorKey: "category",
+    header: "Category",
   },
   {
     accessorKey: "uploadTime",
@@ -71,8 +66,8 @@ export const columns: ColumnDef<Payment>[] = [
                 </span>
               </AlertDialogTitle>
               <AlertDialogDescription className="text-dark-3">
-                Anda akan menghapus data course dengan judul{" "}
-                <span className="font-bold">"{cell.row.original.title}"</span>
+                Anda akan menghapus data news dengan judul{" "}
+                <span className="font-bold">"{cell.row.original.news}"</span>
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

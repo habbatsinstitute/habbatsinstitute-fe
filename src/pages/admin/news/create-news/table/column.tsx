@@ -2,17 +2,17 @@ import { ColumnDef } from "@tanstack/react-table";
 import { LuPenLine } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
-export type Payment = {
+export type News = {
   id: string;
-  title: string;
+  news: string;
   manageButton?: () => void;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<News>[] = [
   { accessorKey: "id", header: "No" },
   {
-    accessorKey: "title",
-    header: "Title",
+    accessorKey: "news",
+    header: "News Title",
   },
   {
     accessorKey: "option",

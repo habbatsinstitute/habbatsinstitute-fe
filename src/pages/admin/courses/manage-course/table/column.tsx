@@ -16,7 +16,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "option",
-    header: "Option",
+    header: "Opsi",
     cell: (cell) => (
       <section className="flex w-full justify-center py-2">
         <Link

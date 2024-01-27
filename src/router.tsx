@@ -5,7 +5,8 @@ import {
   DashboardCourseCreate,
   DashboardCourseGet,
   DashboardCourseManage,
-  DashboardNews,
+  DashboardNewsCreate,
+  DashboardNewsGet,
   DashboardUsers,
   Home,
   Login,
@@ -62,7 +63,12 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard/news",
-    element: <DashboardNews />,
+    element: <DashboardNewsGet />,
+    errorElement: <Crash />,
+  },
+  {
+    path: "/dashboard/news/add",
+    element: <DashboardNewsCreate />,
     errorElement: <Crash />,
   },
   {
