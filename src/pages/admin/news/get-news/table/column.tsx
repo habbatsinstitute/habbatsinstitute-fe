@@ -24,7 +24,7 @@ export type News = {
 };
 
 export const columns: ColumnDef<News>[] = [
-  { accessorKey: "id", header: "No" },
+  { header: "No", cell: (cell) => cell.row.index + 1 },
   {
     accessorKey: "news",
     header: "News Title",

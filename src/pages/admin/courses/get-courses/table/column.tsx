@@ -25,7 +25,7 @@ export type Payment = {
 };
 
 export const columns: ColumnDef<Payment>[] = [
-  { accessorKey: "id", header: "No" },
+  { header: "No", cell: (cell) => cell.row.index + 1 },
   {
     accessorKey: "videos",
     header: "Videos",
