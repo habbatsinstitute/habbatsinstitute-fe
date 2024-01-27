@@ -2,7 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 import {
   AboutUs,
   Dashboard,
-  DashboardCourse,
+  DashboardCourseCreate,
+  DashboardCourseGet,
+  DashboardCourseManage,
   DashboardNews,
   DashboardUsers,
   Home,
@@ -45,7 +47,17 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard/courses",
-    element: <DashboardCourse />,
+    element: <DashboardCourseGet />,
+    errorElement: <Crash />,
+  },
+  {
+    path: "/dashboard/courses/add",
+    element: <DashboardCourseCreate />,
+    errorElement: <Crash />,
+  },
+  {
+    path: "/dashboard/courses/manage/:id",
+    element: <DashboardCourseManage />,
     errorElement: <Crash />,
   },
   {

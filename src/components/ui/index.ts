@@ -5,3 +5,6 @@ export * from "./label";
 export * from "./pagination";
 export * from "./select";
 export * from "./popover";
+export * from "./table";
+export * from "./textarea";
+export * from "./alert-dialog";

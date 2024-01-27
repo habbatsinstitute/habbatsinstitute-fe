@@ -16,12 +16,26 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     const titleMap: { [key: string]: string } = {
       "/dashboard": "Dashboard",
       "/dashboard/courses": "Courses Manages",
+      "/dashboard/courses/add": "Courses Manages",
+      "/dashboard/courses/update": "Courses Manages",
       "/dashboard/news": "News Manages",
+      "/dashboard/news/add": "News Manages",
+      "/dashboard/news/update": "News Manages",
       "/dashboard/users": "Users Manages",
+      "/dashboard/users/add": "Users Manages",
+      "/dashboard/users/update": "Users Manages",
     };
 
     return titleMap[pathname] || "Dashboard";
   };
+
+  const linkItems = [
+    { to: "/dashboard", icon: <LuUser />, label: "Profile Admin" },
+    { to: "/dashboard/users", icon: <LuUsers />, label: "Manage Users" },
+    { to: "/dashboard/courses", icon: <GoBook />, label: "Manage Courses" },
+    { to: "/dashboard/news", icon: <LuNewspaper />, label: "Manage News" },
+    { to: "/", icon: <LuLogOut />, label: "Log out" },
+  ];
 
   return (
     <main className="flex h-screen w-full overflow-x-hidden overflow-y-hidden font-inter">
@@ -45,41 +59,16 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
               </PopoverTrigger>
               <PopoverContent className="w-[170px] p-0">
                 <section className="flex h-full w-full flex-col gap-2 text-slate-700">
-                  <Link
-                    to={"/admin/profile"}
-                    className="flex items-center gap-3 py-1 pl-3 hover:bg-slate-200"
-                  >
-                    <LuUser />
-                    Profile Admin
-                  </Link>
-                  <Link
-                    to={"/admin/users"}
-                    className="flex items-center gap-3 py-1 pl-3 hover:bg-slate-200"
-                  >
-                    <LuUsers />
-                    Manage Users
-                  </Link>
-                  <Link
-                    to={"/admin/courses"}
-                    className="flex items-center gap-3 py-1 pl-3 hover:bg-slate-200"
-                  >
-                    <GoBook />
-                    Manage Courses
-                  </Link>
-                  <Link
-                    to={"/admin/news"}
-                    className="flex items-center gap-3 py-1 pl-3 hover:bg-slate-200"
-                  >
-                    <LuNewspaper />
-                    Manage News
-                  </Link>
-                  <Link
-                    to={"/"}
-                    className="flex items-center gap-3  py-1 pl-3 hover:bg-slate-200"
-                  >
-                    <LuLogOut />
-                    Log out
-                  </Link>
+                  {linkItems.map((linkItem, index) => (
+                    <Link
+                      key={index}
+                      to={linkItem.to}
+                      className="flex items-center gap-3 py-1 pl-3 hover:bg-slate-200"
+                    >
+                      {linkItem.icon}
+                      {linkItem.label}
+                    </Link>
+                  ))}
                 </section>
               </PopoverContent>
             </Popover>

@@ -34,7 +34,7 @@ export const Dashboard: FC = (): ReactElement => {
   ];
 
   return (
-    <AdminLayout className="flex">
+    <AdminLayout>
       <section className="flex h-[400px] w-full flex-wrap justify-between pt-7">
         {cards.map((card, index) => (
           <Link

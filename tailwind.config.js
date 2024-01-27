@@ -30,6 +30,7 @@ export default {
         "font-black-1": "#1E212B",
         "font-black-2": "#707075",
         "font-black-3": "#043F49",
+        "font-input": "#94A3B8",
         "light-2": "#F8F7F5",
       },
       keyframes: {
