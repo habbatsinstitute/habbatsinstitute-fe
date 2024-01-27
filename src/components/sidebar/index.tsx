@@ -50,7 +50,7 @@ export const SideBar: FC = (): ReactElement => {
       icon: (
         <FiUsers
           className={clsx({
-            "text-bright-1": location.pathname !== "/dashboard/users",
+            "text-bright-1": !location.pathname.startsWith("/dashboard/users"),
           })}
         />
       ),
@@ -77,7 +77,9 @@ export const SideBar: FC = (): ReactElement => {
                   (to === "/dashboard/courses" &&
                     location.pathname.startsWith("/dashboard/courses")) ||
                   (to === "/dashboard/news" &&
-                    location.pathname.startsWith("/dashboard/news")),
+                    location.pathname.startsWith("/dashboard/news")) ||
+                  (to === "/dashboard/users" &&
+                    location.pathname.startsWith("/dashboard/users")),
                 "text-font-white hover:bg-slate-800":
                   location.pathname !== to &&
                   !(
@@ -87,6 +89,10 @@ export const SideBar: FC = (): ReactElement => {
                   !(
                     to === "/dashboard/news" &&
                     location.pathname.startsWith("/dashboard/news")
+                  ) &&
+                  !(
+                    to === "/dashboard/users" &&
+                    location.pathname.startsWith("/dashboard/users")
                   ),
                 "pr-5": label === "Courses",
                 "pr-10": label === "News" || label === "Users",

@@ -70,7 +70,7 @@ export const columns: ColumnDef<User>[] = [
                 </span>
               </AlertDialogTitle>
               <AlertDialogDescription className="text-dark-3">
-                Anda akan menghapus data username dengan judul{" "}
+                Anda akan menghapus data username{" "}
                 <span className="font-bold">
                   "{cell.row.original.username}"
                 </span>

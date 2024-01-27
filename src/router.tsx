@@ -10,6 +10,7 @@ import {
   DashboardNewsManage,
   DashboardUsersCreate,
   DashboardUsersGet,
+  DashboardUsersManage,
   Home,
   Login,
   News,
@@ -86,6 +87,11 @@ export const router = createBrowserRouter([
   {
     path: "/dashboard/users/add",
     element: <DashboardUsersCreate />,
+    errorElement: <Crash />,
+  },
+  {
+    path: "/dashboard/users/manage/:id",
+    element: <DashboardUsersManage />,
     errorElement: <Crash />,
   },
   {
