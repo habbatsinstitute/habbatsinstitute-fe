@@ -43,7 +43,7 @@ export const columns: ColumnDef<News>[] = [
     cell: (cell) => (
       <section className="flex w-24 items-center justify-between gap-2 py-1">
         <Link
-          to={`/dashboard/courses/manage/${cell.row.original.id}`}
+          to={`/dashboard/news/manage/${cell.row.original.id}`}
           className="grid h-8 w-20 place-items-center rounded-md bg-dark-2 px-2 text-font-white hover:bg-slate-700"
         >
           Manage
