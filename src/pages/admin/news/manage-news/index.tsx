@@ -121,7 +121,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
             />
           </section>
           <section className="flex w-full justify-end gap-2 py-2">
-            <Button size={"sm"} onClick={() => navigate("/dashboard/courses")}>
+            <Button size={"sm"} onClick={() => navigate("/dashboard/news")}>
               Cancel
             </Button>
             <AlertDialog>

@@ -8,3 +8,4 @@ export * from "./popover";
 export * from "./table";
 export * from "./textarea";
 export * from "./alert-dialog";
+export * from "./calendar";
