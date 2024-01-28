@@ -19,6 +19,9 @@ import * as z from "zod";
 import { loginSchema } from "../validation/login-validation";
 import { useLogin } from "../api/query";
 import { Slide, toast } from "react-toastify";
+import { getUserRole, setAccessToken, setRefreshToken } from "@/utils/token";
+import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 export const LoginBody: FC = (): ReactElement => {
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -30,7 +33,9 @@ export const LoginBody: FC = (): ReactElement => {
     },
   });
 
-  const { mutate } = useLogin();
+  const { mutate, isPending } = useLogin();
+
+  const navigate = useNavigate();
 
   function onSubmit(values: z.infer<typeof loginSchema>) {
     const payload = new FormData();
@@ -40,8 +45,12 @@ export const LoginBody: FC = (): ReactElement => {
 
     mutate(payload, {
       onSuccess: (response) => {
-        localStorage.setItem("accessToken", response.data.access_token);
-        localStorage.setItem("refreshToken", response.data.refresh_token);
+        setAccessToken(response.data.access_token);
+        setRefreshToken(response.data.refresh_token);
+
+        const role = getUserRole();
+
+        role === "2" ? navigate("/dashboard") : navigate("/");
       },
       onError: () => {
         toast.error("Invalid username atau password", {
@@ -82,6 +91,7 @@ export const LoginBody: FC = (): ReactElement => {
                         <FormLabel className="pt-1">Username</FormLabel>
                         <FormControl>
                           <Input
+                            disabled={isPending}
                             placeholder="Masukan Username"
                             type="text"
                             className={
@@ -110,6 +120,7 @@ export const LoginBody: FC = (): ReactElement => {
                         <FormLabel className="pt-1">Password</FormLabel>
                         <FormControl>
                           <Input
+                            disabled={isPending}
                             placeholder="Masukan password"
                             type="text"
                             className={
@@ -130,7 +141,12 @@ export const LoginBody: FC = (): ReactElement => {
                   )}
                 />
                 <section className="mt-5 flex w-full justify-end pr-3">
-                  <Button type="submit" disabled={!form.formState.isValid}>
+                  <Button
+                    type="submit"
+                    disabled={!form.formState.isValid || isPending}
+                    className="flex gap-2"
+                  >
+                    {isPending && <Loader2 className="w-4 animate-spin" />}{" "}
                     Login Now
                   </Button>
                 </section>

@@ -1,4 +1,5 @@
 import { Popover, PopoverContent, PopoverTrigger, SideBar } from "@/components";
+import { removeToken } from "@/utils/token";
 import { GoBook } from "react-icons/go";
 import { LuLogOut, LuNewspaper, LuUser, LuUsers } from "react-icons/lu";
 import { Link } from "react-router-dom";
@@ -64,6 +65,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                       key={index}
                       to={linkItem.to}
                       className="flex items-center gap-3 py-1 pl-3 hover:bg-slate-200"
+                      onClick={() => {
+                        if (linkItem.label === "Log out") {
+                          removeToken();
+                        }
+                      }}
                     >
                       {linkItem.icon}
                       {linkItem.label}

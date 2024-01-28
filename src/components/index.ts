@@ -5,3 +5,4 @@ export * from "./sidebar";
 export * from "./trend";
 export * from "./ui";
 export * from "./providers";
+export * from "./loading";

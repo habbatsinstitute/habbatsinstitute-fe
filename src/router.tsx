@@ -16,7 +16,8 @@ import {
   News,
   NewsDetail,
 } from "./pages";
-import { Crash, NotFound } from "./components";
+import { Crash, Loader, NotFound } from "./components";
+import { AdminMiddleware } from "./middleware/admin-middleware";
 
 export const router = createBrowserRouter([
   {
@@ -46,54 +47,22 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: <AdminMiddleware />,
+    children: [
+      { path: "", element: <Dashboard /> },
+      { path: "courses", element: <DashboardCourseGet /> },
+      { path: "courses/add", element: <DashboardCourseCreate /> },
+      { path: "courses/manage/:id", element: <DashboardCourseManage /> },
+      { path: "news", element: <DashboardNewsGet /> },
+      { path: "news/add", element: <DashboardNewsCreate /> },
+      { path: "news/manage/:id", element: <DashboardNewsManage /> },
+      { path: "users", element: <DashboardUsersGet /> },
+      { path: "users/add", element: <DashboardUsersCreate /> },
+      { path: "users/manage/:id", element: <DashboardUsersManage /> },
+    ],
     errorElement: <Crash />,
   },
-  {
-    path: "/dashboard/courses",
-    element: <DashboardCourseGet />,
-    errorElement: <Crash />,
-  },
-  {
-    path: "/dashboard/courses/add",
-    element: <DashboardCourseCreate />,
-    errorElement: <Crash />,
-  },
-  {
-    path: "/dashboard/courses/manage/:id",
-    element: <DashboardCourseManage />,
-    errorElement: <Crash />,
-  },
-  {
-    path: "/dashboard/news",
-    element: <DashboardNewsGet />,
-    errorElement: <Crash />,
-  },
-  {
-    path: "/dashboard/news/add",
-    element: <DashboardNewsCreate />,
-    errorElement: <Crash />,
-  },
-  {
-    path: "/dashboard/news/manage/:id",
-    element: <DashboardNewsManage />,
-    errorElement: <Crash />,
-  },
-  {
-    path: "/dashboard/users",
-    element: <DashboardUsersGet />,
-    errorElement: <Crash />,
-  },
-  {
-    path: "/dashboard/users/add",
-    element: <DashboardUsersCreate />,
-    errorElement: <Crash />,
-  },
-  {
-    path: "/dashboard/users/manage/:id",
-    element: <DashboardUsersManage />,
-    errorElement: <Crash />,
-  },
+  { path: "/dev", element: <Loader /> },
   {
     path: "*",
     element: <NotFound />,
