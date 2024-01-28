@@ -5,45 +5,111 @@ import {
   CardDescription,
   CardContent,
   Input,
-  CardFooter,
   Button,
+  Form,
+  FormField,
+  FormLabel,
+  FormItem,
+  FormControl,
 } from "@/components";
-import { Label } from "@radix-ui/react-label";
 import { FC, ReactElement } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { loginSchema } from "./schema";
+import * as z from "zod";
 
 export const LoginBody: FC = (): ReactElement => {
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    mode: "all",
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof loginSchema>) {
+    console.log(values);
+  }
+
   return (
     <section className="container flex h-[60%] w-full">
       <section className="flex h-full w-2/5 flex-col justify-center gap-10">
         <Card className="w-[400px] px-3 py-1">
           <CardHeader>
             <CardTitle>Login User</CardTitle>
-            <CardDescription className="pt-1 text-xs">
+            <CardDescription className="pt-3 text-xs">
               Silahkan masukan username dan password untuk mengakses fitur kamis
               dengan lengkap.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form>
-              <div className="grid w-full items-center gap-4">
-                <div className="flex items-center justify-center gap-2 space-y-1.5">
-                  <Label htmlFor="name">Username</Label>
-                  <Input id="name" placeholder="Masukan Username" type="text" />
-                </div>
-                <div className="flex items-center justify-center gap-2 space-y-1.5">
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    placeholder="Masukan Password"
-                    type="password"
-                  />
-                </div>
-              </div>
-            </form>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem className="ml-4 flex h-16 flex-col items-center">
+                      <section className="flex w-full items-center gap-2">
+                        <FormLabel className="pt-1">Username</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Masukan Username"
+                            type="text"
+                            className={
+                              form.formState.errors.username
+                                ? "border-red-400 placeholder:text-red-400"
+                                : ""
+                            }
+                            {...field}
+                          />
+                        </FormControl>
+                      </section>
+                      <section className="w-full">
+                        <p className="pl-20 text-xs font-bold text-red-400">
+                          {form.formState.errors.username?.message}
+                        </p>
+                      </section>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem className="ml-4 flex h-16 flex-col items-center">
+                      <section className="flex w-full items-center gap-2">
+                        <FormLabel className="pt-1">Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Masukan password"
+                            type="text"
+                            className={
+                              form.formState.errors.password
+                                ? "border-red-400 placeholder:text-red-400"
+                                : ""
+                            }
+                            {...field}
+                          />
+                        </FormControl>
+                      </section>
+                      <section className="w-full">
+                        <p className="pl-20 text-xs font-bold text-red-400">
+                          {form.formState.errors.password?.message}
+                        </p>
+                      </section>
+                    </FormItem>
+                  )}
+                />
+                <section className="mt-5 flex w-full justify-end pr-3">
+                  <Button type="submit" disabled={!form.formState.isValid}>
+                    Login Now
+                  </Button>
+                </section>
+              </form>
+            </Form>
           </CardContent>
-          <CardFooter className="flex w-full justify-end">
-            <Button>Login Now</Button>
-          </CardFooter>
         </Card>
         <section className="text-white">
           <p>
