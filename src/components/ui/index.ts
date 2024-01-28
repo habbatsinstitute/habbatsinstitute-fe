@@ -10,3 +10,4 @@ export * from "./textarea";
 export * from "./alert-dialog";
 export * from "./calendar";
 export * from "./form";
+export * from "./alert";

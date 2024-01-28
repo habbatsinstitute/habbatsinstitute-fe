@@ -15,8 +15,10 @@ import {
 import { FC, ReactElement } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { loginSchema } from "./schema";
 import * as z from "zod";
+import { loginSchema } from "../validation/login-validation";
+import { useLogin } from "../api/query";
+import { Slide, toast } from "react-toastify";
 
 export const LoginBody: FC = (): ReactElement => {
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -28,8 +30,33 @@ export const LoginBody: FC = (): ReactElement => {
     },
   });
 
+  const { mutate } = useLogin();
+
   function onSubmit(values: z.infer<typeof loginSchema>) {
-    console.log(values);
+    const payload = new FormData();
+
+    payload.append("username", values.username);
+    payload.append("password", values.password);
+
+    mutate(payload, {
+      onSuccess: (response) => {
+        localStorage.setItem("accessToken", response.data.access_token);
+        localStorage.setItem("refreshToken", response.data.refresh_token);
+      },
+      onError: () => {
+        toast.error("Invalid username atau password", {
+          position: "top-center",
+          autoClose: 1500,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Slide,
+        });
+      },
+    });
   }
 
   return (
