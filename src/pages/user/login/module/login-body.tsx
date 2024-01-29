@@ -122,11 +122,11 @@ export const LoginBody: FC = (): ReactElement => {
                           <Input
                             disabled={isPending}
                             placeholder="Masukan password"
-                            type="text"
+                            type="password"
                             className={
                               form.formState.errors.password
-                                ? "border-red-400 placeholder:text-red-400"
-                                : ""
+                                ? "ml-1 border-red-400 placeholder:text-red-400"
+                                : "ml-1"
                             }
                             {...field}
                           />
