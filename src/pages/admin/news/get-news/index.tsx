@@ -7,7 +7,7 @@ import { columns } from "./table/column";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { newsState } from "@/services";
-import { NewsData } from "./interface";
+import { NewsData } from "@/lib";
 
 export const DashboardNewsGet: FC = (): ReactElement => {
   const news: NewsData = useRecoilValue(newsState);

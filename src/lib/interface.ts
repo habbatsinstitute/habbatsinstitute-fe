@@ -1,4 +1,4 @@
-interface NewsItem {
+export interface NewsItem {
   id: number;
   user_id: number;
   category: string;
