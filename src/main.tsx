@@ -6,6 +6,15 @@ import { router } from "./router";
 import { QueryProvider, RecoilProvider } from "./components";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getAccessToken, getUserRole } from "./utils/token";
+
+if (getAccessToken() && getUserRole() === "2") {
+  const path = window.location.pathname.startsWith("/dashboard")
+    ? window.location.pathname
+    : "/dashboard";
+
+  router.navigate(path);
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
