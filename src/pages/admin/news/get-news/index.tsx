@@ -5,8 +5,12 @@ import { MdOutlineAddBox } from "react-icons/md";
 import { DataTable } from "./table/data-table";
 import { columns } from "./table/column";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { newsState } from "@/services";
+import { NewsData } from "./interface";
 
 export const DashboardNewsGet: FC = (): ReactElement => {
+  const news: NewsData = useRecoilValue(newsState);
   const navigate = useNavigate();
 
   return (
@@ -20,7 +24,7 @@ export const DashboardNewsGet: FC = (): ReactElement => {
           Add News
         </Button>
         <section className="mt-3 h-[400px] w-full">
-          <DataTable columns={columns} data={[]} />
+          <DataTable columns={columns} data={news.data} />
         </section>
       </section>
     </AdminLayout>

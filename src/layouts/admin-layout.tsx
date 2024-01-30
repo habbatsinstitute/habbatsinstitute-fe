@@ -3,6 +3,10 @@ import { removeToken } from "@/utils/token";
 import { GoBook } from "react-icons/go";
 import { LuLogOut, LuNewspaper, LuUser, LuUsers } from "react-icons/lu";
 import { Link } from "react-router-dom";
+import { useGetNews } from "./query";
+import { useRecoilState } from "recoil";
+import { newsState } from "@/services";
+import { useEffect } from "react";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -37,6 +41,16 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     { to: "/dashboard/news", icon: <LuNewspaper />, label: "Manage News" },
     { to: "/", icon: <LuLogOut />, label: "Log out" },
   ];
+
+  const [, setNews] = useRecoilState(newsState);
+
+  const { data: newsData } = useGetNews();
+
+  useEffect(() => {
+    if (newsData) {
+      setNews(newsData);
+    }
+  }, [newsData, setNews]);
 
   return (
     <main className="flex h-screen w-full overflow-x-hidden overflow-y-hidden font-inter">

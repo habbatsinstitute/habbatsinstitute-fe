@@ -15,10 +15,10 @@ import { LuTrash } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
 export type News = {
-  id: string;
-  news: string;
+  id: number;
+  title: string;
   category: string;
-  uploadTime: string;
+  created_at: string;
   manageButton?: () => void;
   deleteButton?: () => void;
 };
@@ -26,7 +26,7 @@ export type News = {
 export const columns: ColumnDef<News>[] = [
   { header: "No", cell: (cell) => cell.row.index + 1 },
   {
-    accessorKey: "news",
+    accessorKey: "title",
     header: "News Title",
   },
   {
@@ -34,7 +34,7 @@ export const columns: ColumnDef<News>[] = [
     header: "Category",
   },
   {
-    accessorKey: "uploadTime",
+    accessorKey: "created_at",
     header: "Upload Time",
   },
   {
@@ -67,7 +67,7 @@ export const columns: ColumnDef<News>[] = [
               </AlertDialogTitle>
               <AlertDialogDescription className="text-dark-3">
                 Anda akan menghapus data news dengan judul{" "}
-                <span className="font-bold">"{cell.row.original.news}"</span>
+                <span className="font-bold">"{cell.row.original.title}"</span>
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
