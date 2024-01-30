@@ -110,13 +110,13 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
               <section className="flex h-10 w-full justify-between gap-3">
                 <Label
                   htmlFor="image"
-                  className="flex w-[75%] items-center truncate rounded-md border border-[#CBD5E1] pl-2 text-sm text-font-input hover:cursor-pointer hover:bg-slate-100"
+                  className={`flex w-[75%] items-center truncate rounded-md border border-[#CBD5E1] pl-2 text-sm text-font-input hover:bg-slate-100 ${isPending ? "cursor-not-allowed opacity-40 hover:bg-slate-100" : "hover:cursor-pointer"}`}
                 >
                   {selectedFile ? selectedFile.name : "Choose image to upload"}
                 </Label>
                 <label
                   htmlFor="image"
-                  className="relative grid w-32 cursor-pointer place-items-center rounded-md bg-[#0F172A] pt-2 text-sm text-white hover:bg-slate-700"
+                  className={`relative grid w-32 place-items-center rounded-md bg-[#0F172A] pt-2 text-sm text-white hover:bg-slate-700 ${isPending ? "cursor-not-allowed opacity-10 hover:bg-[#0F172A]" : "cursor-pointer"}`}
                 >
                   Browse file
                   <Input
@@ -233,6 +233,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
             <section className="flex w-full justify-end gap-2 py-2">
               <Button
                 size={"sm"}
+                disabled={isPending}
                 type="button"
                 onClick={() => navigate("/dashboard/news")}
               >
