@@ -3,15 +3,15 @@ import { LuPenLine } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
 export type News = {
-  id: string;
-  news: string;
+  id: string | number;
+  title: string;
   manageButton?: () => void;
 };
 
 export const columns: ColumnDef<News>[] = [
   { header: "No", cell: (cell) => cell.row.index + 1 },
   {
-    accessorKey: "news",
+    accessorKey: "title",
     header: "News Title",
   },
   {

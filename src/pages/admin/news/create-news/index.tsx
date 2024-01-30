@@ -6,6 +6,7 @@ import {
   FormItem,
   FormLabel,
   Input,
+  Label,
   Select,
   SelectContent,
   SelectGroup,
@@ -16,7 +17,6 @@ import {
   Textarea,
 } from "@/components";
 import { AdminLayout } from "@/layouts";
-import { Label } from "@radix-ui/react-label";
 import { FC, ReactElement, useState } from "react";
 import { MdOutlineAddBox } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -30,9 +30,15 @@ import { useCreateNews } from "./api/query";
 import { Slide, toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
 import { categories } from "@/lib";
+import { useRecoilValue } from "recoil";
+import { newsState } from "@/services";
+import { useGetNews } from "@/layouts/query";
 
 export const DashboardNewsCreate: FC = (): ReactElement => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const news = useRecoilValue(newsState);
+
+  const { refetch } = useGetNews();
 
   const form = useForm<z.infer<typeof createNewsSchema>>({
     resolver: zodResolver(createNewsSchema),
@@ -63,6 +69,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
 
     mutate(formData, {
       onSuccess: () => {
+        refetch();
         toast.success("Data news berhasil ditambahkan", {
           position: "top-center",
           autoClose: 1000,
@@ -252,7 +259,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
           </form>
         </Form>
         <section className="flex h-full w-[48%]">
-          <DataTable columns={columns} data={[]} />
+          <DataTable columns={columns} data={news.data} />
         </section>
       </section>
     </AdminLayout>
