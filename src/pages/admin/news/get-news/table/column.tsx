@@ -15,7 +15,7 @@ import { LuTrash } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
 export type News = {
-  id: number;
+  id: string | number;
   title: string;
   category: string;
   created_at: string;
