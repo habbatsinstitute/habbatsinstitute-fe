@@ -1,7 +1,7 @@
 import { api } from "@/services";
 
-export const getNews = async (params: unknown) => {
-  const { data } = await api.get("/newss", { params: params });
+export const createNews = async (payload: unknown) => {
+  const { data } = await api.post("/news", payload);
 
   return data;
 };

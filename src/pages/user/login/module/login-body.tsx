@@ -55,7 +55,7 @@ export const LoginBody: FC = (): ReactElement => {
       onError: () => {
         toast.error("Invalid username atau password", {
           position: "top-center",
-          autoClose: 1500,
+          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: false,

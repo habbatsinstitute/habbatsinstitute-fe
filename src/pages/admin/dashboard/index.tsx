@@ -1,38 +1,9 @@
 import { AdminLayout } from "@/layouts";
 import { FC, ReactElement } from "react";
-import { GoBook } from "react-icons/go";
-import { LuNewspaper, LuUsers } from "react-icons/lu";
-import { PiChatCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
+import { cards } from "./card";
 
 export const Dashboard: FC = (): ReactElement => {
-  const cards = [
-    {
-      to: "/dashboard/courses",
-      icon: <GoBook className="text-lg" />,
-      title: "Manage Couses",
-      desc: "Kelola course secara efisien. Tambahkan, edit dan hapus course, serta mengatur berbagai detail seperti deskripsi course, jadwal, dan materi pembelajaran.",
-    },
-    {
-      to: "/dashboard/news",
-      icon: <LuNewspaper className="text-lg" />,
-      title: "Manage News",
-      desc: "Kelola news secara efisien. Tambahkan, edit dan hapus news, serta mengatur berbagai detail seperti deskripsi news.",
-    },
-    {
-      to: "/dashboard/users",
-      icon: <LuUsers className="text-lg" />,
-      title: "Manage Users",
-      desc: "Kelola user secara efisien. Tambahkan, edit dan hapus user.",
-    },
-    {
-      to: "/dashboard",
-      icon: <PiChatCircle className="text-lg" />,
-      title: "Realtime Chat",
-      desc: "Kelola chat secara efisien. Tambahkan, edit dan hapus chat, serta mengatur histori chat realtime user.",
-    },
-  ];
-
   return (
     <AdminLayout>
       <section className="flex h-[400px] w-full flex-wrap justify-between pt-7">
