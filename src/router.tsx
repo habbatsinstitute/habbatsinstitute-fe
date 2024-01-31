@@ -16,8 +16,7 @@ import {
   News,
   NewsDetail,
 } from "./pages";
-import { Crash, Loader, NotFound } from "./components";
-import { AdminMiddleware } from "./middleware/admin-middleware";
+import { AdminMiddleware, Crash, Loader, NotFound } from "./components";
 
 export const router = createBrowserRouter([
   {

@@ -1,9 +1,9 @@
 import { FC, ReactElement } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FiUsers } from "react-icons/fi";
 import { GoBook } from "react-icons/go";
 import { LuNewspaper } from "react-icons/lu";
 import { PiDiamondsFour } from "react-icons/pi";
-import { Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
 
 export const SideBar: FC = (): ReactElement => {

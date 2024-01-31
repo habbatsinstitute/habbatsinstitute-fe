@@ -1,6 +1,6 @@
 import { FC, ReactElement } from "react";
-import { Button } from "..";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { Button } from "..";
 
 export const Trend: FC = (): ReactElement => {
   const trends = [

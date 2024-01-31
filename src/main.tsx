@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./tailwind.css";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
-import { QueryProvider, RecoilProvider } from "./components";
 import { ToastContainer } from "react-toastify";
+import { QueryProvider, RecoilProvider } from "./components";
+import { getAccessToken, getUserRole } from "./lib";
 import "react-toastify/dist/ReactToastify.css";
-import { getAccessToken, getUserRole } from "./utils/token";
+import "./tailwind.css";
 
 if (getAccessToken() && getUserRole() === "2") {
   const path = window.location.pathname.startsWith("/dashboard")

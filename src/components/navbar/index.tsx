@@ -1,6 +1,6 @@
 import { FC, ReactElement } from "react";
-import { FiLogIn } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
+import { FiLogIn } from "react-icons/fi";
 
 export const Navbar: FC = (): ReactElement => {
   const path = window.location.pathname;
