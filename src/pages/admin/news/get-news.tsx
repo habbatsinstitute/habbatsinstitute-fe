@@ -1,6 +1,7 @@
 import { FC, ReactElement } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
+import { Slide, toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { MdOutlineAddBox } from "react-icons/md";
 import { LuTrash } from "react-icons/lu";
@@ -18,19 +19,26 @@ import {
   Button,
   DataTable,
 } from "@/components";
-import { NewsData, newsState } from "@/lib";
+import {
+  NewsData,
+  formatDateResponse,
+  newsState,
+  useGetNews,
+  useRemoveNews,
+} from "@/lib";
 
 export const DashboardNewsGet: FC = (): ReactElement => {
   const news: NewsData = useRecoilValue(newsState);
   const navigate = useNavigate();
+
+  const { refetch } = useGetNews();
+  const { mutate } = useRemoveNews();
 
   type News = {
     id: string | number;
     title: string;
     category: string;
     created_at: string;
-    manageButton?: () => void;
-    deleteButton?: () => void;
   };
 
   const columns: ColumnDef<News>[] = [
@@ -60,11 +68,7 @@ export const DashboardNewsGet: FC = (): ReactElement => {
           </Link>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button
-                className="h-8 w-14"
-                variant={"destructive"}
-                onClick={() => console.log(cell.row.original)}
-              >
+              <Button className="h-8 w-14" variant={"destructive"}>
                 <LuTrash className="text-white" />
               </Button>
             </AlertDialogTrigger>
@@ -82,8 +86,40 @@ export const DashboardNewsGet: FC = (): ReactElement => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-[#DC5E5E] hover:bg-red-400">
-                  Delete data
+                <AlertDialogAction
+                  onClick={() =>
+                    mutate(cell.row.original.id, {
+                      onSuccess: () => {
+                        refetch();
+                        toast.success("Data news berhasil dihapus", {
+                          position: "top-center",
+                          autoClose: 1000,
+                          hideProgressBar: true,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "light",
+                          transition: Slide,
+                        });
+                      },
+                      onError: () => {
+                        toast.error("Gagal menghapus data", {
+                          position: "top-center",
+                          autoClose: 1000,
+                          hideProgressBar: true,
+                          closeOnClick: true,
+                          pauseOnHover: false,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "light",
+                          transition: Slide,
+                        });
+                      },
+                    })
+                  }
+                >
+                  Delete Data
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -92,6 +128,11 @@ export const DashboardNewsGet: FC = (): ReactElement => {
       ),
     },
   ];
+
+  const formattedNewsData = news.data.map((news) => ({
+    ...news,
+    created_at: formatDateResponse(news.created_at),
+  }));
 
   return (
     <AdminLayout>
@@ -104,7 +145,7 @@ export const DashboardNewsGet: FC = (): ReactElement => {
           Add News
         </Button>
         <section className="mt-3 h-[400px] w-full">
-          <DataTable columns={columns} data={news.data} />
+          <DataTable columns={columns} data={formattedNewsData} />
         </section>
       </section>
     </AdminLayout>

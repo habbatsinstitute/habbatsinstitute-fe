@@ -13,6 +13,17 @@ export function formatDate(date: Date | string) {
     year: "numeric",
   });
 }
+
+export const formatDateResponse = (createdAt: string): string => {
+  const date = new Date(createdAt);
+
+  return date.toLocaleDateString("id-ID", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
 type TokenPayload = {
   exp: number;
   iat: number;

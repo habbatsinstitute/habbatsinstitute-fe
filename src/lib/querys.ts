@@ -50,3 +50,14 @@ export const useCreateNews = () => {
     },
   });
 };
+
+export const useRemoveNews = () => {
+  return useMutation({
+    mutationKey: ["remove-news"],
+    mutationFn: async (params?: string | number) => {
+      const { data } = await api.delete(`/news/${params}`);
+
+      return data;
+    },
+  });
+};
