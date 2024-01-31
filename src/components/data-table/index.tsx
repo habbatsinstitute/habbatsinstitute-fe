@@ -43,7 +43,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
+    <div className="w-full">
       <Table>
         <TableHeader className="bg-dark-2">
           {table.getHeaderGroups().map((headerGroup) => (
