@@ -14,7 +14,7 @@ export function formatDate(date: Date | string) {
   });
 }
 
-export const formatDateResponse = (createdAt: string): string => {
+export const formatDateResponse = (createdAt: string | Date): string => {
   const date = new Date(createdAt);
 
   return date.toLocaleDateString("id-ID", {

@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import { TGetNewsResponse } from ".";
 
 export const newsState = atom({
   key: "news-state",
@@ -13,5 +14,5 @@ export const newsState = atom({
       page_size: 0,
       total_page: 0,
     },
-  },
+  } as TGetNewsResponse,
 });

@@ -20,7 +20,7 @@ import {
   DataTable,
 } from "@/components";
 import {
-  NewsData,
+  TNewsItems,
   formatDateResponse,
   newsState,
   useGetNews,
@@ -28,20 +28,13 @@ import {
 } from "@/lib";
 
 export const DashboardNewsGet: FC = (): ReactElement => {
-  const news: NewsData = useRecoilValue(newsState);
+  const news = useRecoilValue(newsState);
   const navigate = useNavigate();
 
   const { refetch } = useGetNews();
   const { mutate } = useRemoveNews();
 
-  type News = {
-    id: string | number;
-    title: string;
-    category: string;
-    created_at: string;
-  };
-
-  const columns: ColumnDef<News>[] = [
+  const columns: ColumnDef<TNewsItems>[] = [
     { header: "No", cell: (cell) => cell.row.index + 1 },
     {
       accessorKey: "title",
