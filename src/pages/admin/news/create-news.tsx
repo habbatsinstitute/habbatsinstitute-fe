@@ -29,7 +29,14 @@ import {
   SelectValue,
   Textarea,
 } from "@/components";
-import { createNewsSchema, newsState, useCreateNews, useGetNews } from "@/lib";
+import {
+  TNewsItems,
+  createNewsSchema,
+  newsState,
+  useCreateNews,
+  useGetCategories,
+  useGetNews,
+} from "@/lib";
 
 export const DashboardNewsCreate: FC = (): ReactElement => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -54,6 +61,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
 
   const { refetch } = useGetNews();
   const { mutate, isPending } = useCreateNews();
+  const { data: categories } = useGetCategories();
 
   function onSubmit(values: z.infer<typeof createNewsSchema>) {
     const formData = new FormData();
@@ -94,13 +102,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
     });
   }
 
-  type News = {
-    id: string | number;
-    title: string;
-    manageButton?: () => void;
-  };
-
-  const columns: ColumnDef<News>[] = [
+  const columns: ColumnDef<TNewsItems>[] = [
     { header: "No", cell: (cell) => cell.row.index + 1 },
     {
       accessorKey: "title",
@@ -121,49 +123,6 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
           </Link>
         </section>
       ),
-    },
-  ];
-
-  const categories = [
-    {
-      id: 1,
-      name: "Kesehatan reproduksi",
-    },
-    {
-      id: 2,
-      name: "Kesehatan kardiovaskular",
-    },
-    {
-      id: 3,
-      name: "Kesehatan kulit",
-    },
-    {
-      id: 4,
-      name: "Kesehatan anak",
-    },
-    {
-      id: 5,
-      name: "Kesehatan perempuan",
-    },
-    {
-      id: 6,
-      name: "Kehamilan",
-    },
-    {
-      id: 7,
-      name: "Program",
-    },
-    {
-      id: 8,
-      name: "Bahan Herbal",
-    },
-    {
-      id: 9,
-      name: "Teknologi herbal",
-    },
-    {
-      id: 10,
-      name: "Report kegiatan",
     },
   ];
 
@@ -263,7 +222,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Category</SelectLabel>
-                          {categories.map(({ id, name }) => (
+                          {categories?.data?.map(({ id, name }) => (
                             <SelectItem key={id} value={name}>
                               {name}
                             </SelectItem>

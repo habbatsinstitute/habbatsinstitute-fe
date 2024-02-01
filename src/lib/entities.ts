@@ -1,3 +1,13 @@
+export type TCategory = {
+  id: number;
+  name: string;
+};
+
+export type TGetCategoriesResponse = {
+  data: TCategory[];
+  message: string;
+};
+
 export type TLoginResponse = {
   data: {
     username: string;

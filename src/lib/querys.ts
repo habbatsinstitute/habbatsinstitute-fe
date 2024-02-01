@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import {
   TCreateNewsResponse,
+  TGetCategoriesResponse,
   TGetNewsResponse,
   TLoginResponse,
   TRemoveNewsResponses,
@@ -28,6 +29,17 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error),
 );
+
+export const useGetCategories = (): UseQueryResult<TGetCategoriesResponse> => {
+  return useQuery({
+    queryKey: ["get-categories"],
+    queryFn: async () => {
+      const { data } = await api.get("/news/category");
+
+      return data;
+    },
+  });
+};
 
 export const useLogin = (): UseMutationResult<TLoginResponse> => {
   return useMutation({
