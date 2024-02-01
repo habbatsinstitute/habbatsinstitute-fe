@@ -9,6 +9,7 @@ import {
   TCreateNewsResponse,
   TGetCategoriesResponse,
   TGetNewsResponse,
+  TGetUserMeResponse,
   TLoginResponse,
   TRemoveNewsResponses,
 } from ".";
@@ -29,6 +30,17 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error),
 );
+
+export const useGetUserMe = (): UseQueryResult<TGetUserMeResponse> => {
+  return useQuery({
+    queryKey: ["get-user-me"],
+    queryFn: async () => {
+      const { data } = await api.get("/users/me");
+
+      return data;
+    },
+  });
+};
 
 export const useGetCategories = (): UseQueryResult<TGetCategoriesResponse> => {
   return useQuery({

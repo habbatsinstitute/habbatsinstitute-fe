@@ -50,7 +50,6 @@ export const DashboardUsersManage: FC = (): ReactElement => {
           <Link
             to={`/dashboard/users/manage/${cell.row.original.id}`}
             className="flex h-7 w-28 items-center justify-center gap-1 rounded-md bg-bright-2 text-font-black-3 hover:bg-bright-1"
-            onClick={() => console.log(cell.row.original)}
           >
             <LuPenLine className="text-xl" />
             Manage
@@ -133,6 +132,9 @@ export const DashboardUsersManage: FC = (): ReactElement => {
                   mode="single"
                   selected={date}
                   onSelect={setDate}
+                  disabled={(date) =>
+                    date < new Date() || date < new Date("1900-01-01")
+                  }
                   initialFocus
                 />
               </PopoverContent>

@@ -1,3 +1,15 @@
+export type TUserMe = {
+  id: number;
+  username: string;
+  role_id: number;
+  expiry_date: string;
+};
+
+export type TGetUserMeResponse = {
+  data: TUserMe;
+  message: string;
+};
+
 export type TCategory = {
   id: number;
   name: string;

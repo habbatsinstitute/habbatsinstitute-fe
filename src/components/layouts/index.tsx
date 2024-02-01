@@ -1,10 +1,8 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useRecoilState } from "recoil";
 import { GoBook } from "react-icons/go";
 import { LuLogOut, LuNewspaper, LuUser, LuUsers } from "react-icons/lu";
 import { Popover, PopoverContent, PopoverTrigger, SideBar } from "@/components";
-import { newsState, removeToken, useGetNews } from "@/lib";
+import { removeToken, useGetUserMe } from "@/lib";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -15,17 +13,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   children,
   className = "",
 }) => {
-  const [news, setNews] = useRecoilState(newsState);
-
-  const { data: newsData } = useGetNews();
-
-  useEffect(() => {
-    if (newsData) {
-      setNews(newsData);
-    }
-  }, [newsData, setNews]);
-
-  console.log(news);
+  const { data } = useGetUserMe();
 
   const linkItems = [
     { to: "/dashboard", icon: <LuUser />, label: "Profile Admin" },
@@ -64,7 +52,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             <Popover>
               <PopoverTrigger>
                 <section className="flex items-center justify-center gap-3 rounded-md px-3 py-2 hover:bg-slate-100">
-                  <h3 className="text-lg">Hello, Admin</h3>
+                  <h3 className="text-lg">Hello, {data?.data.username}</h3>
                   <img
                     src="/icons/avatar.png"
                     alt="avatar"

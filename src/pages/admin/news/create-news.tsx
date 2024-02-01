@@ -1,7 +1,6 @@
-import { FC, ReactElement, useState } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
-import { useRecoilValue } from "recoil";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -32,15 +31,14 @@ import {
 import {
   TNewsItems,
   createNewsSchema,
-  newsState,
   useCreateNews,
   useGetCategories,
   useGetNews,
 } from "@/lib";
 
 export const DashboardNewsCreate: FC = (): ReactElement => {
+  const [news, setNews] = useState<TNewsItems[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const news = useRecoilValue(newsState);
 
   const form = useForm<z.infer<typeof createNewsSchema>>({
     resolver: zodResolver(createNewsSchema),
@@ -59,9 +57,15 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
 
   const navigate = useNavigate();
 
-  const { refetch } = useGetNews();
+  const { refetch, data: getNews } = useGetNews();
   const { mutate, isPending } = useCreateNews();
   const { data: categories } = useGetCategories();
+
+  useEffect(() => {
+    if (getNews?.data) {
+      setNews(getNews?.data);
+    }
+  }, [getNews?.data, setNews]);
 
   function onSubmit(values: z.infer<typeof createNewsSchema>) {
     const formData = new FormData();
@@ -111,12 +115,25 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
     {
       accessorKey: "option",
       header: "Opsi",
-      cell: (cell) => (
+      cell: () => (
         <section className="flex w-full justify-center py-2">
           <Link
-            to={`/dashboard/news/manage/${cell.row.original.id}`}
+            // to={`/dashboard/news/manage/${cell.row.original.id}`}
+            to={`/dashboard/news/add`}
             className="flex h-7 w-28 items-center justify-center gap-1 rounded-md bg-bright-2 text-font-black-3 hover:bg-bright-1"
-            onClick={() => console.log(cell.row.original)}
+            onClick={() => {
+              toast.warn("This feature is still development", {
+                position: "top-center",
+                autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Slide,
+              });
+            }}
           >
             <LuPenLine className="text-xl" />
             Manage
@@ -287,7 +304,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
           </form>
         </Form>
         <section className="flex h-full w-[48%]">
-          <DataTable columns={columns} data={news.data} />
+          <DataTable columns={columns} data={news || []} />
         </section>
       </section>
     </AdminLayout>

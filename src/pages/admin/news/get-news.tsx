@@ -1,8 +1,7 @@
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 import { Slide, toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
 import { MdOutlineAddBox } from "react-icons/md";
 import { LuTrash } from "react-icons/lu";
 import {
@@ -22,17 +21,23 @@ import {
 import {
   TNewsItems,
   formatDateResponse,
-  newsState,
   useGetNews,
   useRemoveNews,
 } from "@/lib";
 
 export const DashboardNewsGet: FC = (): ReactElement => {
-  const news = useRecoilValue(newsState);
+  const [news, setNews] = useState<TNewsItems[]>([]);
+
   const navigate = useNavigate();
 
-  const { refetch } = useGetNews();
+  const { refetch, data } = useGetNews();
   const { mutate } = useRemoveNews();
+
+  useEffect(() => {
+    if (data?.data) {
+      setNews(data.data);
+    }
+  }, [data?.data, setNews]);
 
   const columns: ColumnDef<TNewsItems>[] = [
     { header: "No", cell: (cell) => cell.row.index + 1 },
@@ -54,8 +59,22 @@ export const DashboardNewsGet: FC = (): ReactElement => {
       cell: (cell) => (
         <section className="flex w-24 items-center justify-between gap-2 py-1">
           <Link
-            to={`/dashboard/news/manage/${cell.row.original.id}`}
+            // to={`/dashboard/news/manage/${cell.row.original.id}`}
+            to={`/dashboard/news`}
             className="grid h-8 w-20 place-items-center rounded-md bg-dark-2 px-2 text-font-white hover:bg-slate-700"
+            onClick={() => {
+              toast.warn("This feature is still development", {
+                position: "top-center",
+                autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Slide,
+              });
+            }}
           >
             Manage
           </Link>
@@ -123,7 +142,7 @@ export const DashboardNewsGet: FC = (): ReactElement => {
     },
   ];
 
-  const formattedNewsData = news.data.map((news) => ({
+  const formattedNewsData = news.map((news) => ({
     ...news,
     created_at: formatDateResponse(news.created_at),
   }));
@@ -139,7 +158,7 @@ export const DashboardNewsGet: FC = (): ReactElement => {
           Add News
         </Button>
         <section className="mt-3 h-[400px] w-full">
-          <DataTable columns={columns} data={formattedNewsData} />
+          <DataTable columns={columns} data={formattedNewsData || []} />
         </section>
       </section>
     </AdminLayout>
