@@ -8,6 +8,29 @@ export type TLoginResponse = {
   message: string;
 };
 
+export type TCreateNewsResponse = {
+  data: [
+    {
+      id: number;
+      user_id: number;
+      category: string;
+      images: string;
+      title: string;
+      description: string;
+      created_at: Date | string;
+    },
+  ];
+  message: string;
+  pagination: {
+    total_data: number;
+    current_page: number;
+    next_page: number;
+    previous_page: number;
+    page_size: number;
+    total_page: number;
+  };
+};
+
 export type TNewsItems = {
   id: number;
   user_id: number;
@@ -41,5 +64,9 @@ export type TGetNewsByIdResponses = {
     description: string;
     created_at: string;
   };
+  message: string;
+};
+
+export type TRemoveNewsResponses = {
   message: string;
 };

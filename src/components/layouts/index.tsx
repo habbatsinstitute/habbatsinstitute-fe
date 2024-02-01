@@ -15,7 +15,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   children,
   className = "",
 }) => {
-  const [, setNews] = useRecoilState(newsState);
+  const [news, setNews] = useRecoilState(newsState);
 
   const { data: newsData } = useGetNews();
 
@@ -24,6 +24,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       setNews(newsData);
     }
   }, [newsData, setNews]);
+
+  console.log(news);
 
   const linkItems = [
     { to: "/dashboard", icon: <LuUser />, label: "Profile Admin" },

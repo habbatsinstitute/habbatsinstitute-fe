@@ -1,5 +1,16 @@
 import axios from "axios";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  UseMutationResult,
+  UseQueryResult,
+  useMutation,
+  useQuery,
+} from "@tanstack/react-query";
+import {
+  TCreateNewsResponse,
+  TGetNewsResponse,
+  TLoginResponse,
+  TRemoveNewsResponses,
+} from ".";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -18,7 +29,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-export const useLogin = () => {
+export const useLogin = (): UseMutationResult<TLoginResponse> => {
   return useMutation({
     mutationKey: ["login"],
     mutationFn: async (payload: unknown) => {
@@ -29,18 +40,7 @@ export const useLogin = () => {
   });
 };
 
-export const useGetNews = (params?: unknown) => {
-  return useQuery({
-    queryKey: ["get-news"],
-    queryFn: async () => {
-      const { data } = await api.get("/news", { params: params });
-
-      return data;
-    },
-  });
-};
-
-export const useCreateNews = () => {
+export const useCreateNews = (): UseMutationResult<TCreateNewsResponse> => {
   return useMutation({
     mutationKey: ["create-news"],
     mutationFn: async (payload: unknown) => {
@@ -51,8 +51,31 @@ export const useCreateNews = () => {
   });
 };
 
-export const useRemoveNews = () => {
-  return useMutation({
+export const useGetNews = (
+  params?: unknown,
+): UseQueryResult<TGetNewsResponse> => {
+  return useQuery({
+    queryKey: ["get-news"],
+    queryFn: async () => {
+      const { data } = await api.get("/news", { params: params });
+
+      return data;
+    },
+  });
+};
+
+export const useRemoveNews = (): UseMutationResult<
+  TRemoveNewsResponses,
+  Error,
+  string | number | undefined,
+  unknown
+> => {
+  return useMutation<
+    TRemoveNewsResponses,
+    Error,
+    string | number | undefined,
+    unknown
+  >({
     mutationKey: ["remove-news"],
     mutationFn: async (params?: string | number) => {
       const { data } = await api.delete(`/news/${params}`);
