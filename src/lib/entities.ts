@@ -30,6 +30,34 @@ export type TLoginResponse = {
   message: string;
 };
 
+export type TCourseItems = {
+  id: number;
+  user_id: number;
+  media_file: string;
+  title: string;
+  description: string;
+  author: string;
+  created_at: Date | string;
+};
+
+export type TCreateCourseResponse = {
+  data: TCourseItems;
+  message: string;
+};
+
+export type TGetCourseResponse = {
+  data: TCourseItems[];
+  message: string;
+  pagination: {
+    total_data: number;
+    current_page: number;
+    next_page: number;
+    previous_page: number;
+    page_size: number;
+    total_page: number;
+  };
+};
+
 export type TCreateNewsResponse = {
   data: [
     {

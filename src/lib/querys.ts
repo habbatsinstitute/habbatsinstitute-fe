@@ -6,8 +6,10 @@ import {
   useQuery,
 } from "@tanstack/react-query";
 import {
+  TCreateCourseResponse,
   TCreateNewsResponse,
   TGetCategoriesResponse,
+  TGetCourseResponse,
   TGetNewsResponse,
   TGetUserMeResponse,
   TLoginResponse,
@@ -58,6 +60,30 @@ export const useLogin = (): UseMutationResult<TLoginResponse> => {
     mutationKey: ["login"],
     mutationFn: async (payload: unknown) => {
       const { data } = await api.post("/auth/login", payload);
+
+      return data;
+    },
+  });
+};
+
+export const useCreateCourse = (): UseMutationResult<TCreateCourseResponse> => {
+  return useMutation({
+    mutationKey: ["create-course"],
+    mutationFn: async (payload: unknown) => {
+      const { data } = await api.post("/courses", payload);
+
+      return data;
+    },
+  });
+};
+
+export const useGetCourse = (
+  params?: unknown,
+): UseQueryResult<TGetCourseResponse> => {
+  return useQuery({
+    queryKey: ["get-course"],
+    queryFn: async () => {
+      const { data } = await api.get("/courses", { params: params });
 
       return data;
     },

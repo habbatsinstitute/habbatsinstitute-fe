@@ -1,8 +1,10 @@
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import { ColumnDef } from "@tanstack/react-table";
+import { Slide, toast } from "react-toastify";
 import { MdOutlineAddBox } from "react-icons/md";
 import { LuTrash } from "react-icons/lu";
-import { ColumnDef } from "@tanstack/react-table";
 import {
   AdminLayout,
   AlertDialog,
@@ -13,28 +15,28 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
   Button,
   DataTable,
 } from "@/components";
+import { TCourseItems, formatDateResponse, useGetCourse } from "@/lib";
 
 export const DashboardCourseGet: FC = (): ReactElement => {
+  const [course, setCourse] = useState<TCourseItems[]>([]);
+
   const navigate = useNavigate();
 
-  type Course = {
-    id: string;
-    videos: string;
-    title: string;
-    author: string;
-    uploadTime: string;
-    manageButton?: () => void;
-    deleteButton?: () => void;
-  };
+  const { data } = useGetCourse();
 
-  const columns: ColumnDef<Course>[] = [
+  useEffect(() => {
+    if (data?.data) {
+      setCourse(data.data);
+    }
+  }, [data?.data, setCourse]);
+
+  const columns: ColumnDef<TCourseItems>[] = [
     { header: "No", cell: (cell) => cell.row.index + 1 },
     {
-      accessorKey: "videos",
+      accessorKey: "title",
       header: "Videos",
     },
     {
@@ -46,7 +48,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
       header: "Author",
     },
     {
-      accessorKey: "uploadTime",
+      accessorKey: "created_at",
       header: "Upload Time",
     },
     {
@@ -55,21 +57,47 @@ export const DashboardCourseGet: FC = (): ReactElement => {
       cell: (cell) => (
         <section className="flex w-24 items-center justify-between gap-2 py-1">
           <Link
-            to={`/dashboard/courses/manage/${cell.row.original.id}`}
+            // to={`/dashboard/courses/manage/${cell.row.original.id}`}
+            to={`/dashboard/courses`}
+            onClick={() => {
+              toast.warn("This feature is still development", {
+                position: "top-center",
+                autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Slide,
+              });
+            }}
             className="grid h-8 w-20 place-items-center rounded-md bg-dark-2 px-2 text-font-white hover:bg-slate-700"
           >
             Manage
           </Link>
           <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                className="h-8 w-14"
-                variant={"destructive"}
-                onClick={() => console.log(cell.row.original)}
-              >
-                <LuTrash className="text-white" />
-              </Button>
-            </AlertDialogTrigger>
+            {/* <AlertDialogTrigger asChild> */}
+            <Button
+              className="h-8 w-14"
+              variant={"destructive"}
+              onClick={() => {
+                toast.warn("This feature is still development", {
+                  position: "top-center",
+                  autoClose: 1000,
+                  hideProgressBar: true,
+                  closeOnClick: false,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Slide,
+                });
+              }}
+            >
+              <LuTrash className="text-white" />
+            </Button>
+            {/* </AlertDialogTrigger> */}
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>
@@ -84,7 +112,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-[#DC5E5E] hover:bg-red-400">
+                <AlertDialogAction className="bg-red-500 hover:bg-red-600">
                   Delete data
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -94,6 +122,11 @@ export const DashboardCourseGet: FC = (): ReactElement => {
       ),
     },
   ];
+
+  const formattedCourseData = course.map((course) => ({
+    ...course,
+    created_at: formatDateResponse(course.created_at),
+  }));
 
   return (
     <AdminLayout>
@@ -106,7 +139,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
           Add Course
         </Button>
         <section className="mt-3 h-[400px] w-full">
-          <DataTable columns={columns} data={[]} />
+          <DataTable columns={columns} data={formattedCourseData || []} />
         </section>
       </section>
     </AdminLayout>

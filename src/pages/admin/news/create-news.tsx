@@ -260,7 +260,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
               control={form.control}
               name="description"
               render={({ field }) => (
-                <FormItem className="flex w-full flex-col gap-1">
+                <FormItem className="flex w-full flex-col">
                   <FormLabel
                     className={`text-sm ${form.formState.errors.description ? "text-red-400" : "text-[#0F172A]"}`}
                   >
