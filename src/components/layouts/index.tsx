@@ -103,11 +103,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   };
 
   return (
-    <main className="flex h-screen w-full overflow-x-hidden overflow-y-hidden font-inter">
+    <main className="flex h-auto w-full overflow-x-hidden overflow-y-hidden font-inter md:h-screen">
       <SideBar />
       <section className="h-full w-full md:w-[80%]">
-        <nav className="container flex h-[78px] w-full items-center justify-between">
-          {/* Nav mobile */}
+        {/* Nav mobile */}
+        <nav className="container fixed flex h-[78px] w-full items-center justify-between bg-white shadow-md md:hidden">
           <section className="flex items-center justify-center gap-3 text-base font-bold text-black md:hidden md:text-xl">
             <Sheet>
               <SheetTrigger asChild>
@@ -182,7 +182,45 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             </Sheet>
           </section>
 
-          {/* Nav Desktop */}
+          <section>
+            <Popover>
+              <PopoverTrigger>
+                <section className="flex items-center justify-center gap-3 rounded-md px-3 py-2 hover:bg-slate-100">
+                  <h3 className="text-base md:text-lg">
+                    Hello, {data?.data.username}
+                  </h3>
+                  <img
+                    src="/icons/avatar.png"
+                    alt="avatar"
+                    className="boder-black w-7 rounded-full border border-black p-1 md:w-10"
+                  />
+                </section>
+              </PopoverTrigger>
+              <PopoverContent className="w-[170px] p-0">
+                <section className="flex h-full w-full flex-col gap-2 text-slate-700">
+                  {linkItems.map((linkItem, index) => (
+                    <Link
+                      key={index}
+                      to={linkItem.to}
+                      className="flex items-center gap-3 px-2 py-3 pl-3 hover:bg-slate-200 md:px-0 md:py-1 md:pl-3"
+                      onClick={() => {
+                        if (linkItem.label === "Log out") {
+                          removeToken();
+                        }
+                      }}
+                    >
+                      {linkItem.icon}
+                      {linkItem.label}
+                    </Link>
+                  ))}
+                </section>
+              </PopoverContent>
+            </Popover>
+          </section>
+        </nav>
+
+        {/* Nav Desktop */}
+        <nav className="container hidden h-[78px] w-full items-center justify-between md:flex">
           <section className="hidden items-center justify-center gap-3 text-base font-bold text-black md:flex md:text-xl">
             <h1 className="flex items-center justify-center gap-3 text-base font-bold text-black md:text-xl">
               {navTitle(window.location.pathname)}
@@ -225,7 +263,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           </section>
         </nav>
         <hr className="container h-1 w-[85%] text-[#E2E8F0] md:w-[95%]" />
-        <section className={`container h-[85%] w-full ${className}`}>
+        <section
+          className={`container mt-[10vh] h-auto w-full md:mt-0 md:h-[85%] ${className}`}
+        >
           {children}
         </section>
       </section>
