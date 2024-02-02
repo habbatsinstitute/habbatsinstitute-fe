@@ -34,16 +34,16 @@ export const Dashboard: FC = (): ReactElement => {
   ];
   return (
     <AdminLayout>
-      <section className="flex h-[400px] w-full flex-wrap justify-between pt-7">
+      <section className="flex h-full w-full flex-wrap justify-between gap-5 pt-7 md:h-[400px] md:gap-0">
         {cards.map((card, index) => (
           <Link
             to={card.to}
             key={index}
-            className="group flex h-40 w-[48%] flex-col justify-center gap-1 rounded-md border bg-[url('/backgrounds/white.jpg')] bg-cover px-5 py-3 shadow-md hover:cursor-pointer hover:bg-[url('/backgrounds/green.png')]"
+            className="group flex h-36 w-full flex-col justify-center gap-3 rounded-md border bg-[url('/backgrounds/white.jpg')] bg-cover px-5 py-3 shadow-md hover:cursor-pointer hover:bg-[url('/backgrounds/white.jpg')] md:h-40 md:w-[48%] md:gap-1 xl:hover:bg-[url('/backgrounds/green.png')]"
           >
             {card.icon}
             <h1 className="font-bold">{card.title}</h1>
-            <p className="text-xs text-font-black-2 group-hover:text-font-black-3">
+            <p className="text-[11px] text-font-black-2 group-hover:text-font-black-3 md:text-[10px] lg:text-[11px] xl:text-xs">
               {card.desc}
             </p>
           </Link>

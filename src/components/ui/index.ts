@@ -9,5 +9,6 @@ export * from "./label";
 export * from "./pagination";
 export * from "./popover";
 export * from "./select";
+export * from "./sheet";
 export * from "./table";
 export * from "./textarea";
