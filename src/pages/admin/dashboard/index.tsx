@@ -43,7 +43,9 @@ export const Dashboard: FC = (): ReactElement => {
           >
             {card.icon}
             <h1 className="font-bold">{card.title}</h1>
-            <p className="text-[11px] text-font-black-2 group-hover:text-font-black-3 md:text-[10px] lg:text-[11px] xl:text-xs">
+            <p
+              className={`${card.title === "Manage Couses" ? "text-[9px]" : "text-[11px]"}  text-font-black-2 group-hover:text-font-black-3 md:text-[10px] lg:text-[11px] xl:text-xs`}
+            >
               {card.desc}
             </p>
           </Link>
