@@ -120,3 +120,48 @@ export type TGetNewsByIdResponses = {
 export type TRemoveNewsResponses = {
   message: string;
 };
+
+export type TUser = {
+  id: number;
+  role_id: number;
+  username: string;
+  expiry_date: Date | string;
+};
+
+export type TCreateUserResponse = {
+  data: {
+    id: number;
+    role_id: number;
+    username: string;
+    expiry_date: Date | string;
+  };
+  message: string;
+};
+
+export type TGetAllUsersResponse = {
+  data: TUser[];
+  message: string;
+  pagination: {
+    total_data: number;
+    current_page: number;
+    next_page: number;
+    previous_page: number;
+    page_size: number;
+    total_page: number;
+  };
+};
+
+export type TGetUserByIdResponse = {
+  data: {
+    username: string;
+  };
+  message: string;
+};
+
+export type TUpdateUserResponse = {
+  message: string;
+};
+
+export type TRemoveUserResponse = {
+  message: string;
+};

@@ -23,7 +23,7 @@ import {
 } from "@/components";
 import {
   TCourseItems,
-  createCourseSchema,
+  courseSchema,
   formatDate,
   useCreateCourse,
   useGetCourse,
@@ -34,8 +34,8 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
   const [course, setCourse] = useState<TCourseItems[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const form = useForm<z.infer<typeof createCourseSchema>>({
-    resolver: zodResolver(createCourseSchema),
+  const form = useForm<z.infer<typeof courseSchema>>({
+    resolver: zodResolver(courseSchema),
     mode: "all",
     defaultValues: {
       title: "",
@@ -60,7 +60,7 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
     }
   }, [getCourse?.data, setCourse]);
 
-  function onSubmit(values: z.infer<typeof createCourseSchema>) {
+  function onSubmit(values: z.infer<typeof courseSchema>) {
     const formData = new FormData();
 
     formData.append("title", values.title);

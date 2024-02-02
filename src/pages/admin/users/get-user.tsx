@@ -1,6 +1,7 @@
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
+import { Slide, toast } from "react-toastify";
 import { LuTrash } from "react-icons/lu";
 import { MdOutlineAddBox } from "react-icons/md";
 import {
@@ -17,27 +18,40 @@ import {
   Button,
   DataTable,
 } from "@/components";
+import {
+  TUser,
+  formatDateResponse,
+  useGetAllUsers,
+  useRemoveUser,
+} from "@/lib";
 
 export const DashboardUsersGet: FC = (): ReactElement => {
+  const [users, setUsers] = useState<TUser[]>([]);
+
   const navigate = useNavigate();
 
-  type User = {
-    id: string;
-    role: string;
-    username: string;
-    expired: string;
-    manageButton?: () => void;
-    deleteButton?: () => void;
-  };
+  const { data, refetch } = useGetAllUsers();
+  const { mutate } = useRemoveUser();
 
-  const columns: ColumnDef<User>[] = [
+  useEffect(() => {
+    if (data?.data) {
+      setUsers(data.data);
+    }
+  }, [data?.data, setUsers]);
+
+  const formattedUsersData = users.map((users) => ({
+    ...users,
+    expiry_date: formatDateResponse(users.expiry_date),
+  }));
+
+  const columns: ColumnDef<TUser>[] = [
     { header: "No", cell: (cell) => cell.row.index + 1 },
     {
       accessorKey: "id",
       header: "User ID",
     },
     {
-      accessorKey: "role",
+      accessorKey: "role_id",
       header: "Role ID",
     },
     {
@@ -45,7 +59,7 @@ export const DashboardUsersGet: FC = (): ReactElement => {
       header: "Username",
     },
     {
-      accessorKey: "expired",
+      accessorKey: "expiry_date",
       header: "Expiry ID",
     },
     {
@@ -54,8 +68,22 @@ export const DashboardUsersGet: FC = (): ReactElement => {
       cell: (cell) => (
         <section className="flex w-24 items-center justify-between gap-2 py-1">
           <Link
-            to={`/dashboard/users/manage/${cell.row.original.id}`}
+            // to={`/dashboard/users/manage/${cell.row.original.id}`}
+            to={`/dashboard/users`}
             className="grid h-8 w-20 place-items-center rounded-md bg-dark-2 px-2 text-font-white hover:bg-slate-700"
+            onClick={() => {
+              toast.warn("This feature is still development", {
+                position: "top-center",
+                autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Slide,
+              });
+            }}
           >
             Manage
           </Link>
@@ -85,7 +113,40 @@ export const DashboardUsersGet: FC = (): ReactElement => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-[#DC5E5E] hover:bg-red-400">
+                <AlertDialogAction
+                  className="bg-red-500 hover:bg-red-600"
+                  onClick={() => {
+                    mutate(cell.row.original.id, {
+                      onSuccess: () => {
+                        refetch();
+                        toast.success("Data user berhasil dihapus", {
+                          position: "top-center",
+                          autoClose: 1000,
+                          hideProgressBar: true,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "light",
+                          transition: Slide,
+                        });
+                      },
+                      onError: () => {
+                        toast.error("Gagal menghapus user", {
+                          position: "top-center",
+                          autoClose: 1000,
+                          hideProgressBar: true,
+                          closeOnClick: true,
+                          pauseOnHover: false,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "light",
+                          transition: Slide,
+                        });
+                      },
+                    });
+                  }}
+                >
                   Delete data
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -107,7 +168,7 @@ export const DashboardUsersGet: FC = (): ReactElement => {
           Add User
         </Button>
         <section className="mt-3 h-[400px] w-full">
-          <DataTable columns={columns} data={[]} />
+          <DataTable columns={columns} data={formattedUsersData || []} />
         </section>
       </section>
     </AdminLayout>

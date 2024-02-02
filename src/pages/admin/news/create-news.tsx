@@ -30,7 +30,7 @@ import {
 } from "@/components";
 import {
   TNewsItems,
-  createNewsSchema,
+  newsSchema,
   useCreateNews,
   useGetCategories,
   useGetNews,
@@ -40,8 +40,8 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
   const [news, setNews] = useState<TNewsItems[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const form = useForm<z.infer<typeof createNewsSchema>>({
-    resolver: zodResolver(createNewsSchema),
+  const form = useForm<z.infer<typeof newsSchema>>({
+    resolver: zodResolver(newsSchema),
     mode: "all",
     defaultValues: {
       title: "",
@@ -67,7 +67,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
     }
   }, [getNews?.data, setNews]);
 
-  function onSubmit(values: z.infer<typeof createNewsSchema>) {
+  function onSubmit(values: z.infer<typeof newsSchema>) {
     const formData = new FormData();
 
     formData.append("title", values.title);

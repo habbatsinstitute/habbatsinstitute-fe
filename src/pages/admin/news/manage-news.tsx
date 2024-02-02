@@ -34,15 +34,15 @@ import {
   Textarea,
   Label,
 } from "@/components";
-import { TNewsItems, manageNewsSchema, useGetCategories } from "@/lib";
+import { TNewsItems, newsSchema, useGetCategories } from "@/lib";
 
 export const DashboardNewsManage: FC = (): ReactElement => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const { data: categories } = useGetCategories();
 
-  const form = useForm<z.infer<typeof manageNewsSchema>>({
-    resolver: zodResolver(manageNewsSchema),
+  const form = useForm<z.infer<typeof newsSchema>>({
+    resolver: zodResolver(newsSchema),
     mode: "all",
     defaultValues: {
       title: "",
@@ -58,7 +58,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
 
   const navigate = useNavigate();
 
-  function onSubmit(values: z.infer<typeof manageNewsSchema>) {
+  function onSubmit(values: z.infer<typeof newsSchema>) {
     console.log(values);
     console.log(selectedFile);
   }
