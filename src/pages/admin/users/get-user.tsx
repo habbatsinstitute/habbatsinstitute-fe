@@ -35,7 +35,7 @@ export const DashboardUsersGet: FC = (): ReactElement => {
 
   useEffect(() => {
     if (data?.data) {
-      setUsers(data.data);
+      setUsers(data?.data?.filter((user) => user.role_id === 1));
     }
   }, [data?.data, setUsers]);
 

@@ -48,7 +48,7 @@ export const DashboardUsersCreate: FC = (): ReactElement => {
 
   useEffect(() => {
     if (getUsers?.data) {
-      setUsers(getUsers?.data);
+      setUsers(getUsers?.data.filter((user) => user.role_id === 1));
     }
   }, [getUsers?.data, setUsers]);
 
@@ -129,11 +129,11 @@ export const DashboardUsersCreate: FC = (): ReactElement => {
 
   return (
     <AdminLayout>
-      <section className="flex h-[510px] w-full justify-between pt-7">
+      <section className="flex h-[1000px] w-full flex-col justify-between gap-10 pt-7 md:gap-0 xl:h-[510px] xl:flex-row">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="container flex h-full w-[48%] flex-col justify-evenly rounded-md border"
+            className="container flex h-full w-full flex-col justify-evenly gap-3 rounded-md border py-5 lg:gap-0 xl:w-[48%] xl:py-0"
           >
             <h1 className="mt-5 text-lg font-black text-[#0F172A]">Add User</h1>
             <p className="w-3/4 text-xs text-[#64748B]">
@@ -286,7 +286,7 @@ export const DashboardUsersCreate: FC = (): ReactElement => {
             </section>
           </form>
         </Form>
-        <section className="flex h-full w-[48%]">
+        <section className="flex h-full w-full md:mt-10 xl:mt-0 xl:w-[48%]">
           <DataTable columns={columns} data={users || []} />
         </section>
       </section>

@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
-                    className="overflow-x-auto break-words border py-1"
+                    className="max-w-[20rem] overflow-x-auto break-words border py-1"
                     key={cell.id}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

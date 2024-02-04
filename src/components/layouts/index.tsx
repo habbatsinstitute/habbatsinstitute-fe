@@ -105,9 +105,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   return (
     <main className="flex h-auto w-full overflow-x-hidden overflow-y-hidden font-inter md:h-screen">
       <SideBar />
-      <section className="h-full w-full md:w-[80%]">
+      <section className="h-auto w-full md:h-full md:w-[80%]">
         {/* Nav mobile */}
-        <nav className="container fixed flex h-[78px] w-full items-center justify-between bg-white shadow-md md:hidden">
+        <nav className="container fixed z-10 flex h-[78px] w-full items-center justify-between bg-white shadow-md md:hidden">
           <section className="flex items-center justify-center gap-3 text-base font-bold text-black md:hidden md:text-xl">
             <Sheet>
               <SheetTrigger asChild>

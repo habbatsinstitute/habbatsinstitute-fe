@@ -36,7 +36,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
   const columns: ColumnDef<TCourseItems>[] = [
     { header: "No", cell: (cell) => cell.row.index + 1 },
     {
-      accessorKey: "title",
+      accessorKey: "media_file",
       header: "Videos",
     },
     {
