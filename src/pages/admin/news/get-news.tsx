@@ -19,25 +19,36 @@ import {
   DataTable,
 } from "@/components";
 import {
+  TGetNewsResponse,
   TNewsItems,
+  api,
   formatDateResponse,
-  useGetNews,
   useRemoveNews,
 } from "@/lib";
 
 export const DashboardNewsGet: FC = (): ReactElement => {
   const [news, setNews] = useState<TNewsItems[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const { refetch, data } = useGetNews();
   const { mutate } = useRemoveNews();
 
-  useEffect(() => {
-    if (data?.data) {
-      setNews(data.data);
+  const getNews = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetNewsResponse>("/news");
+      setNews(data?.data);
+    } catch (error) {
+      setNews([]);
+    } finally {
+      setLoading(false);
     }
-  }, [data?.data, setNews]);
+  };
+
+  useEffect(() => {
+    getNews();
+  }, []);
 
   const columns: ColumnDef<TNewsItems>[] = [
     { header: "No", cell: (cell) => cell.row.index + 1 },
@@ -103,7 +114,7 @@ export const DashboardNewsGet: FC = (): ReactElement => {
                   onClick={() =>
                     mutate(cell.row.original.id, {
                       onSuccess: () => {
-                        refetch();
+                        getNews();
                         toast.success("Data news berhasil dihapus", {
                           position: "top-center",
                           autoClose: 1000,
@@ -158,7 +169,11 @@ export const DashboardNewsGet: FC = (): ReactElement => {
           Add News
         </Button>
         <section className="mt-3 h-[400px] w-full">
-          <DataTable columns={columns} data={formattedNewsData || []} />
+          <DataTable
+            columns={columns}
+            data={formattedNewsData}
+            loading={loading}
+          />
         </section>
       </section>
     </AdminLayout>
