@@ -1,5 +1,5 @@
-import { FC, ReactElement, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { FC, Fragment, ReactElement, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,16 +23,18 @@ import {
 } from "@/components";
 import {
   TCourseItems,
+  TGetCourseResponse,
+  api,
   courseSchema,
   formatDate,
   useCreateCourse,
-  useGetCourse,
   useGetUserMe,
 } from "@/lib";
 
 export const DashboardCourseCreate: FC = (): ReactElement => {
-  const [course, setCourse] = useState<TCourseItems[]>([]);
+  const [courses, setCourses] = useState<TCourseItems[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof courseSchema>>({
     resolver: zodResolver(courseSchema),
@@ -51,14 +53,23 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
   const navigate = useNavigate();
 
   const { data: userMe } = useGetUserMe();
-  const { data: getCourse, refetch } = useGetCourse();
   const { mutate, isPending } = useCreateCourse();
 
-  useEffect(() => {
-    if (getCourse?.data) {
-      setCourse(getCourse?.data);
+  const getCourses = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetCourseResponse>("/courses");
+      setCourses(data?.data);
+    } catch (error) {
+      setCourses([]);
+    } finally {
+      setLoading(false);
     }
-  }, [getCourse?.data, setCourse]);
+  };
+
+  useEffect(() => {
+    getCourses();
+  }, []);
 
   function onSubmit(values: z.infer<typeof courseSchema>) {
     const formData = new FormData();
@@ -70,7 +81,7 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
 
     mutate(formData, {
       onSuccess: () => {
-        refetch();
+        getCourses();
         toast.success("Data course berhasil ditambahkan", {
           position: "top-center",
           autoClose: 1000,
@@ -110,10 +121,9 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
       header: "Opsi",
       cell: () => (
         <section className="flex w-full justify-center py-2">
-          <Link
-            // to={`/dashboard/courses/manage/${cell.row.original.id}`}
-            to={`/dashboard/courses/add`}
+          <Button
             className="flex h-7 w-28 items-center justify-center gap-1 rounded-md bg-bright-2 text-font-black-3 hover:bg-bright-1"
+            disabled={isPending}
             onClick={() => {
               toast.warn("This feature is still development", {
                 position: "top-center",
@@ -128,9 +138,15 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
               });
             }}
           >
-            <LuPenLine className="text-xl" />
-            Manage
-          </Link>
+            {isPending ? (
+              <Loader2 className="w-4 animate-spin" />
+            ) : (
+              <Fragment>
+                <LuPenLine className="text-xl" />
+                Manage
+              </Fragment>
+            )}
+          </Button>
         </section>
       ),
     },
@@ -151,13 +167,15 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
               Untuk menambah data course, isi form input dibawah dengan benar.
             </p>
             <section className="flex w-full flex-col gap-1">
-              <h2 className="text-sm text-[#0F172A] hover:cursor-default">
+              <h2
+                className={`text-sm ${selectedFile && selectedFile?.type !== "video/mp4" ? "text-red-400" : "text-[#0F172A]"} hover:cursor-default`}
+              >
                 Videos
               </h2>
               <section className="flex h-10 w-full justify-between gap-3">
                 <Label
                   htmlFor="video"
-                  className={`flex w-[75%] items-center truncate rounded-md border border-[#CBD5E1] pl-2 text-sm text-font-input hover:bg-slate-100 ${isPending ? "cursor-not-allowed opacity-40 hover:bg-slate-100" : "hover:cursor-pointer"}`}
+                  className={`flex w-[75%] items-center truncate rounded-md border ${selectedFile && selectedFile?.type !== "video/mp4" ? "border-red-400 text-red-400" : "border-[#CBD5E1] text-font-input"} pl-2 text-sm  hover:bg-slate-100 ${isPending ? "cursor-not-allowed opacity-40 hover:bg-slate-100" : "hover:cursor-pointer"}`}
                 >
                   {selectedFile ? selectedFile.name : "Choose video to upload"}
                 </Label>
@@ -169,13 +187,20 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
                   <Input
                     id="video"
                     type="file"
-                    accept="video/*"
+                    accept="video/mp4"
                     className="sr-only"
                     onChange={handleFileChange}
                     disabled={isPending}
                   />
                 </label>
               </section>
+              {selectedFile && selectedFile?.type !== "video/mp4" && (
+                <section className="w-full">
+                  <p className="text-xs font-bold text-red-400">
+                    Hanya mengizinkan format file mp4
+                  </p>
+                </section>
+              )}
             </section>
             <FormField
               control={form.control}
@@ -253,7 +278,12 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
                 size={"sm"}
                 type="submit"
                 className="gap-1 bg-bright-2 font-bold text-font-black-3 hover:bg-bright-1"
-                disabled={!form.formState.isValid || !selectedFile || isPending}
+                disabled={
+                  !form.formState.isValid ||
+                  !selectedFile ||
+                  isPending ||
+                  selectedFile.type !== "video/mp4"
+                }
               >
                 {isPending && <Loader2 className="w-4 animate-spin" />}
                 Add Course <MdOutlineAddBox className="text-xl" />
@@ -262,7 +292,7 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
           </form>
         </Form>
         <section className="flex h-full w-full md:mt-10 xl:mt-0 xl:w-[48%]">
-          <DataTable columns={columns} data={course || []} />
+          <DataTable columns={columns} data={courses} loading={loading} />
         </section>
       </section>
     </AdminLayout>

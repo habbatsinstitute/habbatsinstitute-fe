@@ -16,14 +16,14 @@ export const loginSchema = z.object({
 export const courseSchema = z.object({
   title: z
     .string({ required_error: "Title wajib diisi" })
-    .min(1, { message: "Title wajib diisi" })
-    .max(100, { message: "Title maksimal 50 karakter" }),
+    .min(20, { message: "Title minimal 20 karakter" })
+    .max(100, { message: "Title maksimal 100 karakter" }),
   description: z
     .string({ required_error: "Deskripsi wajib diisi" })
     .min(1, {
       message: "Deskripsi wajib diisi",
     })
-    .max(5000, { message: "Deskiprsi maksimal 5000 karakter" }),
+    .max(2000, { message: "Deskripsi maksimal 2000 karakter" }),
 });
 
 export const newsSchema = z.object({
