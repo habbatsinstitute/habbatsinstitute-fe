@@ -65,8 +65,11 @@ export function DataTable<TData, TValue>({
         <TableBody>
           {loading ? (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                Loading...
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 animate-pulse text-center"
+              >
+                Refreshing ...
               </TableCell>
             </TableRow>
           ) : data.length > 0 ? (

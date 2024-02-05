@@ -17,10 +17,18 @@ import {
   AlertDialogTrigger,
   Button,
   DataTable,
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 } from "@/components";
 import {
   TCourseItems,
   TGetCourseResponse,
+  TPaging,
   api,
   formatDateResponse,
   useRemoveCourse,
@@ -29,6 +37,14 @@ import {
 export const DashboardCourseGet: FC = (): ReactElement => {
   const [courses, setCourses] = useState<TCourseItems[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [paging, setPaging] = useState<TPaging>({
+    total_data: 0,
+    current_page: 0,
+    next_page: 0,
+    previous_page: 0,
+    page_size: 0,
+    total_page: 0,
+  });
 
   const navigate = useNavigate();
 
@@ -39,6 +55,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
       setLoading(true);
       const { data } = await api.get<TGetCourseResponse>("/courses");
       setCourses(data?.data);
+      setPaging(data?.pagination);
     } catch (error) {
       setCourses([]);
     } finally {
@@ -74,21 +91,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
       cell: (cell) => (
         <section className="flex w-24 items-center justify-between gap-2 py-1">
           <Link
-            // to={`/dashboard/courses/manage/${cell.row.original.id}`}
-            to={`/dashboard/courses`}
-            onClick={() => {
-              toast.warn("This feature is still development", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Slide,
-              });
-            }}
+            to={`/dashboard/courses/manage/${cell.row.original.id}`}
             className="grid h-8 w-20 place-items-center rounded-md bg-dark-2 px-2 text-font-white hover:bg-slate-700"
           >
             Manage
@@ -164,7 +167,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
 
   return (
     <AdminLayout>
-      <section className="flex h-[400px] w-full flex-col pt-7">
+      <section className="flex h-[450px] w-full flex-col pt-7">
         <section className="flex w-full gap-3">
           <Button
             onClick={() => navigate("/dashboard/courses/add")}
@@ -179,16 +182,62 @@ export const DashboardCourseGet: FC = (): ReactElement => {
             }}
             className="flex items-center justify-center gap-1 bg-emerald-300 text-black hover:bg-emerald-400"
           >
-            <LuRefreshCcw className="text-xl" />
+            <LuRefreshCcw className={`${loading && "animate-spin"} text-xl`} />
           </Button>
         </section>
 
-        <section className="mt-3 h-[400px] w-full">
+        <section className="mt-3 flex h-[450px] w-full flex-col">
           <DataTable
             columns={columns}
             data={formattedCourseData}
             loading={loading}
           />
+
+          {!loading && (
+            <section className="mt-3 flex w-full justify-end">
+              <section>
+                <Pagination>
+                  <PaginationContent>
+                    {paging.current_page !== 1 && (
+                      <PaginationItem>
+                        <PaginationPrevious
+                          href={`?page=${paging.current_page - 1}`}
+                        />
+                      </PaginationItem>
+                    )}
+                    {paging.previous_page !== 0 && (
+                      <PaginationItem>
+                        <PaginationLink href={`?page=${paging.previous_page}`}>
+                          {paging.previous_page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )}
+                    <PaginationItem>
+                      <PaginationLink
+                        href={`?page=${paging.current_page}`}
+                        isActive
+                      >
+                        {paging.current_page}
+                      </PaginationLink>
+                    </PaginationItem>
+                    {paging.next_page !== 0 && (
+                      <PaginationItem>
+                        <PaginationLink href={`?page=${paging.next_page}`}>
+                          {paging.next_page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )}
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationNext href="#" />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </section>
+            </section>
+          )}
         </section>
       </section>
     </AdminLayout>

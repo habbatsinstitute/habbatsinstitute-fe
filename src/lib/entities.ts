@@ -1,3 +1,12 @@
+export type TPaging = {
+  total_data: number;
+  current_page: number;
+  next_page: number;
+  previous_page: number;
+  page_size: number;
+  total_page: number;
+};
+
 export type TUserMe = {
   id: number;
   username: string;
@@ -56,6 +65,15 @@ export type TGetCourseResponse = {
     page_size: number;
     total_page: number;
   };
+};
+
+export type TGetCourseByIdResponse = {
+  data: TCourseItems;
+  message: string;
+};
+
+export type TUpdateCourseResponse = {
+  message: string;
 };
 
 export type TRemoveCourseResponse = {

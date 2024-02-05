@@ -11,6 +11,7 @@ import {
   TCreateUserResponse,
   TGetAllUsersResponse,
   TGetCategoriesResponse,
+  TGetCourseByIdResponse,
   TGetCourseResponse,
   TGetNewsResponse,
   TGetUserByIdResponse,
@@ -19,6 +20,7 @@ import {
   TRemoveCourseResponse,
   TRemoveNewsResponses,
   TRemoveUserResponse,
+  TUpdateCourseResponse,
 } from ".";
 
 export const api = axios.create({
@@ -89,6 +91,32 @@ export const useGetCourse = (
     queryKey: ["get-course"],
     queryFn: async () => {
       const { data } = await api.get("/courses", { params: params });
+
+      return data;
+    },
+  });
+};
+
+export const useGetCourseById = (
+  params?: unknown,
+): UseQueryResult<TGetCourseByIdResponse> => {
+  return useQuery({
+    queryKey: ["get-course-by-id"],
+    queryFn: async () => {
+      const { data } = await api.get(`/courses/${params}`);
+
+      return data;
+    },
+  });
+};
+
+export const useUpdateCourse = (
+  params?: unknown,
+): UseMutationResult<TUpdateCourseResponse> => {
+  return useMutation({
+    mutationKey: ["update-course"],
+    mutationFn: async (payload: unknown) => {
+      const { data } = await api.put(`/courses/${params}`, payload);
 
       return data;
     },
