@@ -1,10 +1,9 @@
 import { FC, ReactElement, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import { ColumnDef } from "@tanstack/react-table";
 import { Slide, toast } from "react-toastify";
 import { MdOutlineAddBox } from "react-icons/md";
-import { LuTrash } from "react-icons/lu";
+import { LuRefreshCcw, LuTrash } from "react-icons/lu";
 import {
   AdminLayout,
   AlertDialog,
@@ -15,23 +14,41 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
   Button,
   DataTable,
 } from "@/components";
-import { TCourseItems, formatDateResponse, useGetCourse } from "@/lib";
+import {
+  TCourseItems,
+  TGetCourseResponse,
+  api,
+  formatDateResponse,
+  useRemoveCourse,
+} from "@/lib";
 
 export const DashboardCourseGet: FC = (): ReactElement => {
-  const [course, setCourse] = useState<TCourseItems[]>([]);
+  const [courses, setCourses] = useState<TCourseItems[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const { data } = useGetCourse();
+  const { mutate } = useRemoveCourse();
+
+  const getCourses = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetCourseResponse>("/courses");
+      setCourses(data?.data);
+    } catch (error) {
+      setCourses([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (data?.data) {
-      setCourse(data.data);
-    }
-  }, [data?.data, setCourse]);
+    getCourses();
+  }, []);
 
   const columns: ColumnDef<TCourseItems>[] = [
     { header: "No", cell: (cell) => cell.row.index + 1 },
@@ -77,27 +94,11 @@ export const DashboardCourseGet: FC = (): ReactElement => {
             Manage
           </Link>
           <AlertDialog>
-            {/* <AlertDialogTrigger asChild> */}
-            <Button
-              className="h-8 w-14"
-              variant={"destructive"}
-              onClick={() => {
-                toast.warn("This feature is still development", {
-                  position: "top-center",
-                  autoClose: 1000,
-                  hideProgressBar: true,
-                  closeOnClick: false,
-                  pauseOnHover: false,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "light",
-                  transition: Slide,
-                });
-              }}
-            >
-              <LuTrash className="text-white" />
-            </Button>
-            {/* </AlertDialogTrigger> */}
+            <AlertDialogTrigger asChild>
+              <Button className="h-8 w-14" variant={"destructive"}>
+                <LuTrash className="text-white" />
+              </Button>
+            </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>
@@ -112,7 +113,40 @@ export const DashboardCourseGet: FC = (): ReactElement => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-red-500 hover:bg-red-600">
+                <AlertDialogAction
+                  className="bg-red-500 hover:bg-red-600"
+                  onClick={() =>
+                    mutate(cell.row.original.id, {
+                      onSuccess: () => {
+                        getCourses();
+                        toast.success("Data course berhasil dihapus", {
+                          position: "top-center",
+                          autoClose: 1000,
+                          hideProgressBar: true,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "light",
+                          transition: Slide,
+                        });
+                      },
+                      onError: () => {
+                        toast.error("Gagal menghapus data course", {
+                          position: "top-center",
+                          autoClose: 1000,
+                          hideProgressBar: true,
+                          closeOnClick: true,
+                          pauseOnHover: false,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "light",
+                          transition: Slide,
+                        });
+                      },
+                    })
+                  }
+                >
                   Delete data
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -123,7 +157,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
     },
   ];
 
-  const formattedCourseData = course.map((course) => ({
+  const formattedCourseData = courses.map((course) => ({
     ...course,
     created_at: formatDateResponse(course.created_at),
   }));
@@ -131,15 +165,30 @@ export const DashboardCourseGet: FC = (): ReactElement => {
   return (
     <AdminLayout>
       <section className="flex h-[400px] w-full flex-col pt-7">
-        <Button
-          onClick={() => navigate("/dashboard/courses/add")}
-          className="flex w-36 items-center justify-center gap-1 bg-bright-1 text-font-black-1 hover:bg-bright-2"
-        >
-          <MdOutlineAddBox className="text-xl" />
-          Add Course
-        </Button>
+        <section className="flex w-full gap-3">
+          <Button
+            onClick={() => navigate("/dashboard/courses/add")}
+            className="flex w-36 items-center justify-center gap-1 bg-bright-1 text-font-black-1 hover:bg-bright-2"
+          >
+            <MdOutlineAddBox className="text-xl" />
+            Add Course
+          </Button>
+          <Button
+            onClick={() => {
+              getCourses();
+            }}
+            className="flex items-center justify-center gap-1 bg-emerald-300 text-black hover:bg-emerald-400"
+          >
+            <LuRefreshCcw className="text-xl" />
+          </Button>
+        </section>
+
         <section className="mt-3 h-[400px] w-full">
-          <DataTable columns={columns} data={formattedCourseData || []} />
+          <DataTable
+            columns={columns}
+            data={formattedCourseData}
+            loading={loading}
+          />
         </section>
       </section>
     </AdminLayout>

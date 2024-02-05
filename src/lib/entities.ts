@@ -58,6 +58,10 @@ export type TGetCourseResponse = {
   };
 };
 
+export type TRemoveCourseResponse = {
+  message: string;
+};
+
 export type TCreateNewsResponse = {
   data: [
     {

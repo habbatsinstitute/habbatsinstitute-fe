@@ -16,6 +16,7 @@ import {
   TGetUserByIdResponse,
   TGetUserMeResponse,
   TLoginResponse,
+  TRemoveCourseResponse,
   TRemoveNewsResponses,
   TRemoveUserResponse,
 } from ".";
@@ -88,6 +89,27 @@ export const useGetCourse = (
     queryKey: ["get-course"],
     queryFn: async () => {
       const { data } = await api.get("/courses", { params: params });
+
+      return data;
+    },
+  });
+};
+
+export const useRemoveCourse = (): UseMutationResult<
+  TRemoveCourseResponse,
+  Error,
+  string | number | undefined,
+  unknown
+> => {
+  return useMutation<
+    TRemoveCourseResponse,
+    Error,
+    string | number | undefined,
+    unknown
+  >({
+    mutationKey: ["remove-course"],
+    mutationFn: async (params?: string | number) => {
+      const { data } = await api.delete(`/courses/${params}`);
 
       return data;
     },
