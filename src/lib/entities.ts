@@ -139,6 +139,10 @@ export type TGetNewsByIdResponses = {
   message: string;
 };
 
+export type TUpdateNewsResponse = {
+  message: string;
+};
+
 export type TRemoveNewsResponses = {
   message: string;
 };

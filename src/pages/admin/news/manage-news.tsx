@@ -1,10 +1,12 @@
-import { FC, ReactElement, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { FC, Fragment, ReactElement, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { LuTrash, LuSave, LuPenLine } from "react-icons/lu";
+import { Slide, toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
+import { LuTrash, LuSave, LuPenLine, LuLoader2 } from "react-icons/lu";
 import {
   AdminLayout,
   AlertDialog,
@@ -34,12 +36,23 @@ import {
   Textarea,
   Label,
 } from "@/components";
-import { TNewsItems, newsSchema, useGetCategories } from "@/lib";
+import {
+  TGetNewsResponse,
+  TNewsItems,
+  api,
+  newsSchema,
+  useGetCategories,
+  useGetNewsById,
+  useRemoveNews,
+  useUpdateNews,
+} from "@/lib";
 
 export const DashboardNewsManage: FC = (): ReactElement => {
+  const [news, setNews] = useState<TNewsItems[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const { data: categories } = useGetCategories();
+  const id = useParams();
 
   const form = useForm<z.infer<typeof newsSchema>>({
     resolver: zodResolver(newsSchema),
@@ -56,17 +69,84 @@ export const DashboardNewsManage: FC = (): ReactElement => {
     setSelectedFile(file || null);
   };
 
+  const { data: categories } = useGetCategories();
+  const {
+    data: getNewsById,
+    refetch: refetchNewsById,
+    isFetching: isFetchingNewsById,
+  } = useGetNewsById(id?.id);
+  const { mutate: update, isPending: isPendingUpdate } = useUpdateNews(id?.id);
+  const { mutate: remove, isPending: isPendingRemove } = useRemoveNews();
+
   const navigate = useNavigate();
 
+  const getNews = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetNewsResponse>("/news");
+      setNews(data?.data);
+    } catch (error) {
+      setNews([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getNews();
+  }, []);
+
+  useEffect(() => {
+    refetchNewsById();
+    form.reset(getNewsById?.data);
+  }, [form, form.reset, getNewsById?.data, id, refetchNewsById]);
+
   function onSubmit(values: z.infer<typeof newsSchema>) {
-    console.log(values);
-    console.log(selectedFile);
+    const formData = new FormData();
+
+    formData.append("title", values.title);
+    formData.append("description", values.description);
+    formData.append("category", values.category);
+    if (selectedFile) {
+      formData.append("images", selectedFile as Blob);
+    }
+
+    update(formData, {
+      onSuccess: () => {
+        getNews();
+        toast.success("Data news berhasil diupdate", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Slide,
+        });
+        navigate("/dashboard/news");
+      },
+      onError: () => {
+        toast.error("Gagal update data news", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Slide,
+        });
+      },
+    });
   }
 
   const columns: ColumnDef<TNewsItems>[] = [
     { header: "No", cell: (cell) => cell.row.index + 1 },
     {
-      accessorKey: "news",
+      accessorKey: "title",
       header: "News Title",
     },
     {
@@ -74,14 +154,22 @@ export const DashboardNewsManage: FC = (): ReactElement => {
       header: "Opsi",
       cell: (cell) => (
         <section className="flex w-full justify-center py-2">
-          <Link
-            to={`/dashboard/news/manage/${cell.row.original.id}`}
+          <Button
             className="flex h-7 w-28 items-center justify-center gap-1 rounded-md bg-bright-2 text-font-black-3 hover:bg-bright-1"
-            onClick={() => console.log(cell.row.original)}
+            onClick={() => {
+              navigate(`/dashboard/news/manage/${cell.row.original.id}`);
+            }}
+            disabled={isFetchingNewsById || isPendingUpdate || isPendingRemove}
           >
-            <LuPenLine className="text-xl" />
-            Manage
-          </Link>
+            {isFetchingNewsById || isPendingUpdate || isPendingRemove ? (
+              <Loader2 className="w-4 animate-spin" />
+            ) : (
+              <Fragment>
+                <LuPenLine className="text-xl" />
+                Manage
+              </Fragment>
+            )}
+          </Button>
         </section>
       ),
     },
@@ -102,30 +190,72 @@ export const DashboardNewsManage: FC = (): ReactElement => {
               Isi form input dibawah dengan benar.
             </p>
             <section className="flex w-full flex-col gap-1">
-              <h2 className="text-sm text-[#0F172A] hover:cursor-default">
+              <h2
+                className={`text-sm ${
+                  (selectedFile &&
+                    selectedFile.type !== "image/jpeg" &&
+                    selectedFile.type !== "image/png" &&
+                    selectedFile.type !== "image/jpg") ||
+                  (selectedFile && selectedFile.size > 2000000)
+                    ? "text-red-400"
+                    : "text-[#0F172A]"
+                } hover:cursor-default`}
+              >
                 Image Cover
               </h2>
               <section className="flex h-10 w-full justify-between gap-3">
                 <Label
                   htmlFor="image"
-                  className="flex w-[75%] items-center truncate rounded-md border border-[#CBD5E1] pl-2 text-sm text-font-input hover:cursor-pointer hover:bg-slate-100"
+                  className={`flex w-[75%] items-center truncate rounded-md border ${
+                    (selectedFile &&
+                      selectedFile.type !== "image/jpeg" &&
+                      selectedFile.type !== "image/png" &&
+                      selectedFile.type !== "image/jpg") ||
+                    (selectedFile && selectedFile.size > 2000000)
+                      ? "border-red-400 text-red-400"
+                      : "border-[#CBD5E1] text-font-input"
+                  } pl-2 text-sm  hover:bg-slate-100 ${isPendingUpdate || isPendingRemove ? "cursor-not-allowed opacity-40 hover:bg-slate-100" : "hover:cursor-pointer"}`}
                 >
                   {selectedFile ? selectedFile.name : "Choose image to upload"}
                 </Label>
                 <label
                   htmlFor="image"
-                  className="relative grid w-32 cursor-pointer place-items-center rounded-md bg-[#0F172A] pt-2 text-sm text-white hover:bg-slate-700"
+                  className={`relative grid w-32 place-items-center rounded-md bg-[#0F172A] pt-2 text-sm text-white hover:bg-slate-700 ${isPendingUpdate || isPendingRemove || isFetchingNewsById ? "cursor-not-allowed opacity-30 hover:bg-[#0F172A]" : "cursor-pointer"}`}
                 >
-                  Browse file
+                  {isFetchingNewsById || isPendingUpdate || isPendingRemove ? (
+                    <LuLoader2 className="animate-spin" />
+                  ) : (
+                    "Browse file"
+                  )}
                   <Input
                     id="image"
                     type="file"
                     accept="image/*"
                     className="sr-only"
                     onChange={handleFileChange}
+                    disabled={
+                      isPendingUpdate || isPendingRemove || isFetchingNewsById
+                    }
                   />
                 </label>
               </section>
+              {selectedFile &&
+                selectedFile.type !== "image/jpg" &&
+                selectedFile.type !== "image/jpeg" &&
+                selectedFile.type !== "image/png" && (
+                  <section className="w-full">
+                    <p className="text-xs font-bold text-red-400">
+                      Hanya mengizinkan format gambar JPG, JPEG, dan PNG
+                    </p>
+                  </section>
+                )}
+              {selectedFile && selectedFile?.size > 2000000 && (
+                <section className="w-full">
+                  <p className="text-xs font-bold text-red-400">
+                    File tidak boleh lebih dari 2 MB
+                  </p>
+                </section>
+              )}
             </section>
             <FormField
               control={form.control}
@@ -145,6 +275,9 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                         form.formState.errors.title
                           ? "border-red-400 placeholder:text-red-400"
                           : ""
+                      }
+                      disabled={
+                        isPendingUpdate || isPendingRemove || isFetchingNewsById
                       }
                       {...field}
                     />
@@ -171,12 +304,17 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      disabled={
+                        isPendingUpdate || isPendingRemove || isFetchingNewsById
+                      }
                     >
                       <FormControl>
                         <SelectTrigger
                           className={`w-full focus:ring-0 focus:ring-offset-0 ${form.formState.errors.category ? "border-red-400 text-red-400" : ""}`}
                         >
-                          <SelectValue placeholder="Select category news" />
+                          <SelectValue
+                            placeholder={getNewsById?.data?.category}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -214,6 +352,9 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                       id="news-description"
                       placeholder="Type your message here"
                       className={`h-14 resize-none focus-visible:ring-1 focus-visible:ring-blue-300 focus-visible:ring-offset-0 ${form.formState.errors.description ? "border-red-400 placeholder:text-red-400" : ""}`}
+                      disabled={
+                        isPendingUpdate || isPendingRemove || isFetchingNewsById
+                      }
                       {...field}
                     />
                   </FormControl>
@@ -231,8 +372,15 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                 size={"sm"}
                 type="button"
                 onClick={() => navigate("/dashboard/news")}
+                disabled={
+                  isPendingUpdate || isPendingRemove || isFetchingNewsById
+                }
               >
-                Cancel
+                {isFetchingNewsById || isPendingUpdate || isPendingRemove ? (
+                  <LuLoader2 className="w-14 animate-spin" />
+                ) : (
+                  "Cancel"
+                )}
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
@@ -241,9 +389,20 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                     type="button"
                     variant={"destructive"}
                     className="flex gap-1"
+                    disabled={
+                      isPendingUpdate || isPendingRemove || isFetchingNewsById
+                    }
                   >
-                    Delete
-                    <LuTrash />
+                    {isFetchingNewsById ||
+                    isPendingUpdate ||
+                    isPendingRemove ? (
+                      <LuLoader2 className="w-14 animate-spin" />
+                    ) : (
+                      <Fragment>
+                        Delete
+                        <LuTrash />
+                      </Fragment>
+                    )}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -255,7 +414,9 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-dark-3">
                       Anda akan menghapus data news dengan judul{" "}
-                      <span className="font-bold">"{"News"}"</span>
+                      <span className="font-bold">
+                        "{getNewsById?.data.title}"
+                      </span>
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -263,6 +424,38 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                     <AlertDialogAction
                       type="submit"
                       className="bg-[#DC5E5E] hover:bg-red-400"
+                      onClick={() =>
+                        remove(id?.id, {
+                          onSuccess: () => {
+                            getNews();
+                            toast.success("Data news berhasil dihapus", {
+                              position: "top-center",
+                              autoClose: 1000,
+                              hideProgressBar: true,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                              theme: "light",
+                              transition: Slide,
+                            });
+                            navigate("/dashboard/news");
+                          },
+                          onError: () => {
+                            toast.error("Gagal menghapus data news", {
+                              position: "top-center",
+                              autoClose: 1000,
+                              hideProgressBar: true,
+                              closeOnClick: true,
+                              pauseOnHover: false,
+                              draggable: true,
+                              progress: undefined,
+                              theme: "light",
+                              transition: Slide,
+                            });
+                          },
+                        })
+                      }
                     >
                       Delete data
                     </AlertDialogAction>
@@ -273,13 +466,33 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                 size={"sm"}
                 type="submit"
                 className="gap-1 bg-bright-2 font-bold text-font-black-3 hover:bg-bright-1"
+                disabled={
+                  !form.formState.isValid ||
+                  isPendingUpdate ||
+                  isPendingRemove ||
+                  isFetchingNewsById ||
+                  (selectedFile !== null &&
+                    selectedFile?.type !== "image/jpg" &&
+                    selectedFile?.type !== "image/jpeg" &&
+                    selectedFile?.type !== "image/png") ||
+                  (selectedFile !== null && selectedFile?.size > 2000000)
+                }
               >
-                Save <LuSave className="text-lg" />
+                {(isPendingRemove || isFetchingNewsById || isPendingUpdate) && (
+                  <LuLoader2 className="mx-7 w-full animate-spin" />
+                )}
+                {!isPendingRemove &&
+                  !isFetchingNewsById &&
+                  !isPendingUpdate && (
+                    <Fragment>
+                      Save <LuSave className="text-lg" />
+                    </Fragment>
+                  )}
               </Button>
             </section>
           </section>
           <section className="flex h-full w-full md:mt-10 xl:mt-0 xl:w-[48%]">
-            <DataTable columns={columns} data={[]} />
+            <DataTable columns={columns} data={news} loading={loading} />
           </section>
         </form>
       </Form>

@@ -413,12 +413,18 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                   (selectedFile !== null && selectedFile?.size > 100000000)
                 }
               >
-                {isPendingRemove ||
+                {(isPendingRemove ||
                   isFetchingCourseById ||
-                  (isPendingUpdate && (
-                    <LuLoader2 className="w-4 animate-spin" />
-                  ))}
-                Save <LuSave className="text-lg" />
+                  isPendingUpdate) && (
+                  <LuLoader2 className="mx-7 w-full animate-spin" />
+                )}
+                {!isPendingRemove &&
+                  !isFetchingCourseById &&
+                  !isPendingUpdate && (
+                    <Fragment>
+                      Save <LuSave className="text-lg" />
+                    </Fragment>
+                  )}
               </Button>
             </section>
           </form>

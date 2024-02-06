@@ -13,6 +13,7 @@ import {
   TGetCategoriesResponse,
   TGetCourseByIdResponse,
   TGetCourseResponse,
+  TGetNewsByIdResponses,
   TGetNewsResponse,
   TGetUserByIdResponse,
   TGetUserMeResponse,
@@ -21,6 +22,7 @@ import {
   TRemoveNewsResponses,
   TRemoveUserResponse,
   TUpdateCourseResponse,
+  TUpdateNewsResponse,
 } from ".";
 
 export const api = axios.create({
@@ -162,6 +164,32 @@ export const useGetNews = (
     queryKey: ["get-news"],
     queryFn: async () => {
       const { data } = await api.get("/news", { params: params });
+
+      return data;
+    },
+  });
+};
+
+export const useGetNewsById = (
+  params?: unknown,
+): UseQueryResult<TGetNewsByIdResponses> => {
+  return useQuery({
+    queryKey: ["get-news-by-id"],
+    queryFn: async () => {
+      const { data } = await api.get(`/news/${params}`);
+
+      return data;
+    },
+  });
+};
+
+export const useUpdateNews = (
+  params?: unknown,
+): UseMutationResult<TUpdateNewsResponse> => {
+  return useMutation({
+    mutationKey: ["update-news"],
+    mutationFn: async (payload: unknown) => {
+      const { data } = await api.patch(`/news/${params}`, payload);
 
       return data;
     },

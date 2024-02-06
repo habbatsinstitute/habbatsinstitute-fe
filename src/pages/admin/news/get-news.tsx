@@ -70,22 +70,8 @@ export const DashboardNewsGet: FC = (): ReactElement => {
       cell: (cell) => (
         <section className="flex w-24 items-center justify-between gap-2 py-1">
           <Link
-            // to={`/dashboard/news/manage/${cell.row.original.id}`}
-            to={`/dashboard/news`}
+            to={`/dashboard/news/manage/${cell.row.original.id}`}
             className="grid h-8 w-20 place-items-center rounded-md bg-dark-2 px-2 text-font-white hover:bg-slate-700"
-            onClick={() => {
-              toast.warn("This feature is still development", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Slide,
-              });
-            }}
           >
             Manage
           </Link>
