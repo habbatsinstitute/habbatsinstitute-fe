@@ -17,18 +17,10 @@ import {
   AlertDialogTrigger,
   Button,
   DataTable,
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components";
 import {
   TCourseItems,
   TGetCourseResponse,
-  TPaging,
   api,
   formatDateResponse,
   useRemoveCourse,
@@ -37,14 +29,14 @@ import {
 export const DashboardCourseGet: FC = (): ReactElement => {
   const [courses, setCourses] = useState<TCourseItems[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [paging, setPaging] = useState<TPaging>({
-    total_data: 0,
-    current_page: 0,
-    next_page: 0,
-    previous_page: 0,
-    page_size: 0,
-    total_page: 0,
-  });
+  // const [paging, setPaging] = useState<TPaging>({
+  //   total_data: 0,
+  //   current_page: 0,
+  //   next_page: 0,
+  //   previous_page: 0,
+  //   page_size: 0,
+  //   total_page: 0,
+  // });
 
   const navigate = useNavigate();
 
@@ -55,7 +47,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
       setLoading(true);
       const { data } = await api.get<TGetCourseResponse>("/courses");
       setCourses(data?.data);
-      setPaging(data?.pagination);
+      // setPaging(data?.pagination);
     } catch (error) {
       setCourses([]);
     } finally {
@@ -193,7 +185,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
             loading={loading}
           />
 
-          {!loading && (
+          {/* {!loading && (
             <section className="mt-3 flex w-full justify-end">
               <section>
                 <Pagination>
@@ -237,7 +229,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
                 </Pagination>
               </section>
             </section>
-          )}
+          )} */}
         </section>
       </section>
     </AdminLayout>
