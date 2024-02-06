@@ -186,14 +186,14 @@ export const DashboardCourseManage: FC = (): ReactElement => {
 
             <section className="flex w-full flex-col gap-1">
               <h2
-                className={`text-sm ${selectedFile && selectedFile?.type !== "video/mp4" ? "text-red-400" : "text-[#0F172A]"} hover:cursor-default`}
+                className={`text-sm ${(selectedFile && selectedFile?.type !== "video/mp4") || (selectedFile && selectedFile?.size > 100000000) ? "text-red-400" : "text-[#0F172A]"} hover:cursor-default`}
               >
                 Videos
               </h2>
               <section className="flex h-10 w-full justify-between gap-3">
                 <Label
                   htmlFor="video"
-                  className={`flex w-[75%] items-center truncate rounded-md border ${selectedFile && selectedFile?.type !== "video/mp4" ? "border-red-400 text-red-400" : "border-[#CBD5E1] text-font-input"} pl-2 text-sm  hover:bg-slate-100 ${isPendingUpdate || isPendingRemove ? "cursor-not-allowed opacity-40 hover:bg-slate-100" : "hover:cursor-pointer"}`}
+                  className={`flex w-[75%] items-center truncate rounded-md border ${(selectedFile && selectedFile?.type !== "video/mp4") || (selectedFile && selectedFile?.size > 100000000) ? "border-red-400 text-red-400" : "border-[#CBD5E1] text-font-input"} pl-2 text-sm  hover:bg-slate-100 ${isPendingUpdate || isPendingRemove ? "cursor-not-allowed opacity-40 hover:bg-slate-100" : "hover:cursor-pointer"}`}
                 >
                   {selectedFile ? selectedFile.name : "Choose video to upload"}
                 </Label>
@@ -224,6 +224,13 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                 <section className="w-full">
                   <p className="text-xs font-bold text-red-400">
                     Hanya mengizinkan format file mp4
+                  </p>
+                </section>
+              )}
+              {selectedFile && selectedFile?.size > 100000000 && (
+                <section className="w-full">
+                  <p className="text-xs font-bold text-red-400">
+                    File tidak boleh lebih dari 100 MB
                   </p>
                 </section>
               )}
@@ -401,7 +408,9 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                   isPendingUpdate ||
                   isPendingRemove ||
                   isFetchingCourseById ||
-                  (selectedFile !== null && selectedFile?.type !== "video/mp4")
+                  (selectedFile !== null &&
+                    selectedFile?.type !== "video/mp4") ||
+                  (selectedFile !== null && selectedFile?.size > 100000000)
                 }
               >
                 {isPendingRemove ||
