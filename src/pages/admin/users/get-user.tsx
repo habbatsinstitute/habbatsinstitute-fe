@@ -2,7 +2,7 @@ import { FC, ReactElement, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 import { Slide, toast } from "react-toastify";
-import { LuTrash } from "react-icons/lu";
+import { LuRefreshCcw, LuTrash } from "react-icons/lu";
 import { MdOutlineAddBox } from "react-icons/md";
 import {
   AdminLayout,
@@ -19,25 +19,36 @@ import {
   DataTable,
 } from "@/components";
 import {
+  TGetAllUsersResponse,
   TUser,
+  api,
   formatDateResponse,
-  useGetAllUsers,
   useRemoveUser,
 } from "@/lib";
 
 export const DashboardUsersGet: FC = (): ReactElement => {
   const [users, setUsers] = useState<TUser[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const { data, refetch } = useGetAllUsers();
   const { mutate } = useRemoveUser();
 
-  useEffect(() => {
-    if (data?.data) {
-      setUsers(data?.data?.filter((user) => user.role_id === 1));
+  const getUsers = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetAllUsersResponse>("/users");
+      setUsers(data?.data);
+    } catch (error) {
+      setUsers([]);
+    } finally {
+      setLoading(false);
     }
-  }, [data?.data, setUsers]);
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   const formattedUsersData = users.map((users) => ({
     ...users,
@@ -118,7 +129,7 @@ export const DashboardUsersGet: FC = (): ReactElement => {
                   onClick={() => {
                     mutate(cell.row.original.id, {
                       onSuccess: () => {
-                        refetch();
+                        getUsers();
                         toast.success("Data user berhasil dihapus", {
                           position: "top-center",
                           autoClose: 1000,
@@ -160,15 +171,30 @@ export const DashboardUsersGet: FC = (): ReactElement => {
   return (
     <AdminLayout>
       <section className="flex h-[400px] w-full flex-col pt-7">
-        <Button
-          onClick={() => navigate("/dashboard/users/add")}
-          className="flex w-36 items-center justify-center gap-1 bg-bright-1 text-font-black-1 hover:bg-bright-2"
-        >
-          <MdOutlineAddBox className="text-xl" />
-          Add User
-        </Button>
+        <section className="flex w-full gap-3">
+          <Button
+            onClick={() => navigate("/dashboard/users/add")}
+            className="flex w-36 items-center justify-center gap-1 bg-bright-1 text-font-black-1 hover:bg-bright-2"
+          >
+            <MdOutlineAddBox className="text-xl" />
+            Add User
+          </Button>
+          <Button
+            onClick={() => {
+              getUsers();
+            }}
+            className="flex items-center justify-center gap-1 bg-emerald-300 text-black hover:bg-emerald-400"
+          >
+            <LuRefreshCcw className={`${loading && "animate-spin"} text-xl`} />
+          </Button>
+        </section>
+
         <section className="mt-3 h-[400px] w-full">
-          <DataTable columns={columns} data={formattedUsersData || []} />
+          <DataTable
+            columns={columns}
+            data={formattedUsersData}
+            loading={loading}
+          />
         </section>
       </section>
     </AdminLayout>

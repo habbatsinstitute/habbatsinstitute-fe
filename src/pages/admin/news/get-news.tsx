@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 import { Slide, toast } from "react-toastify";
 import { MdOutlineAddBox } from "react-icons/md";
-import { LuTrash } from "react-icons/lu";
+import { LuRefreshCcw, LuTrash } from "react-icons/lu";
 import {
   AdminLayout,
   AlertDialog,
@@ -161,13 +161,24 @@ export const DashboardNewsGet: FC = (): ReactElement => {
   return (
     <AdminLayout>
       <section className="flex h-[400px] w-full flex-col pt-7">
-        <Button
-          onClick={() => navigate("/dashboard/news/add")}
-          className="flex w-36 items-center justify-center gap-1 bg-bright-1 text-font-black-1 hover:bg-bright-2"
-        >
-          <MdOutlineAddBox className="text-xl" />
-          Add News
-        </Button>
+        <section className="flex w-full gap-3">
+          <Button
+            onClick={() => navigate("/dashboard/news/add")}
+            className="flex w-36 items-center justify-center gap-1 bg-bright-1 text-font-black-1 hover:bg-bright-2"
+          >
+            <MdOutlineAddBox className="text-xl" />
+            Add News
+          </Button>
+          <Button
+            onClick={() => {
+              getNews();
+            }}
+            className="flex items-center justify-center gap-1 bg-emerald-300 text-black hover:bg-emerald-400"
+          >
+            <LuRefreshCcw className={`${loading && "animate-spin"} text-xl`} />
+          </Button>
+        </section>
+
         <section className="mt-3 h-[400px] w-full">
           <DataTable
             columns={columns}
