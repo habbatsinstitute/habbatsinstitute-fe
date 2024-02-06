@@ -25,17 +25,25 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components";
-import { TUser, cn, userSchema, useCreateUser, useGetAllUsers } from "@/lib";
+import {
+  TUser,
+  cn,
+  userSchema,
+  useCreateUser,
+  TGetAllUsersResponse,
+  api,
+} from "@/lib";
 
 export const DashboardUsersCreate: FC = (): ReactElement => {
   const [users, setUsers] = useState<TUser[]>([]);
   const [date, setDate] = useState<Date>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
-    mode: "onChange",
+    mode: "all",
     defaultValues: {
       username: "",
       password: "",
@@ -44,13 +52,22 @@ export const DashboardUsersCreate: FC = (): ReactElement => {
   });
 
   const { mutate, isPending } = useCreateUser();
-  const { refetch, data: getUsers } = useGetAllUsers();
+
+  const getUsers = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetAllUsersResponse>("/users");
+      setUsers(data?.data.filter((user) => user.role_id === 1));
+    } catch (error) {
+      setUsers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (getUsers?.data) {
-      setUsers(getUsers?.data.filter((user) => user.role_id === 1));
-    }
-  }, [getUsers?.data, setUsers]);
+    getUsers();
+  }, []);
 
   function onSubmit(values: z.infer<typeof userSchema>) {
     const formData = new FormData();
@@ -61,7 +78,7 @@ export const DashboardUsersCreate: FC = (): ReactElement => {
 
     mutate(formData, {
       onSuccess: () => {
-        refetch();
+        getUsers();
         toast.success("Data user berhasil ditambahkan", {
           position: "top-center",
           autoClose: 1000,
@@ -287,7 +304,7 @@ export const DashboardUsersCreate: FC = (): ReactElement => {
           </form>
         </Form>
         <section className="flex h-full w-full md:mt-10 xl:mt-0 xl:w-[48%]">
-          <DataTable columns={columns} data={users || []} />
+          <DataTable columns={columns} data={users} loading={loading} />
         </section>
       </section>
     </AdminLayout>
