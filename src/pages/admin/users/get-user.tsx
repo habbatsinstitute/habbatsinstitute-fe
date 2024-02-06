@@ -38,7 +38,7 @@ export const DashboardUsersGet: FC = (): ReactElement => {
     try {
       setLoading(true);
       const { data } = await api.get<TGetAllUsersResponse>("/users");
-      setUsers(data?.data);
+      setUsers(data?.data.filter((user) => user.role_id === 1));
     } catch (error) {
       setUsers([]);
     } finally {
