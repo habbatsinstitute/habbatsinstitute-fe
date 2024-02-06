@@ -23,6 +23,7 @@ import {
   TRemoveUserResponse,
   TUpdateCourseResponse,
   TUpdateNewsResponse,
+  TUpdateUserResponse,
 } from ".";
 
 export const api = axios.create({
@@ -248,6 +249,19 @@ export const useGetUserById = (
     queryKey: ["get-user-by-id"],
     queryFn: async () => {
       const { data } = await api.get(`/users/${params}`);
+
+      return data;
+    },
+  });
+};
+
+export const useUpdateUser = (
+  params?: unknown,
+): UseMutationResult<TUpdateUserResponse> => {
+  return useMutation({
+    mutationKey: ["update-user"],
+    mutationFn: async (payload: unknown) => {
+      const { data } = await api.put(`/users/update-user/${params}`, payload);
 
       return data;
     },

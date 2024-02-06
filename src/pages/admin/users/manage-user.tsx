@@ -1,12 +1,13 @@
-import { FC, ReactElement, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { FC, Fragment, ReactElement, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Slide, toast } from "react-toastify";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { LuTrash, LuSave, LuPenLine } from "react-icons/lu";
+import { CalendarIcon, Loader2 } from "lucide-react";
+import { LuTrash, LuSave, LuPenLine, LuLoader2 } from "react-icons/lu";
 import {
   AdminLayout,
   AlertDialog,
@@ -32,20 +33,23 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components";
-import { TUser, cn, useGetAllUsers, useGetUserById, userSchema } from "@/lib";
+import {
+  TGetAllUsersResponse,
+  TUser,
+  api,
+  cn,
+  useGetUserById,
+  useRemoveUser,
+  useUpdateUser,
+  userSchema,
+} from "@/lib";
 
 export const DashboardUsersManage: FC = (): ReactElement => {
   const [users, setUsers] = useState<TUser[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [date, setDate] = useState<Date>();
 
-  const navigate = useNavigate();
   const { id } = useParams();
-
-  const {
-    data: getUserById,
-    refetch: refetchUserById,
-    isFetching: isFetchUserById,
-  } = useGetUserById(id);
 
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
@@ -57,13 +61,31 @@ export const DashboardUsersManage: FC = (): ReactElement => {
     },
   });
 
-  const { data: getUsers } = useGetAllUsers();
+  const {
+    data: getUserById,
+    refetch: refetchUserById,
+    isFetching: isFetchUserById,
+  } = useGetUserById(id);
+  const { mutate: update, isPending: isPendingUpdate } = useUpdateUser(id);
+  const { mutate: remove, isPending: isPendingRemove } = useRemoveUser();
+
+  const navigate = useNavigate();
+
+  const getUsers = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetAllUsersResponse>("/users");
+      setUsers(data?.data.filter((user) => user.role_id === 1));
+    } catch (error) {
+      setUsers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (getUsers?.data) {
-      setUsers(getUsers?.data.filter((user) => user.role_id === 1));
-    }
-  }, [getUsers?.data, setUsers]);
+    getUsers();
+  }, []);
 
   useEffect(() => {
     refetchUserById();
@@ -71,7 +93,42 @@ export const DashboardUsersManage: FC = (): ReactElement => {
   }, [form, form.reset, getUserById?.data, id, refetchUserById]);
 
   function onSubmit(values: z.infer<typeof userSchema>) {
-    console.log(values);
+    const formData = new FormData();
+
+    formData.append("username", values.username);
+    formData.append("password", values.password);
+    formData.append("expiry_date", date?.toISOString() as string);
+
+    update(formData, {
+      onSuccess: () => {
+        getUsers();
+        toast.success("Data user berhasil diupdate", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Slide,
+        });
+        navigate("/dashboard/users");
+      },
+      onError: () => {
+        toast.error("Gagal update data user", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Slide,
+        });
+      },
+    });
   }
 
   const columns: ColumnDef<TUser>[] = [
@@ -85,13 +142,22 @@ export const DashboardUsersManage: FC = (): ReactElement => {
       header: "Opsi",
       cell: (cell) => (
         <section className="flex w-full justify-center py-2">
-          <Link
-            to={`/dashboard/users/manage/${cell.row.original.id}`}
+          <Button
             className="flex h-7 w-28 items-center justify-center gap-1 rounded-md bg-bright-2 text-font-black-3 hover:bg-bright-1"
+            onClick={() => {
+              navigate(`/dashboard/users/manage/${cell.row.original.id}`);
+            }}
+            disabled={isFetchUserById || isPendingUpdate || isPendingRemove}
           >
-            <LuPenLine className="text-xl" />
-            Manage
-          </Link>
+            {isFetchUserById || isPendingUpdate || isPendingRemove ? (
+              <Loader2 className="w-4 animate-spin" />
+            ) : (
+              <Fragment>
+                <LuPenLine className="text-xl" />
+                Manage
+              </Fragment>
+            )}
+          </Button>
         </section>
       ),
     },
@@ -242,10 +308,14 @@ export const DashboardUsersManage: FC = (): ReactElement => {
             <section className="flex w-full justify-end gap-2 py-2">
               <Button
                 size={"sm"}
-                disabled={isFetchUserById}
+                disabled={isPendingUpdate || isPendingRemove || isFetchUserById}
                 onClick={() => navigate("/dashboard/users")}
               >
-                Cancel
+                {isFetchUserById || isPendingUpdate || isPendingRemove ? (
+                  <LuLoader2 className="w-14 animate-spin" />
+                ) : (
+                  "Cancel"
+                )}
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
@@ -253,10 +323,18 @@ export const DashboardUsersManage: FC = (): ReactElement => {
                     size={"sm"}
                     variant={"destructive"}
                     className="flex gap-1"
-                    disabled={isFetchUserById}
+                    disabled={
+                      isPendingUpdate || isPendingRemove || isFetchUserById
+                    }
                   >
-                    Delete
-                    <LuTrash />
+                    {isFetchUserById || isPendingUpdate || isPendingRemove ? (
+                      <LuLoader2 className="w-14 animate-spin" />
+                    ) : (
+                      <Fragment>
+                        Delete
+                        <LuTrash />
+                      </Fragment>
+                    )}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -268,12 +346,48 @@ export const DashboardUsersManage: FC = (): ReactElement => {
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-dark-3">
                       Anda akan menghapus data user dengan username{" "}
-                      <span className="font-bold">"{"Username"}"</span>
+                      <span className="font-bold">
+                        "{getUserById?.data.username}"
+                      </span>
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction className="bg-[#DC5E5E] hover:bg-red-400">
+                    <AlertDialogAction
+                      className="bg-[#DC5E5E] hover:bg-red-400"
+                      onClick={() =>
+                        remove(id, {
+                          onSuccess: () => {
+                            getUsers();
+                            toast.success("Data user berhasil dihapus", {
+                              position: "top-center",
+                              autoClose: 1000,
+                              hideProgressBar: true,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                              theme: "light",
+                              transition: Slide,
+                            });
+                            navigate("/dashboard/users");
+                          },
+                          onError: () => {
+                            toast.error("Gagal menghapus data user", {
+                              position: "top-center",
+                              autoClose: 1000,
+                              hideProgressBar: true,
+                              closeOnClick: true,
+                              pauseOnHover: false,
+                              draggable: true,
+                              progress: undefined,
+                              theme: "light",
+                              transition: Slide,
+                            });
+                          },
+                        })
+                      }
+                    >
                       Delete data
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -283,16 +397,28 @@ export const DashboardUsersManage: FC = (): ReactElement => {
               <Button
                 size={"sm"}
                 className="gap-1 bg-bright-2 font-bold text-font-black-3 hover:bg-bright-1"
-                disabled={isFetchUserById}
+                disabled={
+                  !form.formState.isValid ||
+                  isFetchUserById ||
+                  isPendingUpdate ||
+                  isPendingRemove
+                }
               >
-                Save <LuSave className="text-lg" />
+                {(isPendingRemove || isFetchUserById || isPendingUpdate) && (
+                  <LuLoader2 className="mx-7 w-full animate-spin" />
+                )}
+                {!isPendingRemove && !isFetchUserById && !isPendingUpdate && (
+                  <Fragment>
+                    Save <LuSave className="text-lg" />
+                  </Fragment>
+                )}
               </Button>
             </section>
           </form>
         </Form>
 
         <section className="flex h-full w-full md:mt-10 xl:mt-0 xl:w-[48%]">
-          <DataTable columns={columns} data={users || []} />
+          <DataTable columns={columns} data={users} loading={loading} />
         </section>
       </section>
     </AdminLayout>

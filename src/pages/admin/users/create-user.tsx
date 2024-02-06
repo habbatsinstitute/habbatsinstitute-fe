@@ -116,25 +116,11 @@ export const DashboardUsersCreate: FC = (): ReactElement => {
     {
       accessorKey: "option",
       header: "Opsi",
-      cell: () => (
+      cell: (cell) => (
         <section className="flex w-full justify-center py-2">
           <Link
-            // to={`/dashboard/users/manage/${cell.row.original.id}`}
-            to={`/dashboard/users/add`}
+            to={`/dashboard/users/manage/${cell.row.original.id}`}
             className="flex h-7 w-28 items-center justify-center gap-1 rounded-md bg-bright-2 text-font-black-3 hover:bg-bright-1"
-            onClick={() => {
-              toast.warn("This feature is still development", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Slide,
-              });
-            }}
           >
             <LuPenLine className="text-xl" />
             Manage
