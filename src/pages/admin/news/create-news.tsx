@@ -1,5 +1,5 @@
-import { FC, ReactElement, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { FC, Fragment, ReactElement, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,16 +29,18 @@ import {
   Textarea,
 } from "@/components";
 import {
+  TGetNewsResponse,
   TNewsItems,
+  api,
   newsSchema,
   useCreateNews,
   useGetCategories,
-  useGetNews,
 } from "@/lib";
 
 export const DashboardNewsCreate: FC = (): ReactElement => {
   const [news, setNews] = useState<TNewsItems[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof newsSchema>>({
     resolver: zodResolver(newsSchema),
@@ -57,15 +59,24 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
 
   const navigate = useNavigate();
 
-  const { refetch, data: getNews } = useGetNews();
   const { mutate, isPending } = useCreateNews();
   const { data: categories } = useGetCategories();
 
-  useEffect(() => {
-    if (getNews?.data) {
-      setNews(getNews?.data);
+  const getNews = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetNewsResponse>("/news");
+      setNews(data?.data);
+    } catch (error) {
+      setNews([]);
+    } finally {
+      setLoading(false);
     }
-  }, [getNews?.data, setNews]);
+  };
+
+  useEffect(() => {
+    getNews();
+  }, []);
 
   function onSubmit(values: z.infer<typeof newsSchema>) {
     const formData = new FormData();
@@ -77,7 +88,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
 
     mutate(formData, {
       onSuccess: () => {
-        refetch();
+        getNews();
         toast.success("Data news berhasil ditambahkan", {
           position: "top-center",
           autoClose: 1000,
@@ -115,29 +126,24 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
     {
       accessorKey: "option",
       header: "Opsi",
-      cell: () => (
+      cell: (cell) => (
         <section className="flex w-full justify-center py-2">
-          <Link
-            // to={`/dashboard/news/manage/${cell.row.original.id}`}
-            to={`/dashboard/news/add`}
+          <Button
             className="flex h-7 w-28 items-center justify-center gap-1 rounded-md bg-bright-2 text-font-black-3 hover:bg-bright-1"
+            disabled={isPending}
             onClick={() => {
-              toast.warn("This feature is still development", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Slide,
-              });
+              navigate(`/dashboard/news/manage/${cell.row.original.id}`);
             }}
           >
-            <LuPenLine className="text-xl" />
-            Manage
-          </Link>
+            {isPending ? (
+              <Loader2 className="w-4 animate-spin" />
+            ) : (
+              <Fragment>
+                <LuPenLine className="text-xl" />
+                Manage
+              </Fragment>
+            )}
+          </Button>
         </section>
       ),
     },
@@ -156,16 +162,39 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
               Untuk menambah data news, isi form input dibawah dengan benar.
             </p>
             <section className="flex w-full flex-col gap-1">
-              <h2 className="text-sm text-[#0F172A] hover:cursor-default">
+              <h2
+                className={`text-sm ${
+                  (selectedFile &&
+                    selectedFile.type !== "image/jpeg" &&
+                    selectedFile.type !== "image/png" &&
+                    selectedFile.type !== "image/jpg") ||
+                  (selectedFile && selectedFile.size > 2000000)
+                    ? "text-red-400"
+                    : "text-[#0F172A]"
+                } hover:cursor-default`}
+              >
                 Image Cover
               </h2>
               <section className="flex h-10 w-full justify-between gap-3">
                 <Label
                   htmlFor="image"
-                  className={`flex w-[75%] items-center truncate rounded-md border border-[#CBD5E1] pl-2 text-sm text-font-input hover:bg-slate-100 ${isPending ? "cursor-not-allowed opacity-40 hover:bg-slate-100" : "hover:cursor-pointer"}`}
+                  className={`flex w-[75%] items-center truncate rounded-md border ${
+                    (selectedFile &&
+                      selectedFile.type !== "image/jpeg" &&
+                      selectedFile.type !== "image/png" &&
+                      selectedFile.type !== "image/jpg") ||
+                    (selectedFile && selectedFile.size > 2000000)
+                      ? "border-red-400 text-red-400"
+                      : "border-[#CBD5E1] text-font-input"
+                  } pl-2 text-sm hover:bg-slate-100 ${
+                    isPending
+                      ? "cursor-not-allowed opacity-40 hover:bg-slate-100"
+                      : "hover:cursor-pointer"
+                  }`}
                 >
                   {selectedFile ? selectedFile.name : "Choose image to upload"}
                 </Label>
+
                 <label
                   htmlFor="image"
                   className={`relative grid w-32 place-items-center rounded-md bg-[#0F172A] pt-2 text-sm text-white hover:bg-slate-700 ${isPending ? "cursor-not-allowed opacity-10 hover:bg-[#0F172A]" : "cursor-pointer"}`}
@@ -181,6 +210,23 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
                   />
                 </label>
               </section>
+              {selectedFile &&
+                selectedFile.type !== "image/jpg" &&
+                selectedFile.type !== "image/jpeg" &&
+                selectedFile.type !== "image/png" && (
+                  <section className="w-full">
+                    <p className="text-xs font-bold text-red-400">
+                      Hanya mengizinkan format gambar JPG, JPEG, dan PNG
+                    </p>
+                  </section>
+                )}
+              {selectedFile && selectedFile?.size > 2000000 && (
+                <section className="w-full">
+                  <p className="text-xs font-bold text-red-400">
+                    File tidak boleh lebih dari 2 MB
+                  </p>
+                </section>
+              )}
             </section>
             <FormField
               control={form.control}
@@ -294,7 +340,15 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
               <Button
                 type="submit"
                 size={"sm"}
-                disabled={!form.formState.isValid || !selectedFile || isPending}
+                disabled={
+                  !form.formState.isValid ||
+                  !selectedFile ||
+                  isPending ||
+                  (selectedFile.type !== "image/jpeg" &&
+                    selectedFile.type !== "image/png" &&
+                    selectedFile.type !== "image/jpg") ||
+                  selectedFile.size > 2000000
+                }
                 className="gap-1 bg-bright-2 font-bold text-font-black-3 hover:bg-bright-1"
               >
                 {isPending && <Loader2 className="w-4 animate-spin" />} Add News{" "}
@@ -304,7 +358,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
           </form>
         </Form>
         <section className="flex h-full w-full md:mt-10 xl:mt-0 xl:w-[48%]">
-          <DataTable columns={columns} data={news || []} />
+          <DataTable columns={columns} data={news} loading={loading} />
         </section>
       </section>
     </AdminLayout>

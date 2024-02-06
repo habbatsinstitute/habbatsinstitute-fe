@@ -23,13 +23,13 @@ export const courseSchema = z.object({
     .min(1, {
       message: "Deskripsi wajib diisi",
     })
-    .max(2000, { message: "Deskripsi maksimal 2000 karakter" }),
+    .max(500, { message: "Deskripsi maksimal 500 karakter" }),
 });
 
 export const newsSchema = z.object({
   title: z
     .string({ required_error: "Title wajib diisi" })
-    .min(1, { message: "Title wajib diisi" })
+    .min(20, { message: "Title minimal 20 karakter" })
     .max(100, { message: "Title maksimal 50 karakter" }),
   category: z
     .string({ required_error: "Kategori wajib dipilih" })
@@ -39,7 +39,7 @@ export const newsSchema = z.object({
     .min(1, {
       message: "Deskripsi wajib diisi",
     })
-    .max(5000, { message: "Deskiprsi maksimal 5000 karakter" }),
+    .max(2000, { message: "Deskiprsi maksimal 2000 karakter" }),
 });
 
 export const userSchema = z
