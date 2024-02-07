@@ -26,7 +26,7 @@ export const Navbar: FC<{ className?: string }> = ({
       icon: (
         <LuHome
           className={clsx({
-            "text-teal-700": location.pathname.startsWith("/"),
+            "text-emerald-700": !location.pathname.startsWith("/"),
           })}
         />
       ),
@@ -37,7 +37,7 @@ export const Navbar: FC<{ className?: string }> = ({
       icon: (
         <GoBook
           className={clsx({
-            "text-teal-700": !location.pathname.startsWith("/courses"),
+            "text-emerald-700": !location.pathname.startsWith("/courses"),
           })}
         />
       ),
@@ -48,7 +48,7 @@ export const Navbar: FC<{ className?: string }> = ({
       icon: (
         <LuNewspaper
           className={clsx({
-            "text-teal-700": !location.pathname.startsWith("/news"),
+            "text-emerald-700": !location.pathname.startsWith("/news"),
           })}
         />
       ),
@@ -59,7 +59,7 @@ export const Navbar: FC<{ className?: string }> = ({
       icon: (
         <FiUsers
           className={clsx({
-            "text-teal-700": !location.pathname.startsWith("/about-us"),
+            "text-emerald-700": !location.pathname.startsWith("/about-us"),
           })}
         />
       ),
@@ -70,7 +70,7 @@ export const Navbar: FC<{ className?: string }> = ({
       icon: (
         <LuLogIn
           className={clsx({
-            "text-teal-700": !location.pathname.startsWith("/login"),
+            "text-emerald-700": !location.pathname.startsWith("/login"),
           })}
         />
       ),
@@ -87,9 +87,11 @@ export const Navbar: FC<{ className?: string }> = ({
     >
       <section className="cursor-pointer" onClick={() => navigate("/")}>
         <img
-          src={path === "/login" ? "/logos/white.png" : "/logos/black.png"}
+          src={
+            path === "/login" ? "/new-logos/white.png" : "/new-logos/black.png"
+          }
           alt="logo"
-          className="w-24"
+          className="w-10 md:w-12"
         />
       </section>
       {/* Mobile */}
@@ -97,10 +99,15 @@ export const Navbar: FC<{ className?: string }> = ({
         <Sheet>
           <SheetTrigger asChild>
             <h1 className="flex items-center justify-center gap-3 text-base font-bold text-black md:text-xl">
-              <LuMenu className="text-[2rem] text-white" />
+              <LuMenu
+                className={`text-[2rem] ${path === "/login" ? "text-white" : "text-black"}`}
+              />
             </h1>
           </SheetTrigger>
-          <SheetContent side={"left"} className="bg-teal-50 text-teal-700">
+          <SheetContent
+            side={"left"}
+            className="bg-emerald-50 text-emerald-700"
+          >
             <section className="flex h-full w-full flex-col">
               <section className="grid h-52 place-items-center">
                 <img
@@ -118,7 +125,7 @@ export const Navbar: FC<{ className?: string }> = ({
                     className={clsx(
                       "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
                       {
-                        "bg-teal-700 text-white":
+                        "bg-emerald-700 text-white":
                           location.pathname === to ||
                           (to === "/" && !location.pathname.startsWith("/")) ||
                           (to === "/courses" &&
@@ -148,7 +155,7 @@ export const Navbar: FC<{ className?: string }> = ({
             <li key={index}>
               <Link
                 to={link.to}
-                className={`flex items-center justify-center gap-1 rounded-md hover:bg-dark-1 hover:text-bright-1 ${link.text === "Login" ? "bg-bright-1 underline underline-offset-2" : "bg-white"}  px-4 py-2`}
+                className={`flex items-center justify-center gap-1 rounded-md hover:bg-dark-1 hover:text-bright-1 ${link.text === "Login" ? "bg-bright-1" : "bg-white"}  px-4 py-2`}
               >
                 {link.text} {link.text === "Login" && <FiLogIn />}
               </Link>
