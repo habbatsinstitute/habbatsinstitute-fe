@@ -47,13 +47,13 @@ export const Home: FC = (): ReactElement => {
         </section>
       </section>
 
-      <section className="flex min-h-[600px] flex-col justify-evenly bg-dark-2">
-        <div className="container mt-10 h-[2px] bg-dark-3" />
-        <section className="container mt-2 flex items-center justify-between">
-          <div className="grid h-[90px] w-[200px] place-items-center rounded-md bg-dark-3 text-font-white">
+      <section className="flex min-h-[700px] flex-col justify-evenly gap-10 bg-dark-2 py-20 xl:gap-0 xl:py-0">
+        <div className="container h-[2px] w-4/5 bg-dark-3 xl:w-full" />
+        <section className="container mt-2 flex items-center justify-center xl:justify-between">
+          <div className="hidden h-[90px] w-[200px] place-items-center rounded-md bg-dark-3 text-font-white xl:grid">
             <h3>Course for You</h3>
           </div>
-          <h1 className="w-4/5 text-[1.6rem] font-bold text-font-white">
+          <h1 className="w-11/12 font-bold text-font-white md:w-4/5 lg:text-[1.3rem]">
             Dapatkan akses ke informasi terkini tentang pengembangan{" "}
             <span className="text-bright-1">obat-obatan herbal</span>,{" "}
             <span className="text-bright-1">teknologi ekstraksi terbaru</span>,
@@ -61,10 +61,10 @@ export const Home: FC = (): ReactElement => {
             terkait yang sedang berlangsung.{" "}
           </h1>
         </section>
-        <section className="container flex justify-between">
-          <div className="flex h-[400px] w-[600px] flex-col items-center justify-evenly rounded-md bg-dark-3 py-2">
+        <section className="container flex flex-wrap justify-center gap-10 xl:justify-between xl:gap-0">
+          <div className="flex h-[500px] max-w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:h-[400px] md:max-w-[80%] md:gap-0 lg:max-w-[40%] lg:py-2 xl:max-w-[45%]">
             <video
-              className="h-[60%] w-[90%] bg-slate-700"
+              className="h-[60%] w-[83%] bg-slate-700 md:w-[90%]"
               controls={isLoggin}
               onContextMenu={(e) => e.preventDefault()}
               controlsList="nodownload"
@@ -72,7 +72,7 @@ export const Home: FC = (): ReactElement => {
               <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
             </video>
             <div className="container">
-              <h1 className="text-lg font-bold text-font-white">
+              <h1 className="text-base font-bold text-font-white md:text-lg">
                 Manfaat biji tokek albino untuk kesehatan tenggorokan dan obat
                 batuk.
               </h1>
@@ -82,15 +82,15 @@ export const Home: FC = (): ReactElement => {
               <p className="font-black-2">Toto Bedog - 16 jan 2024</p>
             </div>
             <div className="container flex w-full justify-end">
-              <Button className="flex items-center gap-1 bg-bright-1 text-font-black-1 hover:bg-font-black-1 hover:text-white">
+              <Button className="flex items-center gap-1 bg-bright-1 font-bold text-font-black-1 hover:bg-font-black-1 hover:text-white">
                 <LuPlay />
                 Lihat Course
               </Button>
             </div>
           </div>
-          <div className="flex h-[400px] w-[600px] flex-col items-center justify-evenly rounded-md bg-dark-3 py-2">
+          <div className="flex h-[500px] max-w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:h-[400px] md:max-w-[80%] md:gap-0 lg:max-w-[40%] lg:py-2 xl:max-w-[45%]">
             <video
-              className="h-[60%] w-[90%] bg-slate-700"
+              className="h-[60%] w-[83%] bg-slate-700 md:w-[90%]"
               controls={isLoggin}
               onContextMenu={(e) => e.preventDefault()}
               controlsList="nodownload"
@@ -98,7 +98,7 @@ export const Home: FC = (): ReactElement => {
               <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
             </video>
             <div className="container">
-              <h1 className="text-lg font-bold text-font-white">
+              <h1 className="text-base font-bold text-font-white md:text-lg">
                 Manfaat biji tokek albino untuk kesehatan tenggorokan dan obat
                 batuk.
               </h1>
@@ -108,7 +108,7 @@ export const Home: FC = (): ReactElement => {
               <p className="font-black-2">Toto Bedog - 16 jan 2024</p>
             </div>
             <div className="container flex w-full justify-end">
-              <Button className="flex items-center gap-1 bg-bright-1 text-font-black-1 hover:bg-font-black-1 hover:text-white">
+              <Button className="flex items-center gap-1 bg-bright-1 font-bold text-font-black-1 hover:bg-font-black-1 hover:text-white">
                 <LuPlay />
                 Lihat Course
               </Button>
