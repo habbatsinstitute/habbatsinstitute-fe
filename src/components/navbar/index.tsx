@@ -3,80 +3,34 @@ import { Link, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import clsx from "clsx";
 import { FiLogIn, FiUsers } from "react-icons/fi";
-import { LuHome, LuLogIn, LuMenu, LuNewspaper } from "react-icons/lu";
+import {
+  LuHome,
+  LuLogIn,
+  LuLogOut,
+  LuMenu,
+  LuNewspaper,
+  LuUser,
+} from "react-icons/lu";
 import { GoBook } from "react-icons/go";
-import { Sheet, SheetContent, SheetTrigger } from "..";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  Skeleton,
+} from "..";
+import { getAccessToken, removeToken } from "@/lib";
 
 export const Navbar: FC<{ className?: string }> = ({
   className,
 }): ReactElement => {
   const path = window.location.pathname;
   const navigate = useNavigate();
-
-  const links = [
-    { to: "/", text: "Home" },
-    { to: "/news", text: "News" },
-    { to: "/about-us", text: "About Us" },
-    { to: "/login", text: "Login" },
-  ];
-
-  const navLinksMobile = [
-    {
-      to: "/",
-      icon: (
-        <LuHome
-          className={clsx({
-            "text-emerald-700": !location.pathname.startsWith("/"),
-          })}
-        />
-      ),
-      label: "Home",
-    },
-    {
-      to: "/courses",
-      icon: (
-        <GoBook
-          className={clsx({
-            "text-emerald-700": !location.pathname.startsWith("/courses"),
-          })}
-        />
-      ),
-      label: "Courses",
-    },
-    {
-      to: "news",
-      icon: (
-        <LuNewspaper
-          className={clsx({
-            "text-emerald-700": !location.pathname.startsWith("/news"),
-          })}
-        />
-      ),
-      label: "News",
-    },
-    {
-      to: "/about-us",
-      icon: (
-        <FiUsers
-          className={clsx({
-            "text-emerald-700": !location.pathname.startsWith("/about-us"),
-          })}
-        />
-      ),
-      label: "About Us",
-    },
-    {
-      to: "/login",
-      icon: (
-        <LuLogIn
-          className={clsx({
-            "text-emerald-700": !location.pathname.startsWith("/login"),
-          })}
-        />
-      ),
-      label: "Login",
-    },
-  ];
 
   return (
     <nav
@@ -117,32 +71,103 @@ export const Navbar: FC<{ className?: string }> = ({
                 />
               </section>
 
-              <section className="flex h-full w-full flex-col">
-                {navLinksMobile.map(({ to, icon, label }, index) => (
+              <section className="flex w-full flex-col">
+                <Link
+                  to="/"
+                  className={clsx(
+                    "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
+                    {
+                      "bg-emerald-700 text-white":
+                        location.pathname === "/" ||
+                        !location.pathname.startsWith("/"),
+                    },
+                  )}
+                >
+                  <LuHome
+                    className={clsx({
+                      "text-emerald-700": !location.pathname.startsWith("/"),
+                    })}
+                  />
+                  Home
+                </Link>
+
+                <Link
+                  to="/courses"
+                  className={clsx(
+                    "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
+                    {
+                      "bg-emerald-700 text-white":
+                        location.pathname.startsWith("/courses"),
+                    },
+                  )}
+                >
+                  <GoBook
+                    className={clsx({
+                      "text-emerald-700":
+                        !location.pathname.startsWith("/courses"),
+                    })}
+                  />
+                  Courses
+                </Link>
+
+                <Link
+                  to="/news"
+                  className={clsx(
+                    "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
+                    {
+                      "bg-emerald-700 text-white":
+                        location.pathname.startsWith("/news"),
+                    },
+                  )}
+                >
+                  <LuNewspaper
+                    className={clsx({
+                      "text-emerald-700":
+                        !location.pathname.startsWith("/news"),
+                    })}
+                  />
+                  News
+                </Link>
+
+                <Link
+                  to="/about-us"
+                  className={clsx(
+                    "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
+                    {
+                      "bg-emerald-700 text-white":
+                        location.pathname.startsWith("/about-us"),
+                    },
+                  )}
+                >
+                  <FiUsers
+                    className={clsx({
+                      "text-emerald-700":
+                        !location.pathname.startsWith("/about-us"),
+                    })}
+                  />
+                  About Us
+                </Link>
+
+                {!getAccessToken() && (
                   <Link
-                    key={index}
-                    to={to}
+                    to="/login"
                     className={clsx(
                       "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
                       {
                         "bg-emerald-700 text-white":
-                          location.pathname === to ||
-                          (to === "/" && !location.pathname.startsWith("/")) ||
-                          (to === "/courses" &&
-                            location.pathname.startsWith("/courses")) ||
-                          (to === "/news" &&
-                            location.pathname.startsWith("/news")) ||
-                          (to === "/about-us" &&
-                            location.pathname.startsWith("/about-us")) ||
-                          (to === "/login" &&
-                            location.pathname.startsWith("/login")),
+                          location.pathname.startsWith("/login"),
                       },
                     )}
                   >
-                    {icon}
-                    {label}
+                    <LuLogIn
+                      className={clsx({
+                        "text-emerald-700":
+                          !location.pathname.startsWith("/login"),
+                      })}
+                    />
+                    Login
                   </Link>
-                ))}
+                )}
               </section>
             </section>
           </SheetContent>
@@ -151,16 +176,88 @@ export const Navbar: FC<{ className?: string }> = ({
       {/* MD - Desktop */}
       <section className="hidden md:flex">
         <ul className="flex gap-5 font-bold">
-          {links.map((link, index) => (
-            <li key={index}>
+          <li>
+            <Link
+              to="/"
+              className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:bg-dark-1 hover:text-bright-1`}
+            >
+              Home
+            </Link>
+          </li>
+          {getAccessToken() && (
+            <li>
               <Link
-                to={link.to}
-                className={`flex items-center justify-center gap-1 rounded-md hover:bg-dark-1 hover:text-bright-1 ${link.text === "Login" ? "bg-bright-1" : "bg-white"}  px-4 py-2`}
+                to="/courses"
+                className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:bg-dark-1 hover:text-bright-1`}
               >
-                {link.text} {link.text === "Login" && <FiLogIn />}
+                Course
               </Link>
             </li>
-          ))}
+          )}
+          <li>
+            <Link
+              to="/news"
+              className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:bg-dark-1 hover:text-bright-1`}
+            >
+              News
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/about-us"
+              className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:bg-dark-1 hover:text-bright-1`}
+            >
+              About Us
+            </Link>
+          </li>
+
+          {getAccessToken() ? (
+            <Popover>
+              <PopoverTrigger>
+                <section className="flex items-center justify-center gap-3 rounded-md px-2">
+                  <h3 className="text-base font-normal ">
+                    Hello, {"Username 1"}
+                  </h3>
+                  <Avatar>
+                    <AvatarImage
+                      src="https://github.com/shadcn.png"
+                      alt="@shadcn"
+                    />
+                    <AvatarFallback>
+                      <Skeleton className="h-10 w-10 rounded-full bg-slate-300" />
+                    </AvatarFallback>
+                  </Avatar>
+                </section>
+              </PopoverTrigger>
+              <PopoverContent className="w-[150px] p-0">
+                <section className="flex w-full flex-col gap-2 text-slate-700">
+                  <Link
+                    to={"/"}
+                    className="flex items-center justify-center gap-3 py-1 hover:bg-slate-300"
+                  >
+                    <LuUser />
+                    Profile User
+                  </Link>
+                  <Link
+                    to={"/"}
+                    className="flex items-center justify-center gap-3 py-1 hover:bg-slate-300"
+                    onClick={() => removeToken()}
+                  >
+                    <LuLogOut />
+                    Logout
+                  </Link>
+                </section>
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <Link
+              to={"/login"}
+              className="flex items-center justify-center gap-2 rounded-md bg-bright-1 px-4 py-2 hover:bg-dark-1 hover:text-bright-1"
+            >
+              <FiLogIn />
+              Login
+            </Link>
+          )}
         </ul>
       </section>
     </nav>

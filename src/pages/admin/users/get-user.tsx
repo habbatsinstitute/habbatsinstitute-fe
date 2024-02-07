@@ -86,11 +86,7 @@ export const DashboardUsersGet: FC = (): ReactElement => {
           </Link>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button
-                className="h-8 w-14"
-                variant={"destructive"}
-                onClick={() => console.log(cell.row.original)}
-              >
+              <Button className="h-8 w-14" variant={"destructive"}>
                 <LuTrash className="text-white" />
               </Button>
             </AlertDialogTrigger>
