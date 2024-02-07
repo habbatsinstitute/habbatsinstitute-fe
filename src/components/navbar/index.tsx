@@ -24,13 +24,15 @@ import {
   SheetTrigger,
   Skeleton,
 } from "..";
-import { getAccessToken, removeToken } from "@/lib";
+import { getAccessToken, removeToken, useGetUserMe } from "@/lib";
 
 export const Navbar: FC<{ className?: string }> = ({
   className,
 }): ReactElement => {
   const path = window.location.pathname;
   const navigate = useNavigate();
+
+  const { data } = useGetUserMe();
 
   return (
     <nav
@@ -216,7 +218,7 @@ export const Navbar: FC<{ className?: string }> = ({
               <PopoverTrigger>
                 <section className="flex items-center justify-center gap-3 rounded-md px-2">
                   <h3 className="text-base font-normal ">
-                    Hello, {"Username 1"}
+                    Hello, {data?.data.username}
                   </h3>
                   <Avatar>
                     <AvatarImage
@@ -241,7 +243,10 @@ export const Navbar: FC<{ className?: string }> = ({
                   <Link
                     to={"/"}
                     className="flex items-center justify-center gap-3 py-1 hover:bg-slate-300"
-                    onClick={() => removeToken()}
+                    onClick={() => {
+                      removeToken();
+                      window.location.reload();
+                    }}
                   >
                     <LuLogOut />
                     Logout

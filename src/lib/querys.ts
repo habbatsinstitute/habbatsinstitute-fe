@@ -261,7 +261,7 @@ export const useUpdateUser = (
   return useMutation({
     mutationKey: ["update-user"],
     mutationFn: async (payload: unknown) => {
-      const { data } = await api.put(`/users/update-user/${params}`, payload);
+      const { data } = await api.put(`/users/update/${params}`, payload);
 
       return data;
     },

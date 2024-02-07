@@ -180,6 +180,7 @@ export type TGetAllUsersResponse = {
 export type TGetUserByIdResponse = {
   data: {
     username: string;
+    expiry_date: Date | string;
   };
   message: string;
 };

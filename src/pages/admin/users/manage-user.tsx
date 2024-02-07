@@ -90,6 +90,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
   useEffect(() => {
     refetchUserById();
     form.reset(getUserById?.data);
+    setDate(getUserById?.data?.expiry_date as Date);
   }, [form, form.reset, getUserById?.data, id, refetchUserById]);
 
   function onSubmit(values: z.infer<typeof userSchema>) {
