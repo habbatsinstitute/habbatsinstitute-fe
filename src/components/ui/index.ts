@@ -4,6 +4,7 @@ export * from "./avatar";
 export * from "./button";
 export * from "./calendar";
 export * from "./card";
+export * from "./dialog";
 export * from "./form";
 export * from "./input";
 export * from "./label";

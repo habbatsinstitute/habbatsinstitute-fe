@@ -1,5 +1,5 @@
 import { FC, ReactElement } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -22,6 +22,7 @@ import {
   Navbar,
 } from "@/components";
 import {
+  getAccessToken,
   getUserRole,
   loginSchema,
   setAccessToken,
@@ -73,7 +74,9 @@ export const Login: FC = (): ReactElement => {
       },
     });
   }
-  return (
+  return getAccessToken() ? (
+    <Navigate to={"/"} />
+  ) : (
     <main className="flex h-auto w-full flex-col bg-[url('/backgrounds/green.png')] font-inter">
       {/* Header */}
       <Navbar />
@@ -106,11 +109,11 @@ export const Login: FC = (): ReactElement => {
                                 placeholder="Masukan Username"
                                 type="text"
                                 className={`w-full
-                                ${
-                                  form.formState.errors.username
-                                    ? "border-red-400 placeholder:text-red-400"
-                                    : ""
-                                }`}
+                            ${
+                              form.formState.errors.username
+                                ? "border-red-400 placeholder:text-red-400"
+                                : ""
+                            }`}
                                 {...field}
                               />
                             </FormControl>
@@ -138,11 +141,11 @@ export const Login: FC = (): ReactElement => {
                                 placeholder="Masukan password"
                                 type="password"
                                 className={`w-full
-                              ${
-                                form.formState.errors.password
-                                  ? "border-red-400 placeholder:text-red-400"
-                                  : ""
-                              }`}
+                          ${
+                            form.formState.errors.password
+                              ? "border-red-400 placeholder:text-red-400"
+                              : ""
+                          }`}
                                 {...field}
                               />
                             </FormControl>
