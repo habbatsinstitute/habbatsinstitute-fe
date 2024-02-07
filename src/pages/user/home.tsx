@@ -79,7 +79,9 @@ export const Home: FC = (): ReactElement => {
             </div>
             <div className="container flex items-center gap-2">
               <LuUser2 className="text-bright-1" />
-              <p className="font-black-2">Toto Bedog - 16 jan 2024</p>
+              <p className="font-black-2 text-sm md:text-base">
+                Toto Bedog - 16 jan 2024
+              </p>
             </div>
             <div className="container flex w-full justify-end">
               <Button className="flex items-center gap-1 bg-bright-1 font-bold text-font-black-1 hover:bg-font-black-1 hover:text-white">
@@ -105,7 +107,9 @@ export const Home: FC = (): ReactElement => {
             </div>
             <div className="container flex items-center gap-2">
               <LuUser2 className="text-bright-1" />
-              <p className="font-black-2">Toto Bedog - 16 jan 2024</p>
+              <p className="font-black-2 text-sm md:text-base">
+                Toto Bedog - 16 jan 2024
+              </p>
             </div>
             <div className="container flex w-full justify-end">
               <Button className="flex items-center gap-1 bg-bright-1 font-bold text-font-black-1 hover:bg-font-black-1 hover:text-white">
