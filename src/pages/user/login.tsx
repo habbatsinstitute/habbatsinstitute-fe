@@ -74,19 +74,19 @@ export const Login: FC = (): ReactElement => {
     });
   }
   return (
-    <main className="relative flex h-[850px] w-full flex-col bg-[url('/backgrounds/green.png')] font-inter">
+    <main className="flex h-auto w-full flex-col bg-[url('/backgrounds/green.png')] font-inter">
       {/* Header */}
       <Navbar />
 
       {/* Body */}
-      <section className="container flex h-[60%] w-full">
-        <section className="flex h-full w-2/5 flex-col justify-center gap-10">
-          <Card className="w-[400px] px-3 py-1">
+      <section className="container flex h-[500px] w-full md:h-[700px] xl:h-[450px]">
+        <section className="flex h-full flex-col justify-center gap-5 md:w-full md:items-center xl:w-2/5 xl:justify-normal">
+          <Card className="h-2/3 w-full md:h-[52%] md:w-[50%] lg:h-[47%] lg:w-[40%] xl:mt-[7%] xl:h-[70%] xl:w-[70%]">
             <CardHeader>
               <CardTitle>Login User</CardTitle>
               <CardDescription className="pt-3 text-xs">
                 Silahkan masukan username dan password untuk mengakses fitur
-                kamis dengan lengkap.
+                kami dengan lengkap.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -96,22 +96,25 @@ export const Login: FC = (): ReactElement => {
                     control={form.control}
                     name="username"
                     render={({ field }) => (
-                      <FormItem className="ml-4 flex h-16 flex-col items-center">
+                      <FormItem className="flex h-16 w-full flex-col items-center">
                         <section className="flex w-full items-center gap-2">
                           <FormLabel className="pt-1">Username</FormLabel>
-                          <FormControl>
-                            <Input
-                              disabled={isPending}
-                              placeholder="Masukan Username"
-                              type="text"
-                              className={
-                                form.formState.errors.username
-                                  ? "border-red-400 placeholder:text-red-400"
-                                  : ""
-                              }
-                              {...field}
-                            />
-                          </FormControl>
+                          <section className="w-full">
+                            <FormControl className="w-full">
+                              <Input
+                                disabled={isPending}
+                                placeholder="Masukan Username"
+                                type="text"
+                                className={`w-full
+                                ${
+                                  form.formState.errors.username
+                                    ? "border-red-400 placeholder:text-red-400"
+                                    : ""
+                                }`}
+                                {...field}
+                              />
+                            </FormControl>
+                          </section>
                         </section>
                         <section className="w-full">
                           <p className="pl-20 text-xs font-bold text-red-400">
@@ -125,22 +128,25 @@ export const Login: FC = (): ReactElement => {
                     control={form.control}
                     name="password"
                     render={({ field }) => (
-                      <FormItem className="ml-4 flex h-16 flex-col items-center">
+                      <FormItem className="flex h-16 w-full flex-col items-center">
                         <section className="flex w-full items-center gap-2">
-                          <FormLabel className="pt-1">Password</FormLabel>
-                          <FormControl>
-                            <Input
-                              disabled={isPending}
-                              placeholder="Masukan password"
-                              type="password"
-                              className={
-                                form.formState.errors.password
-                                  ? "ml-1 border-red-400 placeholder:text-red-400"
-                                  : "ml-1"
-                              }
-                              {...field}
-                            />
-                          </FormControl>
+                          <FormLabel className="pr-1 pt-1">Password</FormLabel>
+                          <section className="w-full">
+                            <FormControl className="w-full">
+                              <Input
+                                disabled={isPending}
+                                placeholder="Masukan password"
+                                type="password"
+                                className={`w-full
+                              ${
+                                form.formState.errors.username
+                                  ? "border-red-400 placeholder:text-red-400"
+                                  : ""
+                              }`}
+                                {...field}
+                              />
+                            </FormControl>
+                          </section>
                         </section>
                         <section className="w-full">
                           <p className="pl-20 text-xs font-bold text-red-400">
@@ -150,7 +156,7 @@ export const Login: FC = (): ReactElement => {
                       </FormItem>
                     )}
                   />
-                  <section className="mt-5 flex w-full justify-end pr-3">
+                  <section className="mt-2 flex w-full justify-end">
                     <Button
                       type="submit"
                       disabled={!form.formState.isValid || isPending}
@@ -164,8 +170,8 @@ export const Login: FC = (): ReactElement => {
               </Form>
             </CardContent>
           </Card>
-          <section className="text-white">
-            <p>
+          <section className="mb-5 flex text-sm text-white md:justify-center lg:text-sm xl:mb-0 xl:w-3/4 xl:text-[0.7rem]">
+            <p className="md:w-8/12 lg:w-1/2 lg:text-center xl:w-full xl:text-left">
               Di sini, Anda akan menemukan bagaimana obat-obatan herbal
               tradisional bertemu dengan teknologi canggih, menciptakan solusi
               kesehatan yang revolusioner.
@@ -173,11 +179,11 @@ export const Login: FC = (): ReactElement => {
           </section>
         </section>
 
-        <section className="grid h-full w-3/5 place-items-center">
+        <section className="hidden h-full w-3/5 justify-center xl:flex">
           <img
             src="/illustrations/login.png"
             alt="login"
-            className="h-full w-full object-cover"
+            className="h-full w-11/12 object-cover"
           />
         </section>
       </section>
