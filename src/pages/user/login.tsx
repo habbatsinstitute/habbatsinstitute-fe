@@ -139,7 +139,7 @@ export const Login: FC = (): ReactElement => {
                                 type="password"
                                 className={`w-full
                               ${
-                                form.formState.errors.username
+                                form.formState.errors.password
                                   ? "border-red-400 placeholder:text-red-400"
                                   : ""
                               }`}
