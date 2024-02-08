@@ -82,7 +82,7 @@ export const Login: FC = (): ReactElement => {
       <Navbar />
 
       {/* Body */}
-      <section className="container flex h-[500px] w-full md:h-[700px] xl:h-[450px]">
+      <section className="container mt-24 flex h-[500px] w-full md:h-[700px] xl:h-[450px]">
         <section className="flex h-full flex-col justify-center gap-5 md:w-full md:items-center xl:w-2/5 xl:justify-normal">
           <Card className="h-2/3 w-full md:h-[52%] md:w-[50%] lg:h-[47%] lg:w-[40%] xl:mt-[7%] xl:h-[70%] xl:w-[70%]">
             <CardHeader>
