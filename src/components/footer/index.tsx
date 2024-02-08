@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { AiOutlineFacebook } from "react-icons/ai";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
+import { getAccessToken } from "@/lib";
 
 export const Footer: FC<{ className?: string }> = ({
   className,
@@ -28,7 +29,7 @@ export const Footer: FC<{ className?: string }> = ({
             <Link to={"/"}>Home</Link>
             <Link to={"/news"}>News</Link>
             <Link to={"/about-us"}>About</Link>
-            <Link to={"/login"}>Login</Link>
+            {!getAccessToken() && <Link to={"/login"}>Login</Link>}
           </section>
           <p className="mr-0 mt-[30%] w-full text-xs text-font-white md:mt-[5%] md:w-4/5 md:text-base lg:mr-[10%] lg:w-[60%] xl:mr-[15%] xl:w-1/2">
             Arcamanik Endah Ruko 01 No.07 Bandung, Jawa Barat.

@@ -1,16 +1,20 @@
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Slide, toast } from "react-toastify";
 import { twMerge } from "tailwind-merge";
 import clsx from "clsx";
 import { FiLogIn, FiUsers } from "react-icons/fi";
 import {
   LuHome,
+  LuLoader2,
   LuLogIn,
   LuLogOut,
   LuMenu,
   LuNewspaper,
   LuUser,
-  LuUserCog2,
 } from "react-icons/lu";
 import { GoBook } from "react-icons/go";
 import {
@@ -28,14 +32,18 @@ import {
   AvatarImage,
   Button,
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
   Input,
-  Label,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -44,15 +52,73 @@ import {
   SheetTrigger,
   Skeleton,
 } from "..";
-import { getAccessToken, removeToken, useGetUserMe } from "@/lib";
+import {
+  getAccessToken,
+  removeToken,
+  useGetUserMe,
+  useUpdateUser,
+  userSchema,
+} from "@/lib";
 
 export const Navbar: FC<{ className?: string }> = ({
   className,
 }): ReactElement => {
+  const form = useForm<z.infer<typeof userSchema>>({
+    resolver: zodResolver(userSchema),
+    mode: "all",
+    defaultValues: {
+      username: "",
+      password: "",
+      confirmation_password: "",
+    },
+  });
+
   const path = window.location.pathname;
   const navigate = useNavigate();
 
-  const { data } = useGetUserMe();
+  const { data, refetch } = useGetUserMe();
+  const { mutate, isPending } = useUpdateUser(data?.data.id);
+
+  function onSubmit(values: z.infer<typeof userSchema>) {
+    const formData = new FormData();
+
+    formData.append("username", values.username);
+    formData.append("password", values.password);
+
+    mutate(formData, {
+      onSuccess: () => {
+        refetch();
+        toast.success("Data user berhasil diupdate", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Slide,
+        });
+      },
+      onError: () => {
+        toast.error("Gagal update data user", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Slide,
+        });
+      },
+    });
+  }
+
+  useEffect(() => {
+    form.reset(data?.data);
+  }, [form, form.reset, data?.data]);
 
   return (
     <nav
@@ -211,13 +277,146 @@ export const Navbar: FC<{ className?: string }> = ({
                       </AvatarFallback>
                     </Avatar>
                   </section>
-                  <Link
-                    to={"/"}
-                    className="items flex items-center justify-center gap-2"
-                  >
-                    <LuUserCog2 />
-                    Profile User
-                  </Link>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-slate-300">
+                        <LuUser />
+                        Profile User
+                      </div>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Edit profile</DialogTitle>
+                        <DialogDescription>
+                          Make changes to your profile here. Click save when
+                          you're done.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <Form {...form}>
+                        <form
+                          onSubmit={form.handleSubmit(onSubmit)}
+                          className="flex flex-col gap-5"
+                        >
+                          <div className="flex flex-col">
+                            <FormField
+                              control={form.control}
+                              name="username"
+                              render={({ field }) => (
+                                <FormItem className="flex w-full flex-col">
+                                  <FormLabel
+                                    className={`text-sm ${form.formState.errors.username ? "text-red-400" : "text-[#0F172A]"}`}
+                                  >
+                                    Username
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="text"
+                                      placeholder="Input username"
+                                      className={
+                                        form.formState.errors.username
+                                          ? "border-red-400 placeholder:text-red-400"
+                                          : ""
+                                      }
+                                      disabled={isPending}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <section className="w-full">
+                                    <p className="text-xs font-bold text-red-400">
+                                      {form.formState.errors.username?.message}
+                                    </p>
+                                  </section>
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={form.control}
+                              name="password"
+                              render={({ field }) => (
+                                <FormItem className="flex w-full flex-col">
+                                  <FormLabel
+                                    className={`text-sm ${form.formState.errors.password ? "text-red-400" : "text-[#0F172A]"}`}
+                                  >
+                                    Password
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="password"
+                                      placeholder="Input password"
+                                      className={
+                                        form.formState.errors.password
+                                          ? "border-red-400 placeholder:text-red-400"
+                                          : ""
+                                      }
+                                      disabled={isPending}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <section className="w-full">
+                                    <p className="text-xs font-bold text-red-400">
+                                      {form.formState.errors.password?.message}
+                                    </p>
+                                  </section>
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={form.control}
+                              name="confirmation_password"
+                              render={({ field }) => (
+                                <FormItem className="flex w-full flex-col">
+                                  <FormLabel
+                                    className={`text-sm ${form.formState.errors.confirmation_password ? "text-red-400" : "text-[#0F172A]"}`}
+                                  >
+                                    Confirmation Password
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="password"
+                                      placeholder="Input confirmation password"
+                                      className={
+                                        form.formState.errors
+                                          .confirmation_password
+                                          ? "border-red-400 placeholder:text-red-400"
+                                          : ""
+                                      }
+                                      disabled={isPending}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <section className="w-full">
+                                    <p className="text-xs font-bold text-red-400">
+                                      {
+                                        form.formState.errors
+                                          .confirmation_password?.message
+                                      }
+                                    </p>
+                                  </section>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="flex justify-end gap-3">
+                            <DialogClose asChild>
+                              <Button type="button" variant={"outline"}>
+                                Cancel
+                              </Button>
+                            </DialogClose>
+                            <Button
+                              type="submit"
+                              disabled={isPending || !form.formState.isValid}
+                              className="flex items-center justify-center gap-2"
+                            >
+                              {isPending && (
+                                <LuLoader2 className="w-full animate-spin" />
+                              )}
+                              Save Changes
+                            </Button>
+                          </div>
+                        </form>
+                      </Form>
+                    </DialogContent>
+                  </Dialog>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button
@@ -331,35 +530,129 @@ export const Navbar: FC<{ className?: string }> = ({
                           you're done.
                         </DialogDescription>
                       </DialogHeader>
-                      <div className="flex flex-col gap-5">
-                        <div className="flex items-center gap-3">
-                          <Label htmlFor="name" className="w-[25%]">
-                            Username
-                          </Label>
-                          <div className="w-[70%]">
-                            <Input id="name" />
+                      <Form {...form}>
+                        <form
+                          onSubmit={form.handleSubmit(onSubmit)}
+                          className="flex flex-col gap-5"
+                        >
+                          <div className="flex flex-col">
+                            <FormField
+                              control={form.control}
+                              name="username"
+                              render={({ field }) => (
+                                <FormItem className="flex w-full flex-col">
+                                  <FormLabel
+                                    className={`text-sm ${form.formState.errors.username ? "text-red-400" : "text-[#0F172A]"}`}
+                                  >
+                                    Username
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="text"
+                                      placeholder="Input username"
+                                      className={
+                                        form.formState.errors.username
+                                          ? "border-red-400 placeholder:text-red-400"
+                                          : ""
+                                      }
+                                      disabled={isPending}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <section className="w-full">
+                                    <p className="text-xs font-bold text-red-400">
+                                      {form.formState.errors.username?.message}
+                                    </p>
+                                  </section>
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={form.control}
+                              name="password"
+                              render={({ field }) => (
+                                <FormItem className="flex w-full flex-col">
+                                  <FormLabel
+                                    className={`text-sm ${form.formState.errors.password ? "text-red-400" : "text-[#0F172A]"}`}
+                                  >
+                                    Password
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="password"
+                                      placeholder="Input password"
+                                      className={
+                                        form.formState.errors.password
+                                          ? "border-red-400 placeholder:text-red-400"
+                                          : ""
+                                      }
+                                      disabled={isPending}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <section className="w-full">
+                                    <p className="text-xs font-bold text-red-400">
+                                      {form.formState.errors.password?.message}
+                                    </p>
+                                  </section>
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={form.control}
+                              name="confirmation_password"
+                              render={({ field }) => (
+                                <FormItem className="flex w-full flex-col">
+                                  <FormLabel
+                                    className={`text-sm ${form.formState.errors.confirmation_password ? "text-red-400" : "text-[#0F172A]"}`}
+                                  >
+                                    Confirmation Password
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="password"
+                                      placeholder="Input confirmation password"
+                                      className={
+                                        form.formState.errors
+                                          .confirmation_password
+                                          ? "border-red-400 placeholder:text-red-400"
+                                          : ""
+                                      }
+                                      disabled={isPending}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <section className="w-full">
+                                    <p className="text-xs font-bold text-red-400">
+                                      {
+                                        form.formState.errors
+                                          .confirmation_password?.message
+                                      }
+                                    </p>
+                                  </section>
+                                </FormItem>
+                              )}
+                            />
                           </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <Label htmlFor="name" className="w-[25%]">
-                            Password
-                          </Label>
-                          <div className="w-[70%]">
-                            <Input id="name" type="password" />
+                          <div className="flex justify-end gap-3">
+                            <DialogClose asChild>
+                              <Button type="button" variant={"outline"}>
+                                Cancel
+                              </Button>
+                            </DialogClose>
+                            <Button
+                              type="submit"
+                              disabled={isPending || !form.formState.isValid}
+                              className="flex items-center justify-center gap-2"
+                            >
+                              {isPending && (
+                                <LuLoader2 className="w-full animate-spin" />
+                              )}
+                              Save Changes
+                            </Button>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <Label htmlFor="name" className="w-[25%]">
-                            Confirmation Password
-                          </Label>
-                          <div className="w-[70%]">
-                            <Input id="name" type="password" />
-                          </div>
-                        </div>
-                      </div>
-                      <DialogFooter>
-                        <Button type="submit">Save changes</Button>
-                      </DialogFooter>
+                        </form>
+                      </Form>
                     </DialogContent>
                   </Dialog>
 
