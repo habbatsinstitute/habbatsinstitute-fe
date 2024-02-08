@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { LuPlay, LuUser2 } from "react-icons/lu";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -8,6 +8,20 @@ import { getAccessToken } from "@/lib";
 
 export const Home: FC = (): ReactElement => {
   const [isLoggin] = useState(getAccessToken() ? true : false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const position = window.scrollY;
+      setScrollPosition(position);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const trends = [
     {
@@ -36,9 +50,13 @@ export const Home: FC = (): ReactElement => {
 
   return (
     <main className="flex flex-col overflow-x-hidden overflow-y-hidden bg-[url('/backgrounds/white.jpg')] font-inter">
-      <Navbar />
+      <Navbar
+        className={
+          scrollPosition > 0 ? "bg-white duration-300 ease-in-out" : ""
+        }
+      />
 
-      <section className="container mt-3 flex min-h-[450px]">
+      <section className="container mt-24 flex min-h-[450px]">
         <section className="flex w-full flex-col justify-evenly md:justify-between lg:w-[60%]">
           <h1 className="text-[2rem] font-bold text-[#1E1E1E] md:pt-10 md:text-[3rem] lg:text-[2rem] xl:text-[3rem]">
             Selamat datang di Platform Habbats Institute.

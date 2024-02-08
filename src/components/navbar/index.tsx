@@ -123,147 +123,391 @@ export const Navbar: FC<{ className?: string }> = ({
   return (
     <nav
       className={twMerge(
-        "container my-5 flex h-[56px] w-full items-center justify-between",
+        "fixed z-20 flex h-20 w-full items-center justify-between",
         className,
       )}
     >
-      <section className="cursor-pointer" onClick={() => navigate("/")}>
-        <img
-          src={
-            path === "/login" ? "/new-logos/white.png" : "/new-logos/black.png"
-          }
-          alt="logo"
-          className="w-10 md:w-12"
-        />
-      </section>
-      {/* Mobile */}
-      <section className="flex text-white md:hidden">
-        <Sheet>
-          <SheetTrigger asChild>
-            <h1 className="flex items-center justify-center gap-3 text-base font-bold text-black md:text-xl">
-              <LuMenu
-                className={`text-[2rem] ${path === "/login" ? "text-white" : "text-black"}`}
-              />
-            </h1>
-          </SheetTrigger>
-          <SheetContent
-            side={"left"}
-            className="bg-emerald-50 text-emerald-700"
-          >
-            <section className="flex h-full w-full flex-col">
-              <section className="grid h-52 place-items-center">
-                <img
-                  src="/new-logos/black.png"
-                  alt="logo"
-                  className="w-20 object-cover"
+      <div className="container flex items-center justify-between">
+        <section className="cursor-pointer" onClick={() => navigate("/")}>
+          <img
+            src={
+              path === "/login"
+                ? "/new-logos/white.png"
+                : "/new-logos/black.png"
+            }
+            alt="logo"
+            className="w-10 md:w-12"
+          />
+        </section>
+        {/* Mobile */}
+        <section className="flex text-white md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <h1 className="flex items-center justify-center gap-3 text-base font-bold text-black md:text-xl">
+                <LuMenu
+                  className={`text-[2rem] ${path === "/login" ? "text-white" : "text-black"}`}
                 />
-              </section>
-
-              <section className="flex h-[60%] w-full flex-col">
-                <Link
-                  to="/"
-                  className={clsx(
-                    "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
-                    {
-                      "bg-emerald-700 text-white":
-                        location.pathname === "/" ||
-                        !location.pathname.startsWith("/"),
-                    },
-                  )}
-                >
-                  <LuHome
-                    className={clsx({
-                      "text-emerald-700": !location.pathname.startsWith("/"),
-                    })}
+              </h1>
+            </SheetTrigger>
+            <SheetContent
+              side={"left"}
+              className="bg-emerald-50 text-emerald-700"
+            >
+              <section className="flex h-full w-full flex-col">
+                <section className="grid h-52 place-items-center">
+                  <img
+                    src="/new-logos/black.png"
+                    alt="logo"
+                    className="w-20 object-cover"
                   />
-                  Home
-                </Link>
+                </section>
 
-                <Link
-                  to="/courses"
-                  className={clsx(
-                    "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
-                    {
-                      "bg-emerald-700 text-white":
-                        location.pathname.startsWith("/courses"),
-                    },
-                  )}
-                >
-                  <GoBook
-                    className={clsx({
-                      "text-emerald-700":
-                        !location.pathname.startsWith("/courses"),
-                    })}
-                  />
-                  Courses
-                </Link>
-
-                <Link
-                  to="/news"
-                  className={clsx(
-                    "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
-                    {
-                      "bg-emerald-700 text-white":
-                        location.pathname.startsWith("/news"),
-                    },
-                  )}
-                >
-                  <LuNewspaper
-                    className={clsx({
-                      "text-emerald-700":
-                        !location.pathname.startsWith("/news"),
-                    })}
-                  />
-                  News
-                </Link>
-
-                <Link
-                  to="/about-us"
-                  className={clsx(
-                    "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
-                    {
-                      "bg-emerald-700 text-white":
-                        location.pathname.startsWith("/about-us"),
-                    },
-                  )}
-                >
-                  <FiUsers
-                    className={clsx({
-                      "text-emerald-700":
-                        !location.pathname.startsWith("/about-us"),
-                    })}
-                  />
-                  About Us
-                </Link>
-
-                {!getAccessToken() && (
+                <section className="flex h-[60%] w-full flex-col">
                   <Link
-                    to="/login"
+                    to="/"
                     className={clsx(
                       "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
                       {
                         "bg-emerald-700 text-white":
-                          location.pathname.startsWith("/login"),
+                          location.pathname === "/" ||
+                          !location.pathname.startsWith("/"),
                       },
                     )}
                   >
-                    <LuLogIn
+                    <LuHome
                       className={clsx({
-                        "text-emerald-700":
-                          !location.pathname.startsWith("/login"),
+                        "text-emerald-700": !location.pathname.startsWith("/"),
                       })}
                     />
-                    Login
+                    Home
                   </Link>
+
+                  <Link
+                    to="/courses"
+                    className={clsx(
+                      "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
+                      {
+                        "bg-emerald-700 text-white":
+                          location.pathname.startsWith("/courses"),
+                      },
+                    )}
+                  >
+                    <GoBook
+                      className={clsx({
+                        "text-emerald-700":
+                          !location.pathname.startsWith("/courses"),
+                      })}
+                    />
+                    Courses
+                  </Link>
+
+                  <Link
+                    to="/news"
+                    className={clsx(
+                      "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
+                      {
+                        "bg-emerald-700 text-white":
+                          location.pathname.startsWith("/news"),
+                      },
+                    )}
+                  >
+                    <LuNewspaper
+                      className={clsx({
+                        "text-emerald-700":
+                          !location.pathname.startsWith("/news"),
+                      })}
+                    />
+                    News
+                  </Link>
+
+                  <Link
+                    to="/about-us"
+                    className={clsx(
+                      "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
+                      {
+                        "bg-emerald-700 text-white":
+                          location.pathname.startsWith("/about-us"),
+                      },
+                    )}
+                  >
+                    <FiUsers
+                      className={clsx({
+                        "text-emerald-700":
+                          !location.pathname.startsWith("/about-us"),
+                      })}
+                    />
+                    About Us
+                  </Link>
+
+                  {!getAccessToken() && (
+                    <Link
+                      to="/login"
+                      className={clsx(
+                        "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
+                        {
+                          "bg-emerald-700 text-white":
+                            location.pathname.startsWith("/login"),
+                        },
+                      )}
+                    >
+                      <LuLogIn
+                        className={clsx({
+                          "text-emerald-700":
+                            !location.pathname.startsWith("/login"),
+                        })}
+                      />
+                      Login
+                    </Link>
+                  )}
+                </section>
+
+                {getAccessToken() && (
+                  <section className="flex h-[20%] flex-col justify-center gap-5">
+                    <section
+                      className="flex flex-row-reverse items-center justify-center gap-3 px-2 py-1
+                "
+                    >
+                      <h3 className="text-base font-normal ">
+                        Hello, {data?.data.username.substring(0, 9)}
+                      </h3>
+                      <Avatar>
+                        <AvatarImage
+                          src="https://github.com/shadcn.png"
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback>
+                          <Skeleton className="h-10 w-10 rounded-full bg-slate-300" />
+                        </AvatarFallback>
+                      </Avatar>
+                    </section>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-slate-300">
+                          <LuUser />
+                          Profile User
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                          <DialogTitle>Edit profile</DialogTitle>
+                          <DialogDescription>
+                            Make changes to your profile here. Click save when
+                            you're done.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <Form {...form}>
+                          <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className="flex flex-col gap-5"
+                          >
+                            <div className="flex flex-col">
+                              <FormField
+                                control={form.control}
+                                name="username"
+                                render={({ field }) => (
+                                  <FormItem className="flex w-full flex-col">
+                                    <FormLabel
+                                      className={`text-sm ${form.formState.errors.username ? "text-red-400" : "text-[#0F172A]"}`}
+                                    >
+                                      Username
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        type="text"
+                                        placeholder="Input username"
+                                        className={
+                                          form.formState.errors.username
+                                            ? "border-red-400 placeholder:text-red-400"
+                                            : ""
+                                        }
+                                        disabled={isPending}
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <section className="w-full">
+                                      <p className="text-xs font-bold text-red-400">
+                                        {
+                                          form.formState.errors.username
+                                            ?.message
+                                        }
+                                      </p>
+                                    </section>
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                  <FormItem className="flex w-full flex-col">
+                                    <FormLabel
+                                      className={`text-sm ${form.formState.errors.password ? "text-red-400" : "text-[#0F172A]"}`}
+                                    >
+                                      Password
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        type="password"
+                                        placeholder="Input password"
+                                        className={
+                                          form.formState.errors.password
+                                            ? "border-red-400 placeholder:text-red-400"
+                                            : ""
+                                        }
+                                        disabled={isPending}
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <section className="w-full">
+                                      <p className="text-xs font-bold text-red-400">
+                                        {
+                                          form.formState.errors.password
+                                            ?.message
+                                        }
+                                      </p>
+                                    </section>
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="confirmation_password"
+                                render={({ field }) => (
+                                  <FormItem className="flex w-full flex-col">
+                                    <FormLabel
+                                      className={`text-sm ${form.formState.errors.confirmation_password ? "text-red-400" : "text-[#0F172A]"}`}
+                                    >
+                                      Confirmation Password
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        type="password"
+                                        placeholder="Input confirmation password"
+                                        className={
+                                          form.formState.errors
+                                            .confirmation_password
+                                            ? "border-red-400 placeholder:text-red-400"
+                                            : ""
+                                        }
+                                        disabled={isPending}
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <section className="w-full">
+                                      <p className="text-xs font-bold text-red-400">
+                                        {
+                                          form.formState.errors
+                                            .confirmation_password?.message
+                                        }
+                                      </p>
+                                    </section>
+                                  </FormItem>
+                                )}
+                              />
+                            </div>
+                            <div className="flex justify-end gap-3">
+                              <DialogClose asChild>
+                                <Button type="button" variant={"outline"}>
+                                  Cancel
+                                </Button>
+                              </DialogClose>
+                              <Button
+                                type="submit"
+                                disabled={isPending || !form.formState.isValid}
+                                className="flex items-center justify-center gap-2"
+                              >
+                                {isPending && (
+                                  <LuLoader2 className="w-full animate-spin" />
+                                )}
+                                Save Changes
+                              </Button>
+                            </div>
+                          </form>
+                        </Form>
+                      </DialogContent>
+                    </Dialog>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant={"destructive"}
+                          className="items flex items-center justify-center gap-2"
+                        >
+                          <LuLogOut />
+                          Logout
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you sure you want to log out?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action will end your session, while your
+                            account data is securely stored on our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            className="bg-red-400 hover:bg-red-500"
+                            onClick={() => {
+                              removeToken();
+                              window.location.reload();
+                            }}
+                          >
+                            Logout
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </section>
                 )}
               </section>
+            </SheetContent>
+          </Sheet>
+        </section>
+        {/* MD - Desktop */}
+        <section className="hidden md:flex">
+          <ul className="flex gap-5 font-bold">
+            <li>
+              <Link
+                to="/"
+                className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 ${path === "/" ? "underline underline-offset-8" : ""} hover:bg-dark-1 hover:text-bright-1`}
+              >
+                Home
+              </Link>
+            </li>
+            {getAccessToken() && (
+              <li>
+                <Link
+                  to="/courses"
+                  className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:bg-dark-1 hover:text-bright-1 ${path === "/courses" ? "underline underline-offset-8" : ""}`}
+                >
+                  Course
+                </Link>
+              </li>
+            )}
+            <li>
+              <Link
+                to="/news"
+                className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:bg-dark-1 hover:text-bright-1 ${path === "/news" ? "underline underline-offset-8" : ""}`}
+              >
+                News
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/about-us"
+                className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:bg-dark-1 hover:text-bright-1 ${path === "/about-us" ? "underline underline-offset-8" : ""}`}
+              >
+                About Us
+              </Link>
+            </li>
 
-              {getAccessToken() && (
-                <section className="flex h-[20%] flex-col justify-center gap-5">
-                  <section
-                    className="flex flex-row-reverse items-center justify-center gap-3 px-2 py-1
-                "
-                  >
+            {getAccessToken() ? (
+              <Popover>
+                <PopoverTrigger>
+                  <section className="flex items-center justify-center gap-3 rounded-md px-2">
                     <h3 className="text-base font-normal ">
                       Hello, {data?.data.username.substring(0, 9)}
                     </h3>
@@ -277,430 +521,202 @@ export const Navbar: FC<{ className?: string }> = ({
                       </AvatarFallback>
                     </Avatar>
                   </section>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-slate-300">
-                        <LuUser />
-                        Profile User
-                      </div>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>Edit profile</DialogTitle>
-                        <DialogDescription>
-                          Make changes to your profile here. Click save when
-                          you're done.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <Form {...form}>
-                        <form
-                          onSubmit={form.handleSubmit(onSubmit)}
-                          className="flex flex-col gap-5"
-                        >
-                          <div className="flex flex-col">
-                            <FormField
-                              control={form.control}
-                              name="username"
-                              render={({ field }) => (
-                                <FormItem className="flex w-full flex-col">
-                                  <FormLabel
-                                    className={`text-sm ${form.formState.errors.username ? "text-red-400" : "text-[#0F172A]"}`}
-                                  >
-                                    Username
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type="text"
-                                      placeholder="Input username"
-                                      className={
-                                        form.formState.errors.username
-                                          ? "border-red-400 placeholder:text-red-400"
-                                          : ""
-                                      }
-                                      disabled={isPending}
-                                      {...field}
-                                    />
-                                  </FormControl>
-                                  <section className="w-full">
-                                    <p className="text-xs font-bold text-red-400">
-                                      {form.formState.errors.username?.message}
-                                    </p>
-                                  </section>
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name="password"
-                              render={({ field }) => (
-                                <FormItem className="flex w-full flex-col">
-                                  <FormLabel
-                                    className={`text-sm ${form.formState.errors.password ? "text-red-400" : "text-[#0F172A]"}`}
-                                  >
-                                    Password
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type="password"
-                                      placeholder="Input password"
-                                      className={
-                                        form.formState.errors.password
-                                          ? "border-red-400 placeholder:text-red-400"
-                                          : ""
-                                      }
-                                      disabled={isPending}
-                                      {...field}
-                                    />
-                                  </FormControl>
-                                  <section className="w-full">
-                                    <p className="text-xs font-bold text-red-400">
-                                      {form.formState.errors.password?.message}
-                                    </p>
-                                  </section>
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name="confirmation_password"
-                              render={({ field }) => (
-                                <FormItem className="flex w-full flex-col">
-                                  <FormLabel
-                                    className={`text-sm ${form.formState.errors.confirmation_password ? "text-red-400" : "text-[#0F172A]"}`}
-                                  >
-                                    Confirmation Password
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type="password"
-                                      placeholder="Input confirmation password"
-                                      className={
-                                        form.formState.errors
-                                          .confirmation_password
-                                          ? "border-red-400 placeholder:text-red-400"
-                                          : ""
-                                      }
-                                      disabled={isPending}
-                                      {...field}
-                                    />
-                                  </FormControl>
-                                  <section className="w-full">
-                                    <p className="text-xs font-bold text-red-400">
-                                      {
-                                        form.formState.errors
-                                          .confirmation_password?.message
-                                      }
-                                    </p>
-                                  </section>
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-                          <div className="flex justify-end gap-3">
-                            <DialogClose asChild>
-                              <Button type="button" variant={"outline"}>
-                                Cancel
+                </PopoverTrigger>
+                <PopoverContent className="w-[150px] p-0">
+                  <section className="flex w-full flex-col gap-2 text-slate-700">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-slate-300">
+                          <LuUser />
+                          Profile User
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                          <DialogTitle>Edit profile</DialogTitle>
+                          <DialogDescription>
+                            Make changes to your profile here. Click save when
+                            you're done.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <Form {...form}>
+                          <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className="flex flex-col gap-5"
+                          >
+                            <div className="flex flex-col">
+                              <FormField
+                                control={form.control}
+                                name="username"
+                                render={({ field }) => (
+                                  <FormItem className="flex w-full flex-col">
+                                    <FormLabel
+                                      className={`text-sm ${form.formState.errors.username ? "text-red-400" : "text-[#0F172A]"}`}
+                                    >
+                                      Username
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        type="text"
+                                        placeholder="Input username"
+                                        className={
+                                          form.formState.errors.username
+                                            ? "border-red-400 placeholder:text-red-400"
+                                            : ""
+                                        }
+                                        disabled={isPending}
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <section className="w-full">
+                                      <p className="text-xs font-bold text-red-400">
+                                        {
+                                          form.formState.errors.username
+                                            ?.message
+                                        }
+                                      </p>
+                                    </section>
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                  <FormItem className="flex w-full flex-col">
+                                    <FormLabel
+                                      className={`text-sm ${form.formState.errors.password ? "text-red-400" : "text-[#0F172A]"}`}
+                                    >
+                                      Password
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        type="password"
+                                        placeholder="Input password"
+                                        className={
+                                          form.formState.errors.password
+                                            ? "border-red-400 placeholder:text-red-400"
+                                            : ""
+                                        }
+                                        disabled={isPending}
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <section className="w-full">
+                                      <p className="text-xs font-bold text-red-400">
+                                        {
+                                          form.formState.errors.password
+                                            ?.message
+                                        }
+                                      </p>
+                                    </section>
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="confirmation_password"
+                                render={({ field }) => (
+                                  <FormItem className="flex w-full flex-col">
+                                    <FormLabel
+                                      className={`text-sm ${form.formState.errors.confirmation_password ? "text-red-400" : "text-[#0F172A]"}`}
+                                    >
+                                      Confirmation Password
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        type="password"
+                                        placeholder="Input confirmation password"
+                                        className={
+                                          form.formState.errors
+                                            .confirmation_password
+                                            ? "border-red-400 placeholder:text-red-400"
+                                            : ""
+                                        }
+                                        disabled={isPending}
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <section className="w-full">
+                                      <p className="text-xs font-bold text-red-400">
+                                        {
+                                          form.formState.errors
+                                            .confirmation_password?.message
+                                        }
+                                      </p>
+                                    </section>
+                                  </FormItem>
+                                )}
+                              />
+                            </div>
+                            <div className="flex justify-end gap-3">
+                              <DialogClose asChild>
+                                <Button type="button" variant={"outline"}>
+                                  Cancel
+                                </Button>
+                              </DialogClose>
+                              <Button
+                                type="submit"
+                                disabled={isPending || !form.formState.isValid}
+                                className="flex items-center justify-center gap-2"
+                              >
+                                {isPending && (
+                                  <LuLoader2 className="w-full animate-spin" />
+                                )}
+                                Save Changes
                               </Button>
-                            </DialogClose>
-                            <Button
-                              type="submit"
-                              disabled={isPending || !form.formState.isValid}
-                              className="flex items-center justify-center gap-2"
-                            >
-                              {isPending && (
-                                <LuLoader2 className="w-full animate-spin" />
-                              )}
-                              Save Changes
-                            </Button>
-                          </div>
-                        </form>
-                      </Form>
-                    </DialogContent>
-                  </Dialog>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant={"destructive"}
-                        className="items flex items-center justify-center gap-2"
-                      >
-                        <LuLogOut />
-                        Logout
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you sure you want to log out?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action will end your session, while your account
-                          data is securely stored on our servers.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          className="bg-red-400 hover:bg-red-500"
-                          onClick={() => {
-                            removeToken();
-                            window.location.reload();
-                          }}
-                        >
+                            </div>
+                          </form>
+                        </Form>
+                      </DialogContent>
+                    </Dialog>
+
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-slate-300">
+                          <LuLogOut />
                           Logout
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </section>
-              )}
-            </section>
-          </SheetContent>
-        </Sheet>
-      </section>
-      {/* MD - Desktop */}
-      <section className="hidden md:flex">
-        <ul className="flex gap-5 font-bold">
-          <li>
-            <Link
-              to="/"
-              className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:bg-dark-1 hover:text-bright-1`}
-            >
-              Home
-            </Link>
-          </li>
-          {getAccessToken() && (
-            <li>
+                        </div>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you sure you want to log out?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action will end your session, while your
+                            account data is securely stored on our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            className="bg-red-400 hover:bg-red-500"
+                            onClick={() => {
+                              removeToken();
+                              window.location.reload();
+                            }}
+                          >
+                            Logout
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </section>
+                </PopoverContent>
+              </Popover>
+            ) : (
               <Link
-                to="/courses"
-                className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:bg-dark-1 hover:text-bright-1`}
+                to={"/login"}
+                className={`flex items-center justify-center gap-2 rounded-md bg-bright-1 px-4 py-2 hover:bg-dark-1 hover:text-bright-1 ${path === "/login" ? "underline underline-offset-8" : ""}`}
               >
-                Course
+                <FiLogIn />
+                Login
               </Link>
-            </li>
-          )}
-          <li>
-            <Link
-              to="/news"
-              className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:bg-dark-1 hover:text-bright-1`}
-            >
-              News
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/about-us"
-              className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:bg-dark-1 hover:text-bright-1`}
-            >
-              About Us
-            </Link>
-          </li>
-
-          {getAccessToken() ? (
-            <Popover>
-              <PopoverTrigger>
-                <section className="flex items-center justify-center gap-3 rounded-md px-2">
-                  <h3 className="text-base font-normal ">
-                    Hello, {data?.data.username.substring(0, 9)}
-                  </h3>
-                  <Avatar>
-                    <AvatarImage
-                      src="https://github.com/shadcn.png"
-                      alt="@shadcn"
-                    />
-                    <AvatarFallback>
-                      <Skeleton className="h-10 w-10 rounded-full bg-slate-300" />
-                    </AvatarFallback>
-                  </Avatar>
-                </section>
-              </PopoverTrigger>
-              <PopoverContent className="w-[150px] p-0">
-                <section className="flex w-full flex-col gap-2 text-slate-700">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-slate-300">
-                        <LuUser />
-                        Profile User
-                      </div>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>Edit profile</DialogTitle>
-                        <DialogDescription>
-                          Make changes to your profile here. Click save when
-                          you're done.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <Form {...form}>
-                        <form
-                          onSubmit={form.handleSubmit(onSubmit)}
-                          className="flex flex-col gap-5"
-                        >
-                          <div className="flex flex-col">
-                            <FormField
-                              control={form.control}
-                              name="username"
-                              render={({ field }) => (
-                                <FormItem className="flex w-full flex-col">
-                                  <FormLabel
-                                    className={`text-sm ${form.formState.errors.username ? "text-red-400" : "text-[#0F172A]"}`}
-                                  >
-                                    Username
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type="text"
-                                      placeholder="Input username"
-                                      className={
-                                        form.formState.errors.username
-                                          ? "border-red-400 placeholder:text-red-400"
-                                          : ""
-                                      }
-                                      disabled={isPending}
-                                      {...field}
-                                    />
-                                  </FormControl>
-                                  <section className="w-full">
-                                    <p className="text-xs font-bold text-red-400">
-                                      {form.formState.errors.username?.message}
-                                    </p>
-                                  </section>
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name="password"
-                              render={({ field }) => (
-                                <FormItem className="flex w-full flex-col">
-                                  <FormLabel
-                                    className={`text-sm ${form.formState.errors.password ? "text-red-400" : "text-[#0F172A]"}`}
-                                  >
-                                    Password
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type="password"
-                                      placeholder="Input password"
-                                      className={
-                                        form.formState.errors.password
-                                          ? "border-red-400 placeholder:text-red-400"
-                                          : ""
-                                      }
-                                      disabled={isPending}
-                                      {...field}
-                                    />
-                                  </FormControl>
-                                  <section className="w-full">
-                                    <p className="text-xs font-bold text-red-400">
-                                      {form.formState.errors.password?.message}
-                                    </p>
-                                  </section>
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name="confirmation_password"
-                              render={({ field }) => (
-                                <FormItem className="flex w-full flex-col">
-                                  <FormLabel
-                                    className={`text-sm ${form.formState.errors.confirmation_password ? "text-red-400" : "text-[#0F172A]"}`}
-                                  >
-                                    Confirmation Password
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type="password"
-                                      placeholder="Input confirmation password"
-                                      className={
-                                        form.formState.errors
-                                          .confirmation_password
-                                          ? "border-red-400 placeholder:text-red-400"
-                                          : ""
-                                      }
-                                      disabled={isPending}
-                                      {...field}
-                                    />
-                                  </FormControl>
-                                  <section className="w-full">
-                                    <p className="text-xs font-bold text-red-400">
-                                      {
-                                        form.formState.errors
-                                          .confirmation_password?.message
-                                      }
-                                    </p>
-                                  </section>
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-                          <div className="flex justify-end gap-3">
-                            <DialogClose asChild>
-                              <Button type="button" variant={"outline"}>
-                                Cancel
-                              </Button>
-                            </DialogClose>
-                            <Button
-                              type="submit"
-                              disabled={isPending || !form.formState.isValid}
-                              className="flex items-center justify-center gap-2"
-                            >
-                              {isPending && (
-                                <LuLoader2 className="w-full animate-spin" />
-                              )}
-                              Save Changes
-                            </Button>
-                          </div>
-                        </form>
-                      </Form>
-                    </DialogContent>
-                  </Dialog>
-
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-slate-300">
-                        <LuLogOut />
-                        Logout
-                      </div>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you sure you want to log out?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action will end your session, while your account
-                          data is securely stored on our servers.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          className="bg-red-400 hover:bg-red-500"
-                          onClick={() => {
-                            removeToken();
-                            window.location.reload();
-                          }}
-                        >
-                          Logout
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </section>
-              </PopoverContent>
-            </Popover>
-          ) : (
-            <Link
-              to={"/login"}
-              className="flex items-center justify-center gap-2 rounded-md bg-bright-1 px-4 py-2 hover:bg-dark-1 hover:text-bright-1"
-            >
-              <FiLogIn />
-              Login
-            </Link>
-          )}
-        </ul>
-      </section>
+            )}
+          </ul>
+        </section>
+      </div>
     </nav>
   );
 };
