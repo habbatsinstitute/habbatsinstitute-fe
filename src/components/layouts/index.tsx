@@ -3,8 +3,28 @@ import clsx from "clsx";
 import { FiUsers } from "react-icons/fi";
 import { PiDiamondsFour } from "react-icons/pi";
 import { GoBook } from "react-icons/go";
-import { LuLogOut, LuMenu, LuNewspaper, LuUser, LuUsers } from "react-icons/lu";
 import {
+  LuLogOut,
+  LuMenu,
+  LuNewspaper,
+  LuUser,
+  LuUserCog2,
+  LuUsers,
+} from "react-icons/lu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -12,8 +32,9 @@ import {
   SheetContent,
   SheetTrigger,
   SideBar,
+  Skeleton,
 } from "@/components";
-import { removeToken, useGetUserMe } from "@/lib";
+import { getAccessToken, removeToken, useGetUserMe } from "@/lib";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -129,7 +150,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                     />
                   </section>
 
-                  <section className="flex h-full w-full flex-col">
+                  <section className="flex h-[70%] w-full flex-col">
                     {navLinksData.map(({ to, icon, label }, index) => (
                       <Link
                         key={index}
@@ -177,6 +198,68 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                       </Link>
                     ))}
                   </section>
+                  {getAccessToken() && (
+                    <section className="flex h-[20%] flex-col justify-center gap-5">
+                      <section
+                        className="flex flex-row-reverse items-center justify-center gap-3 px-2 py-1
+                "
+                      >
+                        <h3 className="text-base font-normal ">
+                          Hello, {data?.data.username.substring(0, 9)}
+                        </h3>
+                        <Avatar>
+                          <AvatarImage
+                            src="https://github.com/shadcn.png"
+                            alt="@shadcn"
+                          />
+                          <AvatarFallback>
+                            <Skeleton className="h-10 w-10 rounded-full bg-slate-300" />
+                          </AvatarFallback>
+                        </Avatar>
+                      </section>
+                      <Link
+                        to={"/"}
+                        className="items flex items-center justify-center gap-2"
+                      >
+                        <LuUserCog2 />
+                        Profile User
+                      </Link>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant={"destructive"}
+                            className="items flex items-center justify-center gap-2"
+                          >
+                            <LuLogOut />
+                            Logout
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you sure you want to log out?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action will end your session, while your
+                              account data is securely stored on our servers.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              className="bg-red-400 hover:bg-red-500"
+                              onClick={() => {
+                                removeToken();
+                                window.location.reload();
+                              }}
+                            >
+                              Logout
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </section>
+                  )}
                 </section>
               </SheetContent>
             </Sheet>
