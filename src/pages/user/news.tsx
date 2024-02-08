@@ -73,7 +73,7 @@ export const News: FC = (): ReactElement => {
   return (
     <main className="relative flex h-[3000px] w-full flex-col font-inter">
       {/* Header */}
-      <Navbar />
+      <Navbar className="bg-white" />
       <section className="container flex h-[12%] w-full pb-10">
         <section className="w-1/2">
           <h1 className="flex h-full w-[55%] items-end text-[2rem] font-bold text-[#1E212B]">

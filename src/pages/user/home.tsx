@@ -16,6 +16,9 @@ export const Home: FC = (): ReactElement => {
       setScrollPosition(position);
     };
 
+    const initialScrollPosition = window.scrollY;
+    setScrollPosition(initialScrollPosition);
+
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
