@@ -398,12 +398,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
               <Button
                 size={"sm"}
                 className="gap-1 bg-bright-2 font-bold text-font-black-3 hover:bg-bright-1"
-                disabled={
-                  !form.formState.isValid ||
-                  isFetchUserById ||
-                  isPendingUpdate ||
-                  isPendingRemove
-                }
+                disabled={isFetchUserById || isPendingUpdate || isPendingRemove}
               >
                 {(isPendingRemove || isFetchUserById || isPendingUpdate) && (
                   <LuLoader2 className="mx-7 w-full animate-spin" />

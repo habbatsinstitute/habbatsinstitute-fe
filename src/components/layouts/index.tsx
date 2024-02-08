@@ -3,14 +3,7 @@ import clsx from "clsx";
 import { FiUsers } from "react-icons/fi";
 import { PiDiamondsFour } from "react-icons/pi";
 import { GoBook } from "react-icons/go";
-import {
-  LuLogOut,
-  LuMenu,
-  LuNewspaper,
-  LuUser,
-  LuUserCog2,
-  LuUsers,
-} from "react-icons/lu";
+import { LuLogOut, LuMenu, LuNewspaper, LuUser, LuUsers } from "react-icons/lu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -217,10 +210,6 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                           </AvatarFallback>
                         </Avatar>
                       </section>
-                      <div className="items flex items-center justify-center gap-2">
-                        <LuUserCog2 />
-                        Profile User
-                      </div>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button
