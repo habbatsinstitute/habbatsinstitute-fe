@@ -120,6 +120,33 @@ export const Home: FC = (): ReactElement => {
           </div>
         </section>
       </section>
+
+      <section className="flex min-h-[400px] flex-col justify-evenly gap-5 bg-white py-20">
+        <div className="container">
+          <img src="/images/about-us.png" alt="about us" />
+        </div>
+        <div className="container flex min-h-[300px] flex-wrap gap-5 md:gap-0">
+          <div className="w-full md:w-1/2">
+            <h1 className="text-[2.5rem] font-bold text-[#1E212B]">
+              Kenali kami lebih dalam.
+            </h1>
+          </div>
+          <div className="flex w-full flex-col md:w-1/2">
+            <p className="text-lg text-font-black-2">
+              PT. Habbatussauda International (HABBATS) memiliki visi dalam
+              mengangkat produk obat herbal khususnya obat herbal sunnah
+              berkandungan habbatussauda bersaing di tataran pasar obat modern
+              internasional sehingga dapat dirasakan seluas-luasnya manfaat
+              serta khasiatnya oleh seluruh umat manusia.
+            </p>
+            <div className="mt-5">
+              <Button className="bg-bright-2 font-black text-font-black-3 hover:bg-bright-1">
+                Tentang Kami
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 };
