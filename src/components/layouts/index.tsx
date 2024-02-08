@@ -217,13 +217,10 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                           </AvatarFallback>
                         </Avatar>
                       </section>
-                      <Link
-                        to={"/"}
-                        className="items flex items-center justify-center gap-2"
-                      >
+                      <div className="items flex items-center justify-center gap-2">
                         <LuUserCog2 />
                         Profile User
-                      </Link>
+                      </div>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button
