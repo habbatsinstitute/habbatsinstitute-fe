@@ -182,24 +182,26 @@ export const Navbar: FC<{ className?: string }> = ({
                     Home
                   </Link>
 
-                  <Link
-                    to="/courses"
-                    className={clsx(
-                      "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
-                      {
-                        "bg-emerald-700 text-white":
-                          location.pathname.startsWith("/courses"),
-                      },
-                    )}
-                  >
-                    <GoBook
-                      className={clsx({
-                        "text-emerald-700":
-                          !location.pathname.startsWith("/courses"),
-                      })}
-                    />
-                    Courses
-                  </Link>
+                  {getAccessToken() && (
+                    <Link
+                      to="/courses"
+                      className={clsx(
+                        "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
+                        {
+                          "bg-emerald-700 text-white":
+                            location.pathname.startsWith("/courses"),
+                        },
+                      )}
+                    >
+                      <GoBook
+                        className={clsx({
+                          "text-emerald-700":
+                            !location.pathname.startsWith("/courses"),
+                        })}
+                      />
+                      Courses
+                    </Link>
+                  )}
 
                   <Link
                     to="/news"
