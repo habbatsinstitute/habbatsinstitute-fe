@@ -146,7 +146,7 @@ export const DashboardNewsGet: FC = (): ReactElement => {
 
   return (
     <AdminLayout>
-      <section className="flex min-h-[400px] w-full flex-col pt-7">
+      <section className="flex min-h-[400px] w-full flex-col py-10 md:py-0 md:pt-2">
         <section className="flex w-full gap-3">
           <Button
             onClick={() => navigate("/dashboard/news/add")}
@@ -165,7 +165,7 @@ export const DashboardNewsGet: FC = (): ReactElement => {
           </Button>
         </section>
 
-        <section className="mt-3 h-[400px] w-full">
+        <section className="mt-3 min-h-[400px] w-full">
           <DataTable
             columns={columns}
             data={formattedNewsData}

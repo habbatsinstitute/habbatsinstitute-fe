@@ -289,7 +289,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         </nav>
 
         {/* Nav Desktop */}
-        <nav className="container hidden h-[78px] w-full items-center justify-between md:flex">
+        <nav className="container hidden h-[65px] w-full items-center justify-between md:flex">
           <section className="hidden items-center justify-center gap-3 text-base font-bold text-black md:flex md:text-xl">
             <h1 className="flex items-center justify-center gap-3 text-base font-bold text-black md:text-xl">
               {navTitle(window.location.pathname)}
