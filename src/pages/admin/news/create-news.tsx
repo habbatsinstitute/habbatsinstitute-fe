@@ -157,10 +157,9 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="container flex h-full w-full flex-col justify-evenly gap-3 rounded-md border py-5 lg:gap-0 xl:w-[48%] xl:py-0"
           >
-            <h1 className="mt-5 text-lg font-black text-[#0F172A]">Add News</h1>
-            <p className="w-3/4 text-xs text-[#64748B]">
-              Untuk menambah data news, isi form input dibawah dengan benar.
-            </p>
+            <h1 className="mt-5 text-[1rem] font-black text-[#0F172A]">
+              Add News
+            </h1>
             <section className="flex w-full flex-col gap-1">
               <h2
                 className={`text-sm ${
@@ -175,7 +174,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
               >
                 Image Cover
               </h2>
-              <section className="flex h-10 w-full justify-between gap-3">
+              <section className="flex h-8 w-full justify-between gap-3">
                 <Label
                   htmlFor="image"
                   className={`flex w-[75%] items-center truncate rounded-md border ${
@@ -197,7 +196,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
 
                 <label
                   htmlFor="image"
-                  className={`relative grid w-32 place-items-center rounded-md bg-[#0F172A] pt-2 text-sm text-white hover:bg-slate-700 ${isPending ? "cursor-not-allowed opacity-10 hover:bg-[#0F172A]" : "cursor-pointer"}`}
+                  className={`relative grid w-32 place-items-center rounded-md bg-[#0F172A] pt-1 text-sm text-white hover:bg-slate-700 ${isPending ? "cursor-not-allowed opacity-10 hover:bg-[#0F172A]" : "cursor-pointer"}`}
                 >
                   Browse file
                   <Input
@@ -238,19 +237,21 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
                   >
                     News Title
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="Input news title"
-                      disabled={isPending}
-                      className={
-                        form.formState.errors.title
-                          ? "border-red-400 placeholder:text-red-400"
-                          : ""
-                      }
-                      {...field}
-                    />
-                  </FormControl>
+                  <div className="h-7">
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Input news title"
+                        disabled={isPending}
+                        className={
+                          form.formState.errors.title
+                            ? "border-red-400 placeholder:text-red-400"
+                            : ""
+                        }
+                        {...field}
+                      />
+                    </FormControl>
+                  </div>
                   <section className="w-full">
                     <p className="text-xs font-bold text-red-400">
                       {form.formState.errors.title?.message}
@@ -263,13 +264,13 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
               control={form.control}
               name="category"
               render={({ field }) => (
-                <FormItem className="flex w-full flex-col gap-1 text-font-input">
+                <FormItem className="flex w-full flex-col text-font-input">
                   <FormLabel
                     className={`text-sm ${form.formState.errors.category ? "text-red-400" : "text-[#0F172A]"}`}
                   >
                     Category
                   </FormLabel>
-                  <section className="flex h-10 select-none items-center rounded-md border text-sm text-[#0F172A]">
+                  <section className="flex h-7 select-none items-center rounded-md border text-sm text-[#0F172A]">
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -277,13 +278,13 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
                     >
                       <FormControl>
                         <SelectTrigger
-                          className={`w-full focus:ring-0 focus:ring-offset-0 ${form.formState.errors.category ? "border-red-400 text-red-400" : ""}`}
+                          className={`h-9 w-full focus:ring-0 focus:ring-offset-0 ${form.formState.errors.category ? "border-red-400 text-red-400" : ""}`}
                         >
                           <SelectValue placeholder="Select category news" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectGroup>
+                        <SelectGroup className="h-[200px] xl:h-[150px]">
                           <SelectLabel>Category</SelectLabel>
                           {categories?.data?.map(({ id, name }) => (
                             <SelectItem key={id} value={name}>
@@ -312,14 +313,17 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
                   >
                     Description
                   </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      disabled={isPending}
-                      placeholder="Type your message here"
-                      className={`h-14 resize-none focus-visible:ring-1 focus-visible:ring-blue-300 focus-visible:ring-offset-0 ${form.formState.errors.description ? "border-red-400 placeholder:text-red-400" : ""}`}
-                      {...field}
-                    />
-                  </FormControl>
+                  <div className="h-36">
+                    <FormControl>
+                      <Textarea
+                        disabled={isPending}
+                        placeholder="Type your message here"
+                        className={`h-full resize-none focus-visible:ring-1 focus-visible:ring-blue-300 focus-visible:ring-offset-0 ${form.formState.errors.description ? "border-red-400 placeholder:text-red-400" : ""}`}
+                        {...field}
+                      />
+                    </FormControl>
+                  </div>
+
                   <section className="w-full">
                     <p className="text-xs font-bold text-red-400">
                       {form.formState.errors.description?.message}
