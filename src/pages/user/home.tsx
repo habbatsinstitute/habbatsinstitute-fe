@@ -112,7 +112,7 @@ export const Home: FC = (): ReactElement => {
         <section className="container flex flex-wrap justify-center gap-10 xl:justify-between xl:gap-0">
           <div className="flex h-[500px] max-w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:h-[400px] md:max-w-[80%] md:gap-0 lg:max-w-[40%] lg:py-2 xl:max-w-[45%]">
             <video
-              className="h-[60%] w-[83%] bg-slate-700 md:w-[90%]"
+              className="h-[60%] w-[83%] bg-slate-700 object-fill md:w-[90%]"
               controls={isLoggin}
               onContextMenu={(e) => e.preventDefault()}
               controlsList="nodownload"
@@ -140,7 +140,7 @@ export const Home: FC = (): ReactElement => {
           </div>
           <div className="flex h-[500px] max-w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:h-[400px] md:max-w-[80%] md:gap-0 lg:max-w-[40%] lg:py-2 xl:max-w-[45%]">
             <video
-              className="h-[60%] w-[83%] bg-slate-700 md:w-[90%]"
+              className="h-[60%] w-[83%] bg-slate-700 object-fill md:w-[90%]"
               controls={isLoggin}
               onContextMenu={(e) => e.preventDefault()}
               controlsList="nodownload"

@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import {
   AboutUs,
   Course,
+  CourseDetail,
   Dashboard,
   DashboardCourseCreate,
   DashboardCourseGet,
@@ -28,6 +29,11 @@ export const router = createBrowserRouter([
   {
     path: "/courses",
     element: <Course />,
+    errorElement: <Crash />,
+  },
+  {
+    path: "/courses/:id",
+    element: <CourseDetail />,
     errorElement: <Crash />,
   },
   {

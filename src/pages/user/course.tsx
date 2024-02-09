@@ -178,7 +178,7 @@ export const Course = () => {
         <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
           {trends.map((trend, index) => (
             <section
-              className="flex w-full flex-col justify-between rounded-md bg-[#E2E8F0] p-3 shadow-md md:w-[29.5%]"
+              className="flex w-full flex-col justify-between rounded-md bg-light-2 p-3 py-3 shadow-lg md:w-[29.5%]"
               key={index}
             >
               <section className="flex flex-col py-2">
@@ -186,7 +186,7 @@ export const Course = () => {
                   controls
                   onContextMenu={(e) => e.preventDefault()}
                   controlsList="nodownload"
-                  className=" rounded-md object-cover"
+                  className="h-full w-full rounded-md object-fill"
                 >
                   <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
                 </video>
@@ -215,7 +215,7 @@ export const Course = () => {
         <section className="container flex flex-wrap justify-between gap-10">
           {allVideos.map((trend, index) => (
             <section
-              className="flex w-full flex-col justify-between rounded-md bg-[#E2E8F0] p-3 shadow-md md:w-[29.5%]"
+              className="flex w-full flex-col justify-between rounded-md bg-light-2 p-3 py-3 shadow-lg md:w-[29.5%]"
               key={index}
             >
               <section className="flex flex-col py-2">
@@ -223,7 +223,7 @@ export const Course = () => {
                   controls
                   onContextMenu={(e) => e.preventDefault()}
                   controlsList="nodownload"
-                  className=" rounded-md object-cover"
+                  className="h-full w-full rounded-md object-fill"
                 >
                   <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
                 </video>
