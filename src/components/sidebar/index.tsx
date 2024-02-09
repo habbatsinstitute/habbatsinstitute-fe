@@ -61,7 +61,7 @@ export const SideBar: FC = (): ReactElement => {
   return (
     <aside className="hidden h-full flex-col justify-between bg-font-black-1 md:flex md:w-[30%] xl:w-[20%]">
       <section className="grid h-52 place-items-center">
-        <img src="/logos/bright.png" alt="logo" className="w-28 object-cover" />
+        <img src="/new-logos/bright.png" alt="logo" className="object-cover" />
       </section>
 
       <section className="flex h-full w-full flex-col">

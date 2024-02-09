@@ -137,9 +137,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                 <section className="flex h-full w-full flex-col">
                   <section className="grid h-52 place-items-center">
                     <img
-                      src="/logos/bright.png"
+                      src="/new-logos/bright.png"
                       alt="logo"
-                      className="w-28 object-cover"
+                      className="object-cover"
                     />
                   </section>
 
