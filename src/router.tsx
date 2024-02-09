@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import {
   AboutUs,
+  Course,
   Dashboard,
   DashboardCourseCreate,
   DashboardCourseGet,
@@ -22,6 +23,11 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+    errorElement: <Crash />,
+  },
+  {
+    path: "/courses",
+    element: <Course />,
     errorElement: <Crash />,
   },
   {
