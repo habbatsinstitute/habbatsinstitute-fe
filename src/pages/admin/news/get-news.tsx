@@ -146,7 +146,7 @@ export const DashboardNewsGet: FC = (): ReactElement => {
 
   return (
     <AdminLayout>
-      <section className="flex h-[400px] w-full flex-col pt-7">
+      <section className="flex min-h-[400px] w-full flex-col pt-7">
         <section className="flex w-full gap-3">
           <Button
             onClick={() => navigate("/dashboard/news/add")}

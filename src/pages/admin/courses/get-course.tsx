@@ -159,7 +159,7 @@ export const DashboardCourseGet: FC = (): ReactElement => {
 
   return (
     <AdminLayout>
-      <section className="flex h-[450px] w-full flex-col pt-7">
+      <section className="flex min-h-[450px] w-full flex-col pt-7">
         <section className="flex w-full gap-3">
           <Button
             onClick={() => navigate("/dashboard/courses/add")}
