@@ -1,4 +1,4 @@
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,6 +31,24 @@ import {
 } from "@/lib";
 
 export const Login: FC = (): ReactElement => {
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const position = window.scrollY;
+      setScrollPosition(position);
+    };
+
+    const initialScrollPosition = window.scrollY;
+    setScrollPosition(initialScrollPosition);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     mode: "all",
@@ -79,7 +97,11 @@ export const Login: FC = (): ReactElement => {
   ) : (
     <main className="flex h-auto w-full flex-col bg-[url('/backgrounds/green.png')] font-inter">
       {/* Header */}
-      <Navbar />
+      <Navbar
+        className={
+          scrollPosition > 0 ? "bg-emerald-600 duration-300 ease-in-out" : ""
+        }
+      />
 
       {/* Body */}
       <section className="container mt-24 flex h-[500px] w-full md:h-[700px] xl:h-[450px]">
