@@ -187,6 +187,7 @@ export const Course = () => {
                   onContextMenu={(e) => e.preventDefault()}
                   controlsList="nodownload"
                   className="h-full w-full rounded-md object-fill"
+                  preload="metadata"
                 >
                   <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
                 </video>
@@ -224,6 +225,7 @@ export const Course = () => {
                   onContextMenu={(e) => e.preventDefault()}
                   controlsList="nodownload"
                   className="h-full w-full rounded-md object-fill"
+                  preload="metadata"
                 >
                   <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
                 </video>
