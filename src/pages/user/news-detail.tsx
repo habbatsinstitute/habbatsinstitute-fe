@@ -1,77 +1,139 @@
 import { FC, ReactElement } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { Button, Navbar, Trend } from "@/components";
+import { Button, Navbar, Footer } from "@/components";
 
 export const NewsDetail: FC = (): ReactElement => {
+  const string = `Jahe, bahan herba yang sering digunakan dalam pengobatan tradisional, telah dikenal karena beragam manfaat kesehatannya. Jahe mengandung senyawa aktif seperti gingerol dan shogaol yang memiliki sifat anti-inflamasi dan anti-oksidan. Penggunaan jahe telah terbukti efektif dalam meredakan mual dan muntah, mengurangi nyeri sendi, serta meningkatkan pencernaan. Selain itu, minuman jahe hangat sering dikonsumsi sebagai obat alami untuk meredakan gejala flu dan pilek.\r\n\r\nKurkumin, yang ditemukan dalam kunyit, adalah salah satu bahan herba yang paling banyak dipelajari karena potensi kesehatannya yang luar biasa. Senyawa ini dikenal memiliki sifat anti-inflamasi, anti-kanker, dan anti-oksidan yang kuat. Studi telah menunjukkan bahwa kurkumin dapat membantu mengurangi risiko penyakit jantung, mengurangi peradangan dalam tubuh, serta membantu melawan pertumbuhan sel-sel kanker. Selain itu, kurkumin juga telah digunakan dalam pengobatan tradisional untuk mengurangi gejala arthritis dan meningkatkan kesehatan otak.`;
+
+  const trends = [
+    {
+      title: "Si Kuning Kunyit Kaya Manfaat",
+      description:
+        "Kunyit telah dikenal untuk merawat kulit dan membantu menyembuhkan luka..",
+      image: "/images/turmeric.png",
+      label: "Tanaman Herbal",
+      posted: "17 jan 2024",
+    },
+    {
+      title: "Khasiat Kulit Manggis untuk Cegah Kanker, Benarkah?",
+      description: "Masyarakat Indonesia sudah tidak asing..",
+      image: "/images/mangosteen.png",
+      label: "Diet dan Nutrisi",
+      posted: "08 jan 2024",
+    },
+    {
+      title: "Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.",
+      description: "Tingkat keberhasilan pengobatan kanker..",
+      image: "/images/mannotriose.png",
+      label: "Teknologi Pengobatan",
+      posted: "02 jan 2024",
+    },
+  ];
+
   return (
-    <main className="relative flex h-auto w-full flex-col font-inter">
-      <Navbar />
-      <section className="container flex h-[510px] w-full flex-col items-center justify-evenly gap-1">
-        <img
-          src="/images/mannotriose.png"
-          alt="cover news"
-          className="h-[60%] w-[55%] rounded-md object-cover"
-        />
-        <section className="w-[55%]">
-          <h1 className="w-3/4 text-[1.2rem] font-bold text-font-black-1">
+    <main className="flex flex-col overflow-x-visible font-inter">
+      <Navbar className="bg-white" />
+
+      <section className="container mt-32 flex flex-col items-center gap-10">
+        <div className="flex w-full flex-col gap-3 md:w-4/5 lg:w-1/2">
+          <img
+            src="https://images.unsplash.com/photo-1492552085122-36706c238263?q=80&w=1497&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="news-cover"
+            className="object-cover"
+          />
+          <h1 className="text-2xl font-bold text-font-black-1">
             Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.
           </h1>
-          <section className="flex flex-col">
+          <div className="flex flex-col">
             <section className="flex items-center gap-1">
               <img src="/icons/folder.png" alt="folder" />
-              <p>Tanaman Herbal</p>
+              <p>Tanaman herbal</p>
             </section>
             <h5 className="text-[#707075]">Posted - 17 jan 2024</h5>
-          </section>
+          </div>
+        </div>
+        <div className="h-[1px] w-full bg-dark-3" />
+      </section>
+
+      <div className="container mt-10 flex justify-center">
+        <div className="flex w-full flex-col gap-3 md:w-4/5 lg:w-1/2">
+          <pre className="whitespace-pre-wrap break-words font-inter">
+            {string}
+          </pre>
+        </div>
+      </div>
+
+      <div className="w-ful container mt-10 flex justify-end xl:w-1/2">
+        <Button variant={"outline"}>
+          Next News - Khasiat Kulit Manggis untuk.. <FaArrowRightLong />
+        </Button>
+      </div>
+
+      <section className="mt-0 flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-10 md:gap-0 md:pt-0 xl:mt-10">
+        <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
+        <h1 className="container text-[2rem] font-bold text-font-black-1">
+          News Trend
+        </h1>
+        <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
+          {trends.map((trend, index) => (
+            <section
+              className="flex min-h-[400px] w-full flex-col justify-between md:w-[29.5%]"
+              key={index}
+            >
+              <section className="flex flex-col pt-1">
+                <img
+                  src={trend.image}
+                  alt="trend"
+                  className=" rounded-md object-cover"
+                />
+                <section className="flex items-center gap-1">
+                  <img src="/icons/folder.png" alt="folder" />
+                  <p>{trend.label}</p>
+                </section>
+                <h5 className="text-[#707075]">Posted - {trend.posted}</h5>
+              </section>
+              <section className="flex flex-col gap-2 pt-2">
+                <h3 className="text-lg font-bold text-font-black-1">
+                  {trend.title}
+                </h3>
+                <p>{trend.description}</p>
+                <div className="pt-1 md:pt-0">
+                  <Button className="flex items-center justify-center gap-2 bg-bright-2 font-bold text-font-black-3 hover:bg-green-400">
+                    Lebih lengkap
+                    <FaArrowRightLong className="pt-1 text-[#1E212B]" />
+                  </Button>
+                </div>
+              </section>
+            </section>
+          ))}
         </section>
       </section>
 
-      <section className="container flex w-full flex-col items-center">
-        <hr className="h-[2px] w-[93%] bg-[#36373C]" />
-        <section className="flex w-full flex-col items-center">
-          <h1 className="mr-[8%] pt-10 text-[2rem] font-bold text-font-black-1">
-            Tingkat keberhasilan pengobatan kanker.
-          </h1>
-          <div className="w-[55%] py-10">
-            Tingkat keberhasilan pengobatan kanker hingga saat ini masih rendah.
-            Hanya sekitar 30 persen pasien kanker yang berhasil sembuh ketika
-            menjalani pengobatan. Di antara masalah utama dalam pengobatan
-            kanker adalah timbulnya resistensi sel kanker terhadap antikanker
-            yang tersedia dan munculnya efek samping yang serius akibat target
-            aksi antikanker yang tidak spesifik. Sebagian besar antikanker juga
-            menyerang 3 sel normal yang berdampak timbulnya efek samping
-            tersebut. “Kanker payudara masih menjadi masalah kesehatan utama di
-            dunia dengan morbiditas dan mortalitasnya yang masih tinggi,” ujar
-            Fikri Febriansyah, S.Farm., M.Sc., Apt saat menempuh ujian program
-            doktor di Fakultas Kedokteran, Kesehatan Masyarakat dan Keperawatan
-            UGM, Rabu (11/8). Tahap selanjutnya, dilakukan pengkajian mekanisme
-            aksi secara molekuler dari senyawa aktif hasil isolasi. Uji in vitro
-            dilakukan dengan metode flowcytometry untuk melihat perubahan siklus
-            sel akibat perlakuan senyawa isolat, dan metode imunositokimia untuk
-            melihat adanya modulasi ekspresi beberapa protein target pada sel
-            MCF-7 akibat perlakuan senyawa uji. Secara in silico dilakukan
-            analisis molecular docking menggunakan software Autodock Vina antara
-            isolat senyawa aktif terhadap beberapa protein target untuk
-            mengonfirmasi hasil dari uji in vitro. “Hasil penelitian terkait
-            optimasi metode kultur berdasarkan analisis kemometrik diketahui
-            bahwa metode kultur menggunakan media Starch Nitrate Broth (SNB),
-            wadah erlenmeyer biasa dan waktu kultur selama 5 hari menunjukkan
-            hasil dan aktivitas sitotoksik yang terbaik dibandingkan dengan
-            metode kultur yang lain,” ungkapnya. Hasil isolasi senyawa aktif
-            pada ekstrak metanol bakteri Streptomyces sp. GMY01 diketahui bahwa
-            senyawa aktif antikanker pada ekstrak tersebut berupa senyawa
-            mannotriose. Isolat senyawa mannotriose mempunyai nilai IC50 sebesar
-            5,6 ug/ml pada sel kanker MCF-7 dan IC50 sebesar 687 ug/ml pada sel
-            normal Vero.
+      <section className="flex min-h-[200px] flex-col justify-end gap-5 bg-white pt-20 md:min-h-[400px] md:pt-0 lg:pt-48">
+        <div className="flex h-[250px] bg-[url('/backgrounds/green.png')] bg-cover lg:h-[300px]">
+          <div className="container flex">
+            <div className="flex w-full flex-col justify-center gap-3 md:w-1/2">
+              <h3 className="text-base font-bold text-font-black-3 md:text-lg lg:text-2xl">
+                Dapatkan konsultasi kesehatan yang terpercaya dengan tim ahli
+                medis kami, siap membantu Anda menemukan solusi terbaik untuk
+                kesehatan Anda.
+              </h3>
+              <div>
+                <Button>Konsultasi Sekarang</Button>
+              </div>
+            </div>
+            <div className="hidden w-1/2 items-center justify-center md:flex">
+              <img
+                src="/illustrations/doctor.png"
+                alt="doctor"
+                className="relative scale-90 md:bottom-[12%] lg:bottom-[21%] xl:bottom-[27.5%]"
+              />
+            </div>
           </div>
-        </section>
-        <section className="flex w-[60%] justify-end">
-          <Button variant={"outline"} className="mb-10 gap-3">
-            Next News - Khasiat Kulit Manggis untuk.. <FaArrowRightLong />
-          </Button>
-        </section>
-        <Trend />
+        </div>
       </section>
+
+      <Footer className="z-10" />
     </main>
   );
 };
