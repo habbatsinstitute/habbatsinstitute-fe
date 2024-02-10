@@ -436,7 +436,7 @@ export const Course = () => {
                   >
                     <h3>Admin</h3>
                     <pre
-                      className={`w-full animate-pulse whitespace-pre-wrap break-words text-left font-inter text-sm text-[#64748B]`}
+                      className={`w-full whitespace-pre-wrap break-words text-left font-inter text-sm text-red-400`}
                     >
                       Maaf kami tidak dapat memproses permintaan Anda, silahkan
                       cek kembali
