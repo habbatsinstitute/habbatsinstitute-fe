@@ -25,6 +25,7 @@ export const Course: FC = (): ReactElement => {
   const [messages, setMessages] = useState<
     { username: string; text: string }[]
   >([]);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const lastMessageRef = useRef<HTMLDivElement | null>(null);
 
   const { data } = useGetUserMe();
@@ -49,6 +50,12 @@ export const Course: FC = (): ReactElement => {
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isPending]);
+
+  useEffect(() => {
+    if (isPopoverOpen) {
+      lastMessageRef.current?.scrollIntoView({ behavior: "instant" });
+    }
+  }, [isPopoverOpen]);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -356,7 +363,7 @@ export const Course: FC = (): ReactElement => {
       </section>
 
       <section className="fixed bottom-0 right-0 z-20 h-16 w-16 hover:cursor-pointer hover:opacity-90">
-        <Popover>
+        <Popover onOpenChange={() => setIsPopoverOpen(!isPopoverOpen)}>
           <PopoverTrigger asChild>
             <img src="/icons/chat.png" alt="chat" />
           </PopoverTrigger>

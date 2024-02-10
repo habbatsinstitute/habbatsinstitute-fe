@@ -76,7 +76,7 @@ export const Navbar: FC<{ className?: string }> = ({
   const path = window.location.pathname;
   const navigate = useNavigate();
 
-  const { data, refetch } = useGetUserMe();
+  const { data, refetch, isLoading } = useGetUserMe();
   const { mutate, isPending } = useUpdateUser(data?.data.id);
 
   function onSubmit(values: z.infer<typeof userSchema>) {
@@ -269,9 +269,13 @@ export const Navbar: FC<{ className?: string }> = ({
                       className="flex flex-row-reverse items-center justify-center gap-3 px-2 py-1
                 "
                     >
-                      <h3 className="text-base font-normal ">
-                        Hello, {data?.data.username.substring(0, 9)}
-                      </h3>
+                      {isLoading ? (
+                        <Skeleton className="h-7 w-24 bg-slate-300" />
+                      ) : (
+                        <h3 className="text-base font-normal ">
+                          Hello, {data?.data.username.substring(0, 9)}
+                        </h3>
+                      )}
                       <Avatar>
                         <AvatarImage
                           src="https://github.com/shadcn.png"
@@ -510,9 +514,13 @@ export const Navbar: FC<{ className?: string }> = ({
               <Popover>
                 <PopoverTrigger>
                   <section className="flex items-center justify-center gap-3 rounded-md px-2">
-                    <h3 className="text-base font-normal ">
-                      Hello, {data?.data.username.substring(0, 9)}
-                    </h3>
+                    {isLoading ? (
+                      <Skeleton className="h-7 w-24 bg-slate-300" />
+                    ) : (
+                      <h3 className="text-base font-normal ">
+                        Hello, {data?.data.username.substring(0, 9)}
+                      </h3>
+                    )}
                     <Avatar>
                       <AvatarImage
                         src="https://github.com/shadcn.png"
