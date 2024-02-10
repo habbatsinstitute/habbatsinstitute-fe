@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-import {
+import { lazily } from "react-lazily";
+const {
   AboutUs,
   Course,
   CourseDetail,
@@ -17,7 +18,7 @@ import {
   Login,
   News,
   NewsDetail,
-} from "./pages";
+} = lazily(() => import("./pages"));
 import { AdminMiddleware, Crash, Loader, NotFound } from "./components";
 
 export const router = createBrowserRouter([

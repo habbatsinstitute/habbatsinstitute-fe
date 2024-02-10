@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { FC, ReactElement, useEffect, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Loader2, UserRound } from "lucide-react";
@@ -19,7 +19,7 @@ import {
   useSendQuestion,
 } from "@/lib";
 
-export const Course = () => {
+export const Course: FC = (): ReactElement => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [text, setText] = useState("");
   const [messages, setMessages] = useState<

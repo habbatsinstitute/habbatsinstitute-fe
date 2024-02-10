@@ -1,9 +1,9 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
 import { ToastContainer } from "react-toastify";
-import { QueryProvider } from "./components";
+import { Loader, QueryProvider } from "./components";
 import { getAccessToken, getUserRole } from "./lib";
 import "react-toastify/dist/ReactToastify.css";
 import "./tailwind.css";
@@ -16,11 +16,21 @@ if (getAccessToken() && getUserRole() === "2") {
   router.navigate(path);
 }
 
+if (
+  getAccessToken() &&
+  getUserRole() === "1" &&
+  window.location.pathname === "/login"
+) {
+  router.navigate("/");
+}
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryProvider>
-      <RouterProvider router={router} />
-      <ToastContainer />
+      <Suspense fallback={<Loader />}>
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </Suspense>
     </QueryProvider>
   </React.StrictMode>,
 );
