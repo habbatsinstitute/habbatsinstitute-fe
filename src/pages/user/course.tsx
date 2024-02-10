@@ -171,7 +171,7 @@ export const Course = () => {
         }
       />
 
-      <section className="container mt-16 flex min-h-[450px] flex-row-reverse">
+      <section className="container mb-10 mt-24 flex min-h-[450px] flex-row-reverse md:mt-16">
         <section className="flex w-full flex-col justify-center gap-3 md:gap-2 lg:w-[45%]">
           <h1 className="pb-0 text-[1.8rem] font-bold text-[#1E1E1E] md:pb-2 md:text-[2.7rem] lg:text-[2rem]">
             Perjalanan edukatif. <br />
