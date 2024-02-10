@@ -362,10 +362,10 @@ export const Course: FC = (): ReactElement => {
           </PopoverTrigger>
           <PopoverContent className="flex min-h-[400px] w-screen flex-col font-inter md:w-[30rem]">
             <div className="flex h-[270px] justify-between">
-              <div className="container flex w-[40%] flex-col justify-center gap-3 rounded-md bg-[url('/backgrounds/green.png')]">
+              <div className="flex w-[40%] flex-col justify-center gap-3 rounded-md bg-[url('/backgrounds/green.png')] pl-5">
                 <img src="/icons/chat.png" alt="chat" className="w-14" />
                 <h1 className="font-bold text-font-white">Realtime chat</h1>
-                <p className="text-xs text-font-white">
+                <p className="w-11/12 text-[0.6rem] text-font-white md:text-xs">
                   Tanyakan apa saja seputar kesehatan kami akan membantu
                   mnjawabnya.
                 </p>
