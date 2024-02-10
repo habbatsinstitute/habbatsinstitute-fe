@@ -467,6 +467,14 @@ export const Course: FC = (): ReactElement => {
                 }}
                 value={text}
                 disabled={isPending}
+                onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                  if (e.ctrlKey && e.key === "Enter") {
+                    e.preventDefault();
+                    const formEvent =
+                      e as unknown as React.FormEvent<HTMLFormElement>;
+                    onSubmit(formEvent);
+                  }
+                }}
               />
               <div>
                 <Button
