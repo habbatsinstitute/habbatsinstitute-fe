@@ -215,7 +215,7 @@ export const Course = () => {
         </section>
       </section>
 
-      <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-white md:gap-0">
+      <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-20 md:gap-0 md:pt-0">
         <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
         <h1 className="container text-[2rem] font-bold text-font-black-1">
           Trending Course
