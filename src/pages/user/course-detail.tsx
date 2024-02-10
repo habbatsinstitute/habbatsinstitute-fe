@@ -1,6 +1,8 @@
 import { FC, ReactElement } from "react";
-import { Button, Navbar, Footer } from "@/components";
+import { useNavigate } from "react-router";
 import { UserRound } from "lucide-react";
+import { Button, Navbar, Footer } from "@/components";
+import { getAccessToken } from "@/lib";
 
 const trends = [
   {
@@ -28,6 +30,8 @@ const trends = [
 ];
 
 export const CourseDetail: FC = (): ReactElement => {
+  const navigate = useNavigate();
+
   return (
     <main className="flex flex-col overflow-x-visible font-inter">
       <Navbar className="bg-white" />
@@ -107,7 +111,13 @@ export const CourseDetail: FC = (): ReactElement => {
                 kesehatan Anda.
               </h3>
               <div>
-                <Button>Konsultasi Sekarang</Button>
+                <Button
+                  onClick={() =>
+                    getAccessToken() ? navigate("/courses") : navigate("/login")
+                  }
+                >
+                  Konsultasi Sekarang
+                </Button>
               </div>
             </div>
             <div className="hidden w-1/2 items-center justify-center md:flex">

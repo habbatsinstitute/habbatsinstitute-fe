@@ -322,7 +322,11 @@ export const Home: FC = (): ReactElement => {
                 kesehatan Anda.
               </h3>
               <div>
-                <Button onClick={() => navigate("/courses")}>
+                <Button
+                  onClick={() =>
+                    getAccessToken() ? navigate("/courses") : navigate("/login")
+                  }
+                >
                   Konsultasi Sekarang
                 </Button>
               </div>

@@ -1,8 +1,12 @@
 import { FC, ReactElement } from "react";
+import { useNavigate } from "react-router";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { Button, Navbar, Footer } from "@/components";
+import { getAccessToken } from "@/lib";
 
 export const NewsDetail: FC = (): ReactElement => {
+  const navigate = useNavigate();
+
   const string = `Jahe, bahan herba yang sering digunakan dalam pengobatan tradisional, telah dikenal karena beragam manfaat kesehatannya. Jahe mengandung senyawa aktif seperti gingerol dan shogaol yang memiliki sifat anti-inflamasi dan anti-oksidan. Penggunaan jahe telah terbukti efektif dalam meredakan mual dan muntah, mengurangi nyeri sendi, serta meningkatkan pencernaan. Selain itu, minuman jahe hangat sering dikonsumsi sebagai obat alami untuk meredakan gejala flu dan pilek.\r\n\r\nKurkumin, yang ditemukan dalam kunyit, adalah salah satu bahan herba yang paling banyak dipelajari karena potensi kesehatannya yang luar biasa. Senyawa ini dikenal memiliki sifat anti-inflamasi, anti-kanker, dan anti-oksidan yang kuat. Studi telah menunjukkan bahwa kurkumin dapat membantu mengurangi risiko penyakit jantung, mengurangi peradangan dalam tubuh, serta membantu melawan pertumbuhan sel-sel kanker. Selain itu, kurkumin juga telah digunakan dalam pengobatan tradisional untuk mengurangi gejala arthritis dan meningkatkan kesehatan otak.`;
 
   const trends = [
@@ -119,7 +123,13 @@ export const NewsDetail: FC = (): ReactElement => {
                 kesehatan Anda.
               </h3>
               <div>
-                <Button>Konsultasi Sekarang</Button>
+                <Button
+                  onClick={() =>
+                    getAccessToken() ? navigate("/courses") : navigate("/login")
+                  }
+                >
+                  Konsultasi Sekarang
+                </Button>
               </div>
             </div>
             <div className="hidden w-1/2 items-center justify-center md:flex">
