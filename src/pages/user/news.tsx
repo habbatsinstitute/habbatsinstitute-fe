@@ -1,9 +1,12 @@
 import { FC, ReactElement, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { Button, Footer, Navbar } from "@/components";
 
 export const News: FC = (): ReactElement => {
   const [scrollPosition, setScrollPosition] = useState(0);
+
+  const navigate = useNavigate();
 
   const trends = [
     {
@@ -231,7 +234,9 @@ export const News: FC = (): ReactElement => {
                 kesehatan Anda.
               </h3>
               <div>
-                <Button>Konsultasi Sekarang</Button>
+                <Button onClick={() => navigate("/courses")}>
+                  Konsultasi Sekarang
+                </Button>
               </div>
             </div>
             <div className="hidden w-1/2 items-center justify-center md:flex">

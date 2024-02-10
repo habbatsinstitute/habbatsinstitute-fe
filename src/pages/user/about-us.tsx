@@ -1,8 +1,11 @@
 import { FC, ReactElement } from "react";
-import { Button, Footer, Navbar } from "@/components";
+import { useNavigate } from "react-router";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { Button, Footer, Navbar } from "@/components";
 
 export const AboutUs: FC = (): ReactElement => {
+  const navigate = useNavigate();
+
   const teams = [
     {
       name: "Dr. Insan Agung Nugroho",
@@ -165,7 +168,9 @@ export const AboutUs: FC = (): ReactElement => {
                 kesehatan Anda.
               </h3>
               <div>
-                <Button>Konsultasi Sekarang</Button>
+                <Button onClick={() => navigate("/courses")}>
+                  Konsultasi Sekarang
+                </Button>
               </div>
             </div>
             <div className="hidden w-1/2 items-center justify-center md:flex">

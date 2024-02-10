@@ -1,5 +1,5 @@
 import { FC, ReactElement, useEffect, useRef, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Loader2, UserRound } from "lucide-react";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -27,6 +27,8 @@ export const Course: FC = (): ReactElement => {
   >([]);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const lastMessageRef = useRef<HTMLDivElement | null>(null);
+
+  const navigate = useNavigate();
 
   const { data } = useGetUserMe();
   const { mutate, isPending, isError } = useSendQuestion();
@@ -308,7 +310,9 @@ export const Course: FC = (): ReactElement => {
                 kesehatan Anda.
               </h3>
               <div>
-                <Button>Konsultasi Sekarang</Button>
+                <Button onClick={() => navigate("/courses")}>
+                  Konsultasi Sekarang
+                </Button>
               </div>
             </div>
             <div className="hidden w-1/2 items-center justify-center md:flex">
