@@ -377,7 +377,7 @@ export const Course: FC = (): ReactElement => {
                   mnjawabnya.
                 </p>
               </div>
-              <div className="flex w-[55%] flex-col gap-1 overflow-y-auto">
+              <div className="flex w-[55%] flex-col gap-1 overflow-y-auto pr-5">
                 {messages.length === 0 && (
                   <div className="flex h-full flex-col items-center justify-evenly">
                     <img
