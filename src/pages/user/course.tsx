@@ -171,7 +171,7 @@ export const Course = () => {
         }
       />
 
-      <section className="container mb-10 mt-24 flex min-h-[450px] flex-row-reverse md:mt-16">
+      <section className="container mb-10 mt-24 flex min-h-[450px] flex-row-reverse md:mb-0 md:mt-16">
         <section className="flex w-full flex-col justify-center gap-3 md:gap-2 lg:w-[45%]">
           <h1 className="pb-0 text-[1.8rem] font-bold text-[#1E1E1E] md:pb-2 md:text-[2.7rem] lg:text-[2rem]">
             Perjalanan edukatif. <br />
@@ -215,7 +215,7 @@ export const Course = () => {
         </section>
       </section>
 
-      <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-20 md:gap-0 md:pt-0">
+      <section className="z-10 flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-20 md:gap-0 md:pt-0">
         <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
         <h1 className="container text-[2rem] font-bold text-font-black-1">
           Trending Course
