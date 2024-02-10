@@ -192,3 +192,13 @@ export type TUpdateUserResponse = {
 export type TRemoveUserResponse = {
   message: string;
 };
+
+export type TSendQuestion = {
+  data: {
+    question: string;
+    question_time: string;
+    reply: string;
+    reply_time: string;
+  };
+  message: string;
+};

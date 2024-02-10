@@ -1,12 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { UserRound } from "lucide-react";
-import { Button, Footer, Navbar } from "@/components";
-import { getAccessToken } from "@/lib";
+import { motion } from "framer-motion";
+import { Loader2, UserRound } from "lucide-react";
 import { FaArrowRightLong } from "react-icons/fa6";
+import {
+  Button,
+  Footer,
+  Navbar,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Textarea,
+} from "@/components";
+import {
+  formatDate,
+  getAccessToken,
+  useGetUserMe,
+  useSendQuestion,
+} from "@/lib";
 
 export const Course = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [text, setText] = useState("");
+  const [messages, setMessages] = useState<
+    { username: string; text: string }[]
+  >([]);
+  const lastMessageRef = useRef<HTMLDivElement | null>(null);
+
+  const { data } = useGetUserMe();
+  const { mutate, isPending, isError } = useSendQuestion();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +45,29 @@ export const Course = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isPending]);
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("message", text);
+
+    messages.push({ username: data?.data.username as string, text: text });
+
+    mutate(formData, {
+      onSuccess: (response) => {
+        setMessages([
+          ...messages,
+          { username: "admin", text: response?.data?.reply },
+        ]);
+      },
+    });
+
+    setText("");
+  };
 
   const trends = [
     {
@@ -308,6 +353,127 @@ export const Course = () => {
             </section>
           ))}
         </section>
+      </section>
+
+      <section className="fixed bottom-0 right-0 z-20 h-16 w-16 hover:cursor-pointer hover:opacity-90">
+        <Popover>
+          <PopoverTrigger asChild>
+            <img src="/icons/chat.png" alt="chat" />
+          </PopoverTrigger>
+          <PopoverContent className="flex min-h-[400px] w-screen flex-col font-inter md:w-[30rem]">
+            <div className="flex h-[270px] justify-between">
+              <div className="container flex w-[40%] flex-col justify-center gap-3 rounded-md bg-[url('/backgrounds/green.png')]">
+                <img src="/icons/chat.png" alt="chat" className="w-14" />
+                <h1 className="font-bold text-font-white">Realtime chat</h1>
+                <p className="text-xs text-font-white">
+                  Tanyakan apa saja seputar kesehatan kami akan membantu
+                  mnjawabnya.
+                </p>
+              </div>
+              <div className="flex w-[55%] flex-col gap-1 overflow-y-auto">
+                {messages.length === 0 && (
+                  <div className="flex h-full flex-col items-center justify-evenly">
+                    <img
+                      src="/illustrations/no-chat.jpg"
+                      alt="Tidak ada chat"
+                      className="w-32"
+                    />
+                    <h1>Tidak ada chat</h1>
+                  </div>
+                )}
+                {messages.map((message, index) => (
+                  <motion.div
+                    key={index}
+                    className={`flex w-full flex-col gap-2 ${
+                      message.username === data?.data.username
+                        ? "items-end"
+                        : "items-start"
+                    }`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <h3>{message.username}</h3>
+                    <pre
+                      className={`w-full whitespace-pre-wrap break-words ${
+                        message.username === data?.data.username
+                          ? "text-right"
+                          : "text-left"
+                      } font-inter text-sm text-[#64748B]`}
+                    >
+                      {message.text}
+                    </pre>
+                    <p className="text-xs">{formatDate(new Date())}</p>
+                    <div className="container h-[1px] bg-[#36373C]" />
+                  </motion.div>
+                ))}
+                {isPending && (
+                  <motion.div
+                    className={`flex w-full flex-col gap-2`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <h3>Admin</h3>
+                    <pre
+                      className={`w-full animate-pulse whitespace-pre-wrap break-words text-left font-inter text-sm text-[#64748B]`}
+                    >
+                      Typing ...
+                    </pre>
+                    <p className="text-xs">{formatDate(new Date())}</p>
+                    <div className="container h-[1px] bg-[#36373C]" />
+                  </motion.div>
+                )}
+                {isError && (
+                  <motion.div
+                    className={`flex w-full flex-col gap-2`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <h3>Admin</h3>
+                    <pre
+                      className={`w-full animate-pulse whitespace-pre-wrap break-words text-left font-inter text-sm text-[#64748B]`}
+                    >
+                      Maaf kami tidak dapat memproses permintaan Anda, silahkan
+                      cek kembali
+                    </pre>
+                    <p className="text-xs">{formatDate(new Date())}</p>
+                    <div className="container h-[1px] bg-[#36373C]" />
+                  </motion.div>
+                )}
+                <div ref={lastMessageRef}></div>
+              </div>
+            </div>
+            <form
+              onSubmit={onSubmit}
+              className="mt-5 flex h-[130px] flex-col gap-2"
+            >
+              <Textarea
+                placeholder="Type your message here"
+                className={`resize-none focus-visible:ring-1 focus-visible:ring-blue-300 focus-visible:ring-offset-0`}
+                onChange={(e) => {
+                  setText(e.target.value);
+                }}
+                value={text}
+                disabled={isPending}
+              />
+              <div>
+                <Button
+                  type="submit"
+                  className="gap-2 bg-bright-2 font-black text-font-black-1 hover:bg-bright-1"
+                  disabled={isPending || !text}
+                >
+                  {isPending && <Loader2 className="w-4 animate-spin" />}
+                  Send Message
+                </Button>
+              </div>
+            </form>
+          </PopoverContent>
+        </Popover>
       </section>
 
       <Footer />

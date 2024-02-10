@@ -21,6 +21,7 @@ import {
   TRemoveCourseResponse,
   TRemoveNewsResponses,
   TRemoveUserResponse,
+  TSendQuestion,
   TUpdateCourseResponse,
   TUpdateNewsResponse,
   TUpdateUserResponse,
@@ -283,6 +284,17 @@ export const useRemoveUser = (): UseMutationResult<
     mutationKey: ["remove-user"],
     mutationFn: async (params?: string | number) => {
       const { data } = await api.delete(`/users/${params}`);
+
+      return data;
+    },
+  });
+};
+
+export const useSendQuestion = (): UseMutationResult<TSendQuestion> => {
+  return useMutation({
+    mutationKey: ["send-question"],
+    mutationFn: async (payload: unknown) => {
+      const { data } = await api.post("/chatbots", payload);
 
       return data;
     },
