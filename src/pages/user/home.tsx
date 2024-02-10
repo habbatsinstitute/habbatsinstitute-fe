@@ -1,6 +1,8 @@
 import { FC, ReactElement, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { motion } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
-import { LuPlay, LuUser2 } from "react-icons/lu";
+import { LuPlay, LuSearch, LuUser2 } from "react-icons/lu";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { BiNews } from "react-icons/bi";
 import { Button, Footer, Input, Navbar } from "@/components";
@@ -9,6 +11,10 @@ import { getAccessToken } from "@/lib";
 export const Home: FC = (): ReactElement => {
   const [isLoggin] = useState(getAccessToken() ? true : false);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [search, setSearch] = useState<string>("");
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,13 +71,31 @@ export const Home: FC = (): ReactElement => {
             Selamat datang di Platform Habbats Institute.
           </h1>
           <section className="flex w-full flex-col gap-5 pb-10">
-            <section className="flex w-full gap-3">
-              <section className="w-4/5 md:w-[40%]">
+            <section className="flex w-full items-center gap-3">
+              <section className="relative flex w-4/5 flex-col md:w-[40%]">
                 <Input
                   placeholder="Cari topik atau pembahasan"
                   type="text"
                   className="bg-white"
+                  onChange={(e) => setSearch(e.target.value)}
+                  onFocus={() => setIsInputFocused(true)}
+                  onBlur={() => setIsInputFocused(false)}
                 />
+                {search.length > 0 && search.length <= 30 && isInputFocused && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute top-10 flex min-h-10 w-full flex-col items-center justify-evenly
+                    gap-1 rounded-md border border-slate-300 bg-white"
+                  >
+                    <div className="flex items-center gap-2 text-xs xl:text-base">
+                      <LuSearch />
+                      <p>Belum ada pencarian, cek kembali</p>
+                    </div>
+                  </motion.div>
+                )}
               </section>
               <Button>
                 <FaSearch />
@@ -190,7 +214,10 @@ export const Home: FC = (): ReactElement => {
               serta khasiatnya oleh seluruh umat manusia.
             </p>
             <div className="mt-5">
-              <Button className="bg-bright-2 font-black text-font-black-3 hover:bg-bright-1">
+              <Button
+                onClick={() => navigate("/about-us")}
+                className="bg-bright-2 font-black text-font-black-3 hover:bg-bright-1"
+              >
                 Tentang Kami
               </Button>
             </div>
@@ -276,7 +303,7 @@ export const Home: FC = (): ReactElement => {
               Mengeksplorasi perjalanan edukasi.
             </h1>
             <div>
-              <Button className="flex gap-2">
+              <Button onClick={() => navigate("/news")} className="flex gap-2">
                 Lihat halaman news
                 <BiNews />
               </Button>
@@ -295,7 +322,9 @@ export const Home: FC = (): ReactElement => {
                 kesehatan Anda.
               </h3>
               <div>
-                <Button>Konsultasi Sekarang</Button>
+                <Button onClick={() => navigate("/courses")}>
+                  Konsultasi Sekarang
+                </Button>
               </div>
             </div>
             <div className="hidden w-1/2 items-center justify-center md:flex">
