@@ -59,7 +59,7 @@ export const SideBar: FC = (): ReactElement => {
   ];
 
   return (
-    <aside className="hidden h-full flex-col justify-between bg-font-black-1 md:flex md:w-[30%] xl:w-[20%]">
+    <aside className="hidden min-h-full flex-col justify-between bg-font-black-1 md:flex md:w-[30%] xl:w-[20%]">
       <section className="grid h-52 place-items-center">
         <img src="/new-logos/bright.png" alt="logo" className="object-cover" />
       </section>

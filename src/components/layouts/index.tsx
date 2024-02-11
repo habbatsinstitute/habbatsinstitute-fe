@@ -117,7 +117,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   };
 
   return (
-    <main className="flex h-auto w-full overflow-x-hidden overflow-y-hidden font-inter md:h-screen">
+    <main className="flex h-auto w-full overflow-x-hidden overflow-y-hidden font-inter md:min-h-screen">
       <SideBar />
       <section className="h-auto w-full md:h-full md:w-[80%]">
         {/* Nav mobile */}
