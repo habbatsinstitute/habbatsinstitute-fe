@@ -61,9 +61,7 @@ export const NewsDetail: FC = (): ReactElement => {
 
       <div className="container mt-10 flex justify-center">
         <div className="flex w-full flex-col gap-3 md:w-4/5 lg:w-1/2">
-          <pre className="whitespace-pre-wrap break-words font-inter">
-            {string}
-          </pre>
+          <div className="whitespace-pre-wrap font-inter">{string}</div>
         </div>
       </div>
 

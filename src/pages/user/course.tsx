@@ -2,6 +2,7 @@ import { FC, ReactElement, useEffect, useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Loader2, UserRound } from "lucide-react";
+import { LuLoader2 } from "react-icons/lu";
 import { FaArrowRightLong } from "react-icons/fa6";
 import {
   Button,
@@ -410,15 +411,15 @@ export const Course: FC = (): ReactElement => {
                     transition={{ duration: 0.3 }}
                   >
                     <h3>{message.username}</h3>
-                    <pre
-                      className={`w-full whitespace-pre-wrap break-words ${
+                    <div
+                      className={`w-full whitespace-pre-wrap ${
                         message.username === data?.data.username
                           ? "text-right"
                           : "text-left"
                       } font-inter text-sm text-[#64748B]`}
                     >
                       {message.text}
-                    </pre>
+                    </div>
                     <p className="text-xs">{formatDate(new Date())}</p>
                     <div className="container h-[1px] bg-[#36373C]" />
                   </motion.div>
@@ -432,11 +433,11 @@ export const Course: FC = (): ReactElement => {
                     transition={{ duration: 0.5 }}
                   >
                     <h3>Admin</h3>
-                    <pre
-                      className={`w-full animate-pulse whitespace-pre-wrap break-words text-left font-inter text-sm text-[#64748B]`}
+                    <div
+                      className={`flex w-full animate-pulse items-center gap-1 whitespace-pre-wrap text-left font-inter text-sm text-[#64748B]`}
                     >
-                      Typing ...
-                    </pre>
+                      Typing ... <LuLoader2 className="animate-spin" />
+                    </div>
                     <p className="text-xs">{formatDate(new Date())}</p>
                     <div className="container h-[1px] bg-[#36373C]" />
                   </motion.div>
@@ -450,12 +451,12 @@ export const Course: FC = (): ReactElement => {
                     transition={{ duration: 0.5 }}
                   >
                     <h3>Admin</h3>
-                    <pre
-                      className={`w-full whitespace-pre-wrap break-words text-left font-inter text-sm text-red-400`}
+                    <div
+                      className={`w-full whitespace-pre-wrap text-left font-inter text-sm text-red-400`}
                     >
                       Maaf kami tidak dapat memproses permintaan Anda, silahkan
                       cek kembali
-                    </pre>
+                    </div>
                     <p className="text-xs">{formatDate(new Date())}</p>
                     <div className="container h-[1px] bg-[#36373C]" />
                   </motion.div>

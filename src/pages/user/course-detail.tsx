@@ -94,7 +94,7 @@ export const CourseDetail: FC = (): ReactElement => {
                 <h3 className="text-lg font-bold text-font-black-1 md:text-base">
                   {trend.title}
                 </h3>
-                <p>{trend.description}</p>
+                <div className="whitespace-pre-wrap">{trend.description}</div>
               </section>
             </section>
           ))}
