@@ -198,7 +198,7 @@ export const Course: FC = (): ReactElement => {
           <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
             {courses.slice(0, 3).map((course, index) => (
               <section
-                className="group flex w-full flex-col justify-between rounded-md bg-light-2 p-3 py-3 shadow-lg hover:cursor-pointer hover:bg-emerald-100 md:w-[29.5%]"
+                className="group flex w-full flex-col rounded-md bg-light-2 p-3 py-3 shadow-lg hover:cursor-pointer hover:bg-emerald-100 md:w-[29.5%]"
                 onClick={() => {
                   navigate(`/courses/${course.id}`);
                 }}
@@ -209,7 +209,7 @@ export const Course: FC = (): ReactElement => {
                     controls
                     onContextMenu={(e) => e.preventDefault()}
                     controlsList="nodownload"
-                    className="h-full w-full rounded-md object-fill"
+                    className="max-h-[200px] w-full rounded-md object-fill"
                     preload="metadata"
                   >
                     <source src={course.media_file} />
@@ -223,10 +223,10 @@ export const Course: FC = (): ReactElement => {
                   </h5>
                 </section>
                 <section className="flex flex-col gap-2 pt-2">
-                  <h3 className="text-base font-bold text-font-black-1 md:text-base">
+                  <h3 className="break-words text-base font-bold text-font-black-1 md:text-base">
                     {course.title}
                   </h3>
-                  <p className="text-sm">
+                  <p className="break-words text-sm">
                     {course.description.substring(0, 100)}...
                   </p>
                 </section>
@@ -245,7 +245,7 @@ export const Course: FC = (): ReactElement => {
           <section className="container flex flex-wrap justify-between gap-10">
             {courses.map((course, index) => (
               <section
-                className="group flex w-full flex-col justify-between rounded-md bg-light-2 p-3 py-3 shadow-lg hover:cursor-pointer hover:bg-emerald-100 md:w-[29.5%]"
+                className="group flex w-full flex-col rounded-md bg-light-2 p-3 py-3 shadow-lg hover:cursor-pointer hover:bg-emerald-100 md:w-[29.5%]"
                 onClick={() => {
                   navigate(`/courses/${course.id}`);
                 }}
@@ -256,7 +256,7 @@ export const Course: FC = (): ReactElement => {
                     controls
                     onContextMenu={(e) => e.preventDefault()}
                     controlsList="nodownload"
-                    className="h-full w-full rounded-md object-fill"
+                    className="max-h-[200px] w-full rounded-md object-fill"
                     preload="metadata"
                   >
                     <source src={course.media_file} />
@@ -270,10 +270,10 @@ export const Course: FC = (): ReactElement => {
                   </h5>
                 </section>
                 <section className="flex flex-col gap-2 pt-2">
-                  <h3 className="text-base font-bold text-font-black-1 md:text-base">
+                  <h3 className="break-words text-base font-bold text-font-black-1 md:text-base">
                     {course.title}
                   </h3>
-                  <p className="text-sm">
+                  <p className="break-words text-sm">
                     {course.description.substring(0, 100)}...
                   </p>
                 </section>

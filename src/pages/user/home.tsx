@@ -68,6 +68,7 @@ export const Home: FC = (): ReactElement => {
         }
       />
 
+      {/* Hero Section */}
       <section className="container mt-24 flex min-h-[450px]">
         <section className="flex w-full flex-col justify-evenly md:justify-between lg:w-[60%]">
           <h1 className="text-[2rem] font-bold text-[#1E1E1E] md:pt-10 md:text-[3rem] lg:text-[2rem] xl:text-[3rem]">
@@ -122,6 +123,7 @@ export const Home: FC = (): ReactElement => {
         </section>
       </section>
 
+      {/* Course Preview */}
       {courses.length > 0 && (
         <section className="z-10 flex min-h-[700px] flex-col justify-evenly gap-10 bg-dark-2 py-20 xl:gap-0 xl:py-0">
           <div className="container h-[2px] w-4/5 bg-dark-3 md:w-[95%]" />
@@ -141,7 +143,7 @@ export const Home: FC = (): ReactElement => {
             {courses.slice(0, 2).map((course, index) => (
               <div
                 key={index}
-                className="flex h-[500px] max-w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:h-[400px] md:max-w-[80%] md:gap-0 lg:max-w-[40%] lg:py-2 xl:max-w-[45%]"
+                className="flex h-[500px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:h-[400px] md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]"
               >
                 <video
                   className="h-[60%] w-[83%] bg-slate-700 md:w-[90%]"

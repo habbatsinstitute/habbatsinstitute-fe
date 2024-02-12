@@ -135,7 +135,7 @@ export const News: FC = (): ReactElement => {
           <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
             {news.slice(0, 3).map((trend, index) => (
               <section
-                className="flex min-h-[400px] w-full flex-col justify-between md:w-[29.5%]"
+                className="flex min-h-[400px] w-full flex-col md:w-[29.5%]"
                 key={index}
               >
                 <section className="flex flex-col pt-1">
@@ -153,10 +153,10 @@ export const News: FC = (): ReactElement => {
                   </h5>
                 </section>
                 <section className="flex flex-col gap-2 pt-2">
-                  <h3 className="text-base font-bold text-font-black-1">
+                  <h3 className="breaks-words text-base font-bold text-font-black-1">
                     {trend.title}
                   </h3>
-                  <p className="text-sm">
+                  <p className="break-words text-sm">
                     {trend.description.substring(0, 100)}...
                   </p>
                   <div className="pt-1 md:pt-0">
@@ -184,7 +184,7 @@ export const News: FC = (): ReactElement => {
           <section className="container flex flex-wrap justify-between gap-10">
             {news.map((trend, index) => (
               <section
-                className="flex min-h-[400px] w-full flex-col justify-between md:w-[29.5%]"
+                className="flex min-h-[400px] w-full flex-col md:w-[29.5%]"
                 key={index}
               >
                 <section className="flex flex-col pt-1">
@@ -202,10 +202,10 @@ export const News: FC = (): ReactElement => {
                   </h5>
                 </section>
                 <section className="flex flex-col gap-2 pt-2">
-                  <h3 className="text-base font-bold text-font-black-1">
+                  <h3 className="break-words text-base font-bold text-font-black-1">
                     {trend.title}
                   </h3>
-                  <p className="text-sm">
+                  <p className="break-words text-sm">
                     {trend.description.substring(0, 100)}...
                   </p>
                   <div className="pt-1 md:pt-0">
