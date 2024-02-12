@@ -180,7 +180,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex h-[1000px] w-full flex-col justify-between gap-10 pt-7 md:gap-0 xl:h-[510px] xl:flex-row"
+          className="flex min-h-[500px] w-full flex-col justify-between gap-10 pt-7 md:gap-0 xl:min-h-[510px] xl:flex-row"
         >
           <section className="container flex h-full w-full flex-col justify-evenly gap-3 rounded-md border py-5 lg:gap-0 xl:w-[48%] xl:py-0">
             <h1 className="mt-5 text-[1rem] font-black text-[#0F172A]">
@@ -498,7 +498,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
               </Button>
             </section>
           </section>
-          <section className="flex h-full w-full md:mt-10 xl:mt-0 xl:w-[48%]">
+          <section className="flex h-full w-full flex-col py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
             <DataTable columns={columns} data={news} loading={loading} />
           </section>
         </form>

@@ -211,113 +211,109 @@ export const DashboardCourseGet: FC = (): ReactElement => {
 
           {!loading && paging.total_data > 5 && (
             <section className="mt-3 flex w-full justify-end">
-              <section>
-                <Pagination>
-                  <PaginationContent>
-                    {paging.current_page !== 1 && (
-                      <PaginationItem>
-                        <PaginationPrevious
-                          className="hover:cursor-pointer"
-                          onClick={() =>
-                            handlePageChange(paging.current_page - 1)
-                          }
-                        />
-                      </PaginationItem>
-                    )}
-
+              <Pagination>
+                <PaginationContent className="w-full flex-wrap justify-end">
+                  {paging.current_page !== 1 && (
                     <PaginationItem>
-                      <PaginationLink
-                        className={`hover:cursor-pointer ${
-                          1 === paging.current_page && "font-bold"
-                        }`}
-                        onClick={() => handlePageChange(1)}
-                      >
-                        <Button
-                          variant={
-                            1 === paging.current_page ? "default" : "ghost"
-                          }
-                        >
-                          1
-                        </Button>
-                      </PaginationLink>
+                      <PaginationPrevious
+                        className="hover:cursor-pointer"
+                        onClick={() =>
+                          handlePageChange(paging.current_page - 1)
+                        }
+                      />
                     </PaginationItem>
+                  )}
 
-                    {paging.current_page > 4 && (
-                      <PaginationItem>
-                        <PaginationEllipsis />
-                      </PaginationItem>
-                    )}
+                  <PaginationItem>
+                    <PaginationLink
+                      className={`hover:cursor-pointer ${
+                        1 === paging.current_page && "font-bold"
+                      }`}
+                      onClick={() => handlePageChange(1)}
+                    >
+                      <Button
+                        variant={
+                          1 === paging.current_page ? "default" : "ghost"
+                        }
+                      >
+                        1
+                      </Button>
+                    </PaginationLink>
+                  </PaginationItem>
 
-                    {Array.from(
-                      { length: paging.total_page },
-                      (_, index) => index + 1,
-                    ).map(
-                      (pageNumber) =>
-                        pageNumber !== 1 &&
-                        pageNumber !== paging.total_page &&
-                        pageNumber >= paging.current_page - 1 &&
-                        pageNumber <= paging.current_page + 1 && (
-                          <PaginationItem key={pageNumber}>
-                            <PaginationLink
-                              className={`hover:cursor-pointer ${
-                                pageNumber === paging.current_page &&
-                                "font-bold"
-                              }`}
-                              onClick={() => handlePageChange(pageNumber)}
+                  {paging.current_page > 4 && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
+
+                  {Array.from(
+                    { length: paging.total_page },
+                    (_, index) => index + 1,
+                  ).map(
+                    (pageNumber) =>
+                      pageNumber !== 1 &&
+                      pageNumber !== paging.total_page &&
+                      pageNumber >= paging.current_page - 1 &&
+                      pageNumber <= paging.current_page + 1 && (
+                        <PaginationItem key={pageNumber}>
+                          <PaginationLink
+                            className={`hover:cursor-pointer ${
+                              pageNumber === paging.current_page && "font-bold"
+                            }`}
+                            onClick={() => handlePageChange(pageNumber)}
+                          >
+                            <Button
+                              variant={
+                                pageNumber === paging.current_page
+                                  ? "default"
+                                  : "ghost"
+                              }
                             >
-                              <Button
-                                variant={
-                                  pageNumber === paging.current_page
-                                    ? "default"
-                                    : "ghost"
-                                }
-                              >
-                                {pageNumber}
-                              </Button>
-                            </PaginationLink>
-                          </PaginationItem>
-                        ),
-                    )}
+                              {pageNumber}
+                            </Button>
+                          </PaginationLink>
+                        </PaginationItem>
+                      ),
+                  )}
 
-                    {paging.current_page <= paging.total_page - 4 && (
-                      <PaginationItem>
-                        <PaginationEllipsis />
-                      </PaginationItem>
-                    )}
-
+                  {paging.current_page <= paging.total_page - 4 && (
                     <PaginationItem>
-                      <PaginationLink
-                        className={`hover:cursor-pointer ${
-                          paging.total_page === paging.current_page &&
-                          "font-bold"
-                        }`}
-                        onClick={() => handlePageChange(paging.total_page)}
-                      >
-                        <Button
-                          variant={
-                            paging.total_page === paging.current_page
-                              ? "default"
-                              : "ghost"
-                          }
-                        >
-                          {paging.total_page}
-                        </Button>
-                      </PaginationLink>
+                      <PaginationEllipsis />
                     </PaginationItem>
+                  )}
 
-                    {paging.current_page !== paging.total_page && (
-                      <PaginationItem>
-                        <PaginationNext
-                          className="hover:cursor-pointer"
-                          onClick={() =>
-                            handlePageChange(paging.current_page + 1)
-                          }
-                        />
-                      </PaginationItem>
-                    )}
-                  </PaginationContent>
-                </Pagination>
-              </section>
+                  <PaginationItem>
+                    <PaginationLink
+                      className={`hover:cursor-pointer ${
+                        paging.total_page === paging.current_page && "font-bold"
+                      }`}
+                      onClick={() => handlePageChange(paging.total_page)}
+                    >
+                      <Button
+                        variant={
+                          paging.total_page === paging.current_page
+                            ? "default"
+                            : "ghost"
+                        }
+                      >
+                        {paging.total_page}
+                      </Button>
+                    </PaginationLink>
+                  </PaginationItem>
+
+                  {paging.current_page !== paging.total_page && (
+                    <PaginationItem>
+                      <PaginationNext
+                        className="hover:cursor-pointer"
+                        onClick={() =>
+                          handlePageChange(paging.current_page + 1)
+                        }
+                      />
+                    </PaginationItem>
+                  )}
+                </PaginationContent>
+              </Pagination>
             </section>
           )}
         </section>

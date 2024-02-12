@@ -162,7 +162,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
 
   return (
     <AdminLayout>
-      <section className="flex h-[1000px] w-full flex-col justify-between gap-10 pt-7 md:gap-0 xl:h-[510px] xl:flex-row">
+      <section className="flex min-h-[500px] w-full flex-col justify-between gap-10 pt-7 md:gap-0 xl:min-h-[510px] xl:flex-row">
         <form
           onSubmit={(e) => onSubmit(e)}
           className="container flex h-full w-full flex-col justify-evenly gap-3 rounded-md border py-5 lg:gap-0 xl:w-[48%] xl:py-0"
@@ -448,7 +448,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
           </section>
         </form>
 
-        <section className="flex h-full w-full md:mt-10 xl:mt-0 xl:w-[48%]">
+        <section className="flex h-full w-full py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
           <DataTable columns={columns} data={users} loading={loading} />
         </section>
       </section>

@@ -177,7 +177,7 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
 
   return (
     <AdminLayout>
-      <section className="flex h-[1000px] w-full flex-col justify-between gap-10 pt-7 md:gap-0 xl:h-[510px] xl:flex-row">
+      <section className="flex min-h-[500px] w-full flex-col justify-between gap-10 pt-7 md:gap-0 xl:min-h-[510px] xl:flex-row">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -322,14 +322,14 @@ export const DashboardCourseCreate: FC = (): ReactElement => {
             </section>
           </form>
         </Form>
-        <section className="flex h-full w-full flex-col md:mt-10 xl:mt-0 xl:w-[48%]">
+        <section className="flex h-full w-full flex-col py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
           <DataTable columns={columns} data={courses} loading={loading} />
 
           {!loading && paging.total_data > 5 && (
             <section className="mt-3 flex w-full justify-end">
               <section>
                 <Pagination>
-                  <PaginationContent>
+                  <PaginationContent className="flex-wrap">
                     {paging.current_page !== 1 && (
                       <PaginationItem>
                         <PaginationPrevious

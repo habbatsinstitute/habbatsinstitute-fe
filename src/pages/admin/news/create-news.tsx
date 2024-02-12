@@ -151,7 +151,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
 
   return (
     <AdminLayout>
-      <section className="flex h-[1000px] w-full flex-col justify-between gap-10 pt-7 md:gap-0 xl:h-[510px] xl:flex-row">
+      <section className="flex min-h-[500px] w-full flex-col justify-between gap-10 pt-7 md:gap-0 xl:min-h-[510px] xl:flex-row">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -361,7 +361,7 @@ export const DashboardNewsCreate: FC = (): ReactElement => {
             </section>
           </form>
         </Form>
-        <section className="flex h-full w-full md:mt-10 xl:mt-0 xl:w-[48%]">
+        <section className="flex h-full w-full flex-col py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
           <DataTable columns={columns} data={news} loading={loading} />
         </section>
       </section>
