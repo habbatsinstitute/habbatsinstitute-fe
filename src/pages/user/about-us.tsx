@@ -20,6 +20,39 @@ export const AboutUs: FC = (): ReactElement => {
 
   const teams = [
     {
+      name: "Dr. Insan Agung Nugroho",
+      position: "Konsultan Medis",
+      image: "/images/teams/medic-consultant.png",
+      alt: "Konsultan Medis",
+    },
+    {
+      name: "Hendra Kartiko",
+      position: "Field Marketing",
+      image:
+        "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=1365&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Field Marketing",
+    },
+    {
+      name: "Dida",
+      position: "IT Support",
+      image: "/images/teams/it-support.png",
+      alt: "IT Support",
+    },
+    {
+      name: "Diva",
+      position: "Content Creation",
+      image:
+        "https://images.unsplash.com/photo-1574297500578-afae55026ff3?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Content Creation",
+    },
+    {
+      name: "Sani Widiawati",
+      position: "Copywritting",
+      image:
+        "https://images.unsplash.com/flagged/photo-1577614742608-393919945ee2?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Copywritting",
+    },
+    {
       name: "Devia",
       position: "Admin",
       image:
@@ -35,7 +68,8 @@ export const AboutUs: FC = (): ReactElement => {
     {
       name: "Nanan",
       position: "Admin online shop",
-      image: "/images/teams/content-creation.png",
+      image:
+        "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Admin online shop",
     },
     {
