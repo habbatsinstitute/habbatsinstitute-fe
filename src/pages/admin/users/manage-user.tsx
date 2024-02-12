@@ -21,12 +21,20 @@ import {
   DataTable,
   Input,
   Label,
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components";
 import {
   TGetAllUsersResponse,
+  TPaging,
   TUser,
   api,
   cn,
@@ -44,6 +52,14 @@ export const DashboardUsersManage: FC = (): ReactElement => {
     password: "",
     confirmation_password: "",
   });
+  const [paging, setPaging] = useState<TPaging>({
+    previous_page: 0,
+    current_page: 1,
+    next_page: 0,
+    page_size: 5,
+    total_page: 0,
+    total_data: 0,
+  });
 
   const { id } = useParams();
 
@@ -57,11 +73,20 @@ export const DashboardUsersManage: FC = (): ReactElement => {
 
   const navigate = useNavigate();
 
-  const getUsers = async () => {
+  const getUsers = async (
+    page: number = paging.current_page || 1,
+    pageSize: number = 5,
+  ) => {
     try {
       setLoading(true);
-      const { data } = await api.get<TGetAllUsersResponse>("/users");
-      setUsers(data?.data.filter((user) => user.role_id === 1));
+      const { data } = await api.get<TGetAllUsersResponse>("/users", {
+        params: {
+          page,
+          page_size: pageSize,
+        },
+      });
+      setUsers(data?.data);
+      setPaging(data?.pagination);
     } catch (error) {
       setUsers([]);
     } finally {
@@ -82,6 +107,10 @@ export const DashboardUsersManage: FC = (): ReactElement => {
     });
     setDate(getUserById?.data?.expiry_date as Date);
   }, [setForm, getUserById?.data, id, refetchUserById]);
+
+  const handlePageChange = (page: number) => {
+    getUsers(page);
+  };
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -129,7 +158,11 @@ export const DashboardUsersManage: FC = (): ReactElement => {
   }
 
   const columns: ColumnDef<TUser>[] = [
-    { header: "No", cell: (cell) => cell.row.index + 1 },
+    {
+      header: "No",
+      cell: (cell) =>
+        (paging.current_page - 1) * paging.page_size + cell.row.index + 1,
+    },
     {
       accessorKey: "username",
       header: "Username",
@@ -450,6 +483,114 @@ export const DashboardUsersManage: FC = (): ReactElement => {
 
         <section className="flex h-full w-full py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
           <DataTable columns={columns} data={users} loading={loading} />
+
+          {!loading && paging.total_data > 5 && (
+            <section className="mt-3 flex w-full justify-end">
+              <Pagination>
+                <PaginationContent className="flex-wrap">
+                  {paging.current_page !== 1 && (
+                    <PaginationItem>
+                      <PaginationPrevious
+                        className="hover:cursor-pointer"
+                        onClick={() =>
+                          handlePageChange(paging.current_page - 1)
+                        }
+                      />
+                    </PaginationItem>
+                  )}
+
+                  <PaginationItem>
+                    <PaginationLink
+                      className={`hover:cursor-pointer ${
+                        1 === paging.current_page && "font-bold"
+                      }`}
+                      onClick={() => handlePageChange(1)}
+                    >
+                      <Button
+                        variant={
+                          1 === paging.current_page ? "default" : "ghost"
+                        }
+                      >
+                        1
+                      </Button>
+                    </PaginationLink>
+                  </PaginationItem>
+
+                  {paging.current_page > 4 && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
+
+                  {Array.from(
+                    { length: paging.total_page },
+                    (_, index) => index + 1,
+                  ).map(
+                    (pageNumber) =>
+                      pageNumber !== 1 &&
+                      pageNumber !== paging.total_page &&
+                      pageNumber >= paging.current_page - 1 &&
+                      pageNumber <= paging.current_page + 1 && (
+                        <PaginationItem key={pageNumber}>
+                          <PaginationLink
+                            className={`hover:cursor-pointer ${
+                              pageNumber === paging.current_page && "font-bold"
+                            }`}
+                            onClick={() => handlePageChange(pageNumber)}
+                          >
+                            <Button
+                              variant={
+                                pageNumber === paging.current_page
+                                  ? "default"
+                                  : "ghost"
+                              }
+                            >
+                              {pageNumber}
+                            </Button>
+                          </PaginationLink>
+                        </PaginationItem>
+                      ),
+                  )}
+
+                  {paging.current_page <= paging.total_page - 4 && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
+
+                  <PaginationItem>
+                    <PaginationLink
+                      className={`hover:cursor-pointer ${
+                        paging.total_page === paging.current_page && "font-bold"
+                      }`}
+                      onClick={() => handlePageChange(paging.total_page)}
+                    >
+                      <Button
+                        variant={
+                          paging.total_page === paging.current_page
+                            ? "default"
+                            : "ghost"
+                        }
+                      >
+                        {paging.total_page}
+                      </Button>
+                    </PaginationLink>
+                  </PaginationItem>
+
+                  {paging.current_page !== paging.total_page && (
+                    <PaginationItem>
+                      <PaginationNext
+                        className="hover:cursor-pointer"
+                        onClick={() =>
+                          handlePageChange(paging.current_page + 1)
+                        }
+                      />
+                    </PaginationItem>
+                  )}
+                </PaginationContent>
+              </Pagination>
+            </section>
+          )}
         </section>
       </section>
     </AdminLayout>
