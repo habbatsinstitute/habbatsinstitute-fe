@@ -481,7 +481,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
           </section>
         </form>
 
-        <section className="flex h-full w-full py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
+        <section className="flex h-full w-full flex-col py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
           <DataTable columns={columns} data={users} loading={loading} />
 
           {!loading && paging.total_data > 5 && (
