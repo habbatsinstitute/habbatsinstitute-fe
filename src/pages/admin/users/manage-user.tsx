@@ -209,7 +209,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
             <Label
               htmlFor="username"
               className={`text-sm ${
-                form.username?.length >= 1 && form.username?.length <= 6
+                form.username?.length >= 1 && form.username?.length <= 5
                   ? "text-red-400"
                   : "text-[#0F172A]"
               }`}
@@ -221,7 +221,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
               type="text"
               placeholder="Input username"
               className={
-                form.username?.length >= 1 && form.username?.length <= 6
+                form.username?.length >= 1 && form.username?.length <= 5
                   ? "border-red-400 placeholder:text-red-400"
                   : ""
               }
@@ -234,7 +234,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
               }}
               value={form.username}
             />
-            {form.username?.length >= 1 && form.username?.length <= 6 && (
+            {form.username?.length >= 1 && form.username?.length <= 5 && (
               <section className="w-full">
                 <p className="text-xs font-bold text-red-400">
                   Username minimal 6 karakter
