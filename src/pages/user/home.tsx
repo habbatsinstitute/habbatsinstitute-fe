@@ -7,6 +7,8 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { BiNews } from "react-icons/bi";
 import { Button, Footer, Input, Navbar } from "@/components";
 import {
+  TCourseItems,
+  TGetCourseResponse,
   TGetNewsResponse,
   TNewsItems,
   api,
@@ -16,6 +18,7 @@ import {
 
 export const Home: FC = (): ReactElement => {
   const [news, setNews] = useState<TNewsItems[]>([]);
+  const [courses, setCourses] = useState<TCourseItems[]>([]);
   const [isLoggin] = useState(getAccessToken() ? true : false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [search, setSearch] = useState<string>("");
@@ -28,8 +31,17 @@ export const Home: FC = (): ReactElement => {
     setNews(data?.data);
   };
 
+  const getCourses = async () => {
+    const { data } = await api.get<TGetCourseResponse>("/courses");
+    setCourses(data?.data);
+  };
+
   useEffect(() => {
     getNews();
+  }, []);
+
+  useEffect(() => {
+    getCourses();
   }, []);
 
   useEffect(() => {
@@ -110,81 +122,63 @@ export const Home: FC = (): ReactElement => {
         </section>
       </section>
 
-      <section className="z-10 flex min-h-[700px] flex-col justify-evenly gap-10 bg-dark-2 py-20 xl:gap-0 xl:py-0">
-        <div className="container h-[2px] w-4/5 bg-dark-3 md:w-[95%]" />
-        <section className="container mt-2 flex items-center justify-center xl:justify-between">
-          <div className="hidden h-[90px] w-[200px] place-items-center rounded-md bg-dark-3 text-font-white xl:grid">
-            <h3>Course for You</h3>
-          </div>
-          <h1 className="w-11/12 font-bold text-font-white md:w-4/5 lg:text-[1.3rem]">
-            Dapatkan akses ke informasi terkini tentang pengembangan{" "}
-            <span className="text-bright-1">obat-obatan herbal</span>,{" "}
-            <span className="text-bright-1">teknologi ekstraksi terbaru</span>,
-            dan <span className="text-bright-1">penelitian-penelitian</span>{" "}
-            terkait yang sedang berlangsung.{" "}
-          </h1>
+      {courses.length > 0 && (
+        <section className="z-10 flex min-h-[700px] flex-col justify-evenly gap-10 bg-dark-2 py-20 xl:gap-0 xl:py-0">
+          <div className="container h-[2px] w-4/5 bg-dark-3 md:w-[95%]" />
+          <section className="container mt-2 flex items-center justify-center xl:justify-between">
+            <div className="hidden h-[90px] w-[200px] place-items-center rounded-md bg-dark-3 text-font-white xl:grid">
+              <h3>Course for You</h3>
+            </div>
+            <h1 className="w-11/12 font-bold text-font-white md:w-4/5 lg:text-[1.3rem]">
+              Dapatkan akses ke informasi terkini tentang pengembangan{" "}
+              <span className="text-bright-1">obat-obatan herbal</span>,{" "}
+              <span className="text-bright-1">teknologi ekstraksi terbaru</span>
+              , dan <span className="text-bright-1">penelitian-penelitian</span>{" "}
+              terkait yang sedang berlangsung.{" "}
+            </h1>
+          </section>
+          <section className="container flex flex-wrap justify-center gap-10 xl:justify-between xl:gap-0">
+            {courses.slice(0, 2).map((course, index) => (
+              <div
+                key={index}
+                className="flex h-[500px] max-w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:h-[400px] md:max-w-[80%] md:gap-0 lg:max-w-[40%] lg:py-2 xl:max-w-[45%]"
+              >
+                <video
+                  className="h-[60%] w-[83%] bg-slate-700 md:w-[90%]"
+                  controls={isLoggin}
+                  onContextMenu={(e) => e.preventDefault()}
+                  controlsList="nodownload"
+                  preload="metadata"
+                >
+                  <source src={course.media_file} />
+                </video>
+                <div className="container">
+                  <h1 className="text-base font-bold text-font-white md:text-lg">
+                    {course.title}
+                  </h1>
+                </div>
+                <div className="container flex items-center gap-2">
+                  <LuUser2 className="text-bright-1" />
+                  <p className="font-black-2 text-sm md:text-base">
+                    {`${course.author} ${formatDate(course.created_at)}`}
+                  </p>
+                </div>
+                <div className="container flex w-full justify-end">
+                  <Button
+                    onClick={() => {
+                      navigate(`/courses/${course.id}`);
+                    }}
+                    className="flex items-center gap-1 bg-bright-1 font-bold text-font-black-1 hover:bg-font-black-1 hover:text-white"
+                  >
+                    <LuPlay />
+                    Lihat Course
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </section>
         </section>
-        <section className="container flex flex-wrap justify-center gap-10 xl:justify-between xl:gap-0">
-          <div className="flex h-[500px] max-w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:h-[400px] md:max-w-[80%] md:gap-0 lg:max-w-[40%] lg:py-2 xl:max-w-[45%]">
-            <video
-              className="h-[60%] w-[83%] bg-slate-700 md:w-[90%]"
-              controls={isLoggin}
-              onContextMenu={(e) => e.preventDefault()}
-              controlsList="nodownload"
-              preload="metadata"
-            >
-              <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
-            </video>
-            <div className="container">
-              <h1 className="text-base font-bold text-font-white md:text-lg">
-                Manfaat biji tokek albino untuk kesehatan tenggorokan dan obat
-                batuk.
-              </h1>
-            </div>
-            <div className="container flex items-center gap-2">
-              <LuUser2 className="text-bright-1" />
-              <p className="font-black-2 text-sm md:text-base">
-                Toto Bedog - 16 jan 2024
-              </p>
-            </div>
-            <div className="container flex w-full justify-end">
-              <Button className="flex items-center gap-1 bg-bright-1 font-bold text-font-black-1 hover:bg-font-black-1 hover:text-white">
-                <LuPlay />
-                Lihat Course
-              </Button>
-            </div>
-          </div>
-          <div className="flex h-[500px] max-w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:h-[400px] md:max-w-[80%] md:gap-0 lg:max-w-[40%] lg:py-2 xl:max-w-[45%]">
-            <video
-              className="h-[60%] w-[83%] bg-slate-700 md:w-[90%]"
-              controls={isLoggin}
-              onContextMenu={(e) => e.preventDefault()}
-              controlsList="nodownload"
-              preload="metadata"
-            >
-              <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
-            </video>
-            <div className="container">
-              <h1 className="text-base font-bold text-font-white md:text-lg">
-                Manfaat biji tokek albino untuk kesehatan tenggorokan dan obat
-                batuk.
-              </h1>
-            </div>
-            <div className="container flex items-center gap-2">
-              <LuUser2 className="text-bright-1" />
-              <p className="font-black-2 text-sm md:text-base">
-                Toto Bedog - 16 jan 2024
-              </p>
-            </div>
-            <div className="container flex w-full justify-end">
-              <Button className="flex items-center gap-1 bg-bright-1 font-bold text-font-black-1 hover:bg-font-black-1 hover:text-white">
-                <LuPlay />
-                Lihat Course
-              </Button>
-            </div>
-          </div>
-        </section>
-      </section>
+      )}
 
       <section className="flex min-h-[400px] flex-col justify-evenly gap-5 bg-white py-20">
         <div className="container">

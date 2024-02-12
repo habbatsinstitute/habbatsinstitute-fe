@@ -1,36 +1,37 @@
-import { FC, ReactElement } from "react";
-import { useNavigate } from "react-router";
+import { FC, ReactElement, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import { UserRound } from "lucide-react";
 import { Button, Navbar, Footer } from "@/components";
-import { getAccessToken } from "@/lib";
-
-const trends = [
-  {
-    title: "Si Kuning Kunyit Kaya Manfaat",
-    description:
-      "Kunyit telah dikenal untuk merawat kulit dan membantu menyembuhkan luka..",
-    image: "/images/turmeric.png",
-    label: "Tanaman Herbal",
-    posted: "17 jan 2024",
-  },
-  {
-    title: "Khasiat Kulit Manggis untuk Cegah Kanker, Benarkah?",
-    description: "Masyarakat Indonesia sudah tidak asing..",
-    image: "/images/mangosteen.png",
-    label: "Diet dan Nutrisi",
-    posted: "08 jan 2024",
-  },
-  {
-    title: "Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.",
-    description: "Tingkat keberhasilan pengobatan kanker..",
-    image: "/images/mannotriose.png",
-    label: "Teknologi Pengobatan",
-    posted: "02 jan 2024",
-  },
-];
+import {
+  TCourseItems,
+  TGetCourseResponse,
+  api,
+  formatDate,
+  getAccessToken,
+  useGetCourseById,
+} from "@/lib";
 
 export const CourseDetail: FC = (): ReactElement => {
+  const [courses, setCourses] = useState<TCourseItems[]>([]);
+
+  const id = useParams();
+
+  const { data, refetch } = useGetCourseById(id?.id);
+
   const navigate = useNavigate();
+
+  const getCourse = async () => {
+    const { data } = await api.get<TGetCourseResponse>("/courses");
+    setCourses(data?.data);
+  };
+
+  useEffect(() => {
+    getCourse();
+  }, []);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch, id.id]);
 
   return (
     <main className="flex flex-col overflow-x-visible font-inter">
@@ -46,32 +47,31 @@ export const CourseDetail: FC = (): ReactElement => {
               className="h-full w-full rounded-md object-fill"
               preload="metadata"
             >
-              <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
+              <source src={data?.data.media_file} />
             </video>
           </div>
           <h1 className="text-[1rem] font-black text-[#1E212B] md:text-[1.7rem] lg:text-[2rem]">
-            Pengobatan Holistik dengan Tanaman Herbal: Memahami Peran Nutrisi
-            dalam Kesehatan
+            {data?.data.title}
           </h1>
           <div className="flex items-center gap-1">
             <UserRound className="p-1" />
-            <p className="text-sm">Toto Bedog - 16 jan 2024</p>
+            <p className="text-sm">
+              {`${data?.data.author} ${formatDate(data?.data.created_at as string)}`}
+            </p>
           </div>
 
-          <p className="mt-3 text-font-black-2">
-            Kami hadir untuk membawa Anda ke dalam dunia inovasi di balik
-            keajaiban alam. Di sini, Anda akan menemukan bagaimana obat-obatan
-            herbal tradisional bertemu dengan teknologi canggih, menciptakan
-            solusi kesehatan yang revolusioner. Mari bergabung dalam perjalanan
-            edukatif ini, dan temukan bagaimana gabungan antara alam dan
-            teknologi dapat mengubah cara kita memandang kesehatan.
-          </p>
+          <div className="mt-3 whitespace-pre-wrap text-font-black-2">
+            {data?.data.description}
+          </div>
         </div>
 
         <div className="mt-20 flex w-full flex-wrap gap-7 lg:mt-0 lg:w-[25%] lg:gap-10">
-          {trends.map((trend, index) => (
+          {courses.slice(0, 3).map((course, index) => (
             <section
-              className="flex w-full flex-col rounded-md bg-light-2 p-3 py-4 shadow-lg md:w-[30%] lg:w-full"
+              className="flex w-full flex-col rounded-md bg-light-2 p-3 py-4 shadow-lg hover:cursor-pointer hover:bg-emerald-100 md:w-[30%] lg:w-full"
+              onClick={() => {
+                navigate(`/courses/${course.id}`);
+              }}
               key={index}
             >
               <section className="flex flex-col py-2">
@@ -82,19 +82,23 @@ export const CourseDetail: FC = (): ReactElement => {
                   className="h-full w-full rounded-md object-fill"
                   preload="metadata"
                 >
-                  <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
+                  <source src={course.media_file} />
                 </video>
                 <section className="flex items-center gap-1">
                   <UserRound className="p-1" />
-                  <p className="text-sm">{trend.label}</p>
+                  <p className="text-sm">{course.author}</p>
                 </section>
-                <h5 className="text-[#707075]">Posted - {trend.posted}</h5>
+                <h5 className="text-[#707075]">
+                  Posted - {formatDate(course.created_at)}
+                </h5>
               </section>
               <section className="flex flex-col gap-2 pt-2">
                 <h3 className="text-lg font-bold text-font-black-1 md:text-base">
-                  {trend.title}
+                  {course.title}
                 </h3>
-                <div className="whitespace-pre-wrap">{trend.description}</div>
+                <div className="whitespace-pre-wrap">
+                  {course.description.substring(0, 100)}...
+                </div>
               </section>
             </section>
           ))}

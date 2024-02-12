@@ -8,12 +8,25 @@ import {
   Button,
   Footer,
   Navbar,
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
   Popover,
   PopoverContent,
   PopoverTrigger,
   Textarea,
 } from "@/components";
 import {
+  TCourseItems,
+  TGetCourseResponse,
+  TGetNewsResponse,
+  TNewsItems,
+  TPaging,
+  api,
   formatDate,
   getAccessToken,
   useGetUserMe,
@@ -28,11 +41,56 @@ export const Course: FC = (): ReactElement => {
   >([]);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const lastMessageRef = useRef<HTMLDivElement | null>(null);
+  const [courses, setCourses] = useState<TCourseItems[]>([]);
+  const [news, setNews] = useState<TNewsItems[]>([]);
+  const [paging, setPaging] = useState<TPaging>({
+    previous_page: 0,
+    current_page: 1,
+    next_page: 0,
+    page_size: 9,
+    total_page: 0,
+    total_data: 0,
+  });
 
   const navigate = useNavigate();
 
   const { data } = useGetUserMe();
   const { mutate, isPending, isError } = useSendQuestion();
+
+  const getCourses = async (
+    page: number = paging.current_page || 1,
+    pageSize: number = 9,
+  ) => {
+    try {
+      const { data } = await api.get<TGetCourseResponse>("/courses", {
+        params: {
+          page,
+          page_size: pageSize,
+        },
+      });
+      setCourses(data?.data);
+      setPaging(data?.pagination);
+    } catch (error) {
+      setCourses([]);
+    }
+  };
+
+  const getNews = async () => {
+    const { data } = await api.get<TGetNewsResponse>("/news");
+    setNews(data?.data);
+  };
+
+  useEffect(() => {
+    getCourses();
+  }, []);
+
+  useEffect(() => {
+    getNews();
+  }, []);
+
+  const handlePageChange = (page: number) => {
+    getCourses(page);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,100 +136,6 @@ export const Course: FC = (): ReactElement => {
 
     setText("");
   };
-
-  const trends = [
-    {
-      title: "Si Kuning Kunyit Kaya Manfaat",
-      description:
-        "Kunyit telah dikenal untuk merawat kulit dan membantu menyembuhkan luka..",
-      image: "/images/turmeric.png",
-      label: "Tanaman Herbal",
-      posted: "17 jan 2024",
-    },
-    {
-      title: "Khasiat Kulit Manggis untuk Cegah Kanker, Benarkah?",
-      description: "Masyarakat Indonesia sudah tidak asing..",
-      image: "/images/mangosteen.png",
-      label: "Diet dan Nutrisi",
-      posted: "08 jan 2024",
-    },
-    {
-      title: "Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.",
-      description: "Tingkat keberhasilan pengobatan kanker..",
-      image: "/images/mannotriose.png",
-      label: "Teknologi Pengobatan",
-      posted: "02 jan 2024",
-    },
-  ];
-
-  const allVideos = [
-    {
-      title: "Si Kuning Kunyit Kaya Manfaat",
-      description:
-        "Kunyit telah dikenal untuk merawat kulit dan membantu menyembuhkan luka..",
-      image: "/images/turmeric.png",
-      label: "Tanaman Herbal",
-      posted: "17 jan 2024",
-    },
-    {
-      title: "Khasiat Kulit Manggis untuk Cegah Kanker, Benarkah?",
-      description: "Masyarakat Indonesia sudah tidak asing..",
-      image: "/images/mangosteen.png",
-      label: "Diet dan Nutrisi",
-      posted: "08 jan 2024",
-    },
-    {
-      title: "Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.",
-      description: "Tingkat keberhasilan pengobatan kanker..",
-      image: "/images/mannotriose.png",
-      label: "Teknologi Pengobatan",
-      posted: "02 jan 2024",
-    },
-    {
-      title: "Si Kuning Kunyit Kaya Manfaat",
-      description:
-        "Kunyit telah dikenal untuk merawat kulit dan membantu menyembuhkan luka..",
-      image: "/images/turmeric.png",
-      label: "Tanaman Herbal",
-      posted: "17 jan 2024",
-    },
-    {
-      title: "Khasiat Kulit Manggis untuk Cegah Kanker, Benarkah?",
-      description: "Masyarakat Indonesia sudah tidak asing..",
-      image: "/images/mangosteen.png",
-      label: "Diet dan Nutrisi",
-      posted: "08 jan 2024",
-    },
-    {
-      title: "Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.",
-      description: "Tingkat keberhasilan pengobatan kanker..",
-      image: "/images/mannotriose.png",
-      label: "Teknologi Pengobatan",
-      posted: "02 jan 2024",
-    },
-    {
-      title: "Si Kuning Kunyit Kaya Manfaat",
-      description:
-        "Kunyit telah dikenal untuk merawat kulit dan membantu menyembuhkan luka..",
-      image: "/images/turmeric.png",
-      label: "Tanaman Herbal",
-      posted: "17 jan 2024",
-    },
-    {
-      title: "Khasiat Kulit Manggis untuk Cegah Kanker, Benarkah?",
-      description: "Masyarakat Indonesia sudah tidak asing..",
-      image: "/images/mangosteen.png",
-      label: "Diet dan Nutrisi",
-      posted: "08 jan 2024",
-    },
-    {
-      title: "Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.",
-      description: "Tingkat keberhasilan pengobatan kanker..",
-      image: "/images/mannotriose.png",
-      label: "Teknologi Pengobatan",
-      posted: "02 jan 2024",
-    },
-  ];
 
   return getAccessToken() ? (
     <main className="flex flex-col overflow-x-hidden overflow-y-hidden bg-[url('/backgrounds/white.jpg')] font-inter">
@@ -230,76 +194,196 @@ export const Course: FC = (): ReactElement => {
         <h1 className="container text-[2rem] font-bold text-font-black-1">
           Trending Course
         </h1>
-        <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
-          {trends.map((trend, index) => (
-            <section
-              className="flex w-full flex-col justify-between rounded-md bg-light-2 p-3 py-3 shadow-lg md:w-[29.5%]"
-              key={index}
-            >
-              <section className="flex flex-col py-2">
-                <video
-                  controls
-                  onContextMenu={(e) => e.preventDefault()}
-                  controlsList="nodownload"
-                  className="h-full w-full rounded-md object-fill"
-                  preload="metadata"
-                >
-                  <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
-                </video>
-                <section className="flex items-center gap-1">
-                  <UserRound className="p-1" />
-                  <p className="text-sm">{trend.label}</p>
+        {courses.length > 0 && (
+          <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
+            {courses.slice(0, 3).map((course, index) => (
+              <section
+                className="group flex w-full flex-col justify-between rounded-md bg-light-2 p-3 py-3 shadow-lg hover:cursor-pointer hover:bg-emerald-100 md:w-[29.5%]"
+                onClick={() => {
+                  navigate(`/courses/${course.id}`);
+                }}
+                key={index}
+              >
+                <section className="flex flex-col py-2">
+                  <video
+                    controls
+                    onContextMenu={(e) => e.preventDefault()}
+                    controlsList="nodownload"
+                    className="h-full w-full rounded-md object-fill"
+                    preload="metadata"
+                  >
+                    <source src={course.media_file} />
+                  </video>
+                  <section className="flex items-center gap-1">
+                    <UserRound className="p-1" />
+                    <p className="text-sm">{course.author}</p>
+                  </section>
+                  <h5 className="text-[#707075]">
+                    Posted - {formatDate(course.created_at)}
+                  </h5>
                 </section>
-                <h5 className="text-[#707075]">Posted - {trend.posted}</h5>
+                <section className="flex flex-col gap-2 pt-2">
+                  <h3 className="text-base font-bold text-font-black-1 md:text-base">
+                    {course.title}
+                  </h3>
+                  <p className="text-sm">
+                    {course.description.substring(0, 100)}...
+                  </p>
+                </section>
               </section>
-              <section className="flex flex-col gap-2 pt-2">
-                <h3 className="text-lg font-bold text-font-black-1 md:text-base">
-                  {trend.title}
-                </h3>
-                <p>{trend.description}</p>
-              </section>
-            </section>
-          ))}
-        </section>
+            ))}
+          </section>
+        )}
       </section>
 
-      <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-10">
-        <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
-        <h1 className="container text-[2rem] font-bold text-font-black-1">
-          All Course
-        </h1>
-        <section className="container flex flex-wrap justify-between gap-10">
-          {allVideos.map((trend, index) => (
-            <section
-              className="flex w-full flex-col justify-between rounded-md bg-light-2 p-3 py-3 shadow-lg md:w-[29.5%]"
-              key={index}
-            >
-              <section className="flex flex-col py-2">
-                <video
-                  controls
-                  onContextMenu={(e) => e.preventDefault()}
-                  controlsList="nodownload"
-                  className="h-full w-full rounded-md object-fill"
-                  preload="metadata"
-                >
-                  <source src="https://res.cloudinary.com/ddudewmxj/video/upload/v1707146745/course/yx0nhf2blb4wbnwl1nfc.mp4" />
-                </video>
-                <section className="flex items-center gap-1">
-                  <UserRound className="p-1" />
-                  <p className="text-sm">{trend.label}</p>
+      {courses.length > 0 && (
+        <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-10">
+          <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
+          <h1 className="container text-[2rem] font-bold text-font-black-1">
+            All Course
+          </h1>
+          <section className="container flex flex-wrap justify-between gap-10">
+            {courses.map((course, index) => (
+              <section
+                className="group flex w-full flex-col justify-between rounded-md bg-light-2 p-3 py-3 shadow-lg hover:cursor-pointer hover:bg-emerald-100 md:w-[29.5%]"
+                onClick={() => {
+                  navigate(`/courses/${course.id}`);
+                }}
+                key={index}
+              >
+                <section className="flex flex-col py-2">
+                  <video
+                    controls
+                    onContextMenu={(e) => e.preventDefault()}
+                    controlsList="nodownload"
+                    className="h-full w-full rounded-md object-fill"
+                    preload="metadata"
+                  >
+                    <source src={course.media_file} />
+                  </video>
+                  <section className="flex items-center gap-1">
+                    <UserRound className="p-1" />
+                    <p className="text-sm">{course.author}</p>
+                  </section>
+                  <h5 className="text-[#707075]">
+                    Posted - {formatDate(course.created_at)}
+                  </h5>
                 </section>
-                <h5 className="text-[#707075]">Posted - {trend.posted}</h5>
+                <section className="flex flex-col gap-2 pt-2">
+                  <h3 className="text-base font-bold text-font-black-1 md:text-base">
+                    {course.title}
+                  </h3>
+                  <p className="text-sm">
+                    {course.description.substring(0, 100)}...
+                  </p>
+                </section>
               </section>
-              <section className="flex flex-col gap-2 pt-2">
-                <h3 className="text-lg font-bold text-font-black-1 md:text-base">
-                  {trend.title}
-                </h3>
-                <p>{trend.description}</p>
-              </section>
-            </section>
-          ))}
+            ))}
+          </section>
         </section>
-      </section>
+      )}
+
+      {paging.total_data > 9 && (
+        <section className="flex w-full justify-end bg-white py-10">
+          <Pagination>
+            <PaginationContent className="container w-full flex-wrap justify-end">
+              {paging.current_page !== 1 && (
+                <PaginationItem>
+                  <PaginationPrevious
+                    className="hover:cursor-pointer"
+                    onClick={() => handlePageChange(paging.current_page - 1)}
+                  />
+                </PaginationItem>
+              )}
+
+              <PaginationItem>
+                <PaginationLink
+                  className={`hover:cursor-pointer ${
+                    1 === paging.current_page && "font-bold"
+                  }`}
+                  onClick={() => handlePageChange(1)}
+                >
+                  <Button
+                    variant={1 === paging.current_page ? "default" : "ghost"}
+                  >
+                    1
+                  </Button>
+                </PaginationLink>
+              </PaginationItem>
+
+              {paging.current_page > 4 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+
+              {Array.from(
+                { length: paging.total_page },
+                (_, index) => index + 1,
+              ).map(
+                (pageNumber) =>
+                  pageNumber !== 1 &&
+                  pageNumber !== paging.total_page &&
+                  pageNumber >= paging.current_page - 1 &&
+                  pageNumber <= paging.current_page + 1 && (
+                    <PaginationItem key={pageNumber}>
+                      <PaginationLink
+                        className={`hover:cursor-pointer ${
+                          pageNumber === paging.current_page && "font-bold"
+                        }`}
+                        onClick={() => handlePageChange(pageNumber)}
+                      >
+                        <Button
+                          variant={
+                            pageNumber === paging.current_page
+                              ? "default"
+                              : "ghost"
+                          }
+                        >
+                          {pageNumber}
+                        </Button>
+                      </PaginationLink>
+                    </PaginationItem>
+                  ),
+              )}
+
+              {paging.current_page <= paging.total_page - 4 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+
+              <PaginationItem>
+                <PaginationLink
+                  className={`hover:cursor-pointer ${
+                    paging.total_page === paging.current_page && "font-bold"
+                  }`}
+                  onClick={() => handlePageChange(paging.total_page)}
+                >
+                  <Button
+                    variant={
+                      paging.total_page === paging.current_page
+                        ? "default"
+                        : "ghost"
+                    }
+                  >
+                    {paging.total_page}
+                  </Button>
+                </PaginationLink>
+              </PaginationItem>
+
+              {paging.current_page !== paging.total_page && (
+                <PaginationItem>
+                  <PaginationNext
+                    className="hover:cursor-pointer"
+                    onClick={() => handlePageChange(paging.current_page + 1)}
+                  />
+                </PaginationItem>
+              )}
+            </PaginationContent>
+          </Pagination>
+        </section>
+      )}
 
       <section className="flex min-h-[200px] flex-col justify-end gap-5 bg-white pt-20 md:min-h-[400px] lg:pt-48 xl:pt-56">
         <div className="flex h-[250px] bg-[url('/backgrounds/green.png')] bg-cover lg:h-[300px]">
@@ -331,46 +415,54 @@ export const Course: FC = (): ReactElement => {
         </div>
       </section>
 
-      <section className="z-10 flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pb-16 pt-10 md:gap-0 lg:gap-5">
-        <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
-        <h1 className="container text-[2rem] font-bold text-font-black-1">
-          News Trend
-        </h1>
-        <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
-          {trends.map((trend, index) => (
-            <section
-              className="flex min-h-[400px] w-full flex-col justify-between md:w-[30%]"
-              key={index}
-            >
-              <section className="flex flex-col pt-1">
-                <img
-                  src={trend.image}
-                  alt="trend"
-                  className=" rounded-md object-cover"
-                />
-                <section className="flex items-center gap-1">
-                  <img src="/icons/folder.png" alt="folder" />
-                  <p>{trend.label}</p>
+      {news.length > 0 && (
+        <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-light-2 py-10 md:gap-0">
+          <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
+          <h1 className="container mt-10 text-[2rem] font-bold text-font-black-1">
+            News Trend
+          </h1>
+          <section className="container mt-10 flex flex-wrap justify-between gap-10 md:gap-0">
+            {news.slice(0, 3).map((news, index) => (
+              <section
+                className="flex min-h-[400px] w-full flex-col justify-between md:w-[30%]"
+                key={index}
+              >
+                <section className="flex flex-col pt-1">
+                  <img
+                    src={news.images}
+                    alt="news"
+                    className="h-[250px] w-full rounded-md object-cover md:h-[150px] xl:h-[250px]"
+                  />
+                  <section className="flex items-center gap-1">
+                    <img src="/icons/folder.png" alt="folder" />
+                    <p>{news.category}</p>
+                  </section>
+                  <h5 className="text-[#707075]">
+                    Posted - {formatDate(news.created_at)}
+                  </h5>
                 </section>
-                <h5 className="text-[#707075]">Posted - {trend.posted}</h5>
+                <section className="flex flex-col gap-2 pt-2">
+                  <h3 className="text-base font-bold text-font-black-1">
+                    {news.title}
+                  </h3>
+                  <p className="text-sm">
+                    {news.description.substring(0, 100)}...
+                  </p>
+                  <div className="pt-1 md:pt-0">
+                    <Button
+                      onClick={() => navigate(`/news/${news.id}`)}
+                      className="flex items-center justify-center gap-2 bg-bright-2 font-bold text-font-black-3 hover:bg-green-400"
+                    >
+                      Lebih lengkap
+                      <FaArrowRightLong className="pt-1 text-[#1E212B]" />
+                    </Button>
+                  </div>
+                </section>
               </section>
-              <section className="flex flex-col gap-2 pt-2">
-                <h3 className="text-lg font-bold text-font-black-1">
-                  {trend.title}
-                </h3>
-                <p>{trend.description}</p>
-                <div className="pt-1 md:pt-0">
-                  <Button className="flex items-center justify-center gap-2 bg-bright-2 font-bold text-font-black-3 hover:bg-green-400">
-                    Lebih lengkap
-                    <FaArrowRightLong className="pt-1 text-[#1E212B]" />
-                  </Button>
-                </div>
-              </section>
-            </section>
-          ))}
+            ))}
+          </section>
         </section>
-      </section>
-
+      )}
       <section className="fixed bottom-0 right-0 z-20 h-16 w-16 hover:cursor-pointer hover:opacity-90">
         <Popover onOpenChange={() => setIsPopoverOpen(!isPopoverOpen)}>
           <PopoverTrigger asChild>
