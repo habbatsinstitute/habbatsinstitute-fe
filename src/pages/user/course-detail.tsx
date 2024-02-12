@@ -47,7 +47,7 @@ export const CourseDetail: FC = (): ReactElement => {
               className="h-full w-full rounded-md object-fill"
               preload="metadata"
             >
-              <source src={data?.data.media_file} />
+              {data?.data && <source src={data?.data.media_file} />}
             </video>
           </div>
           <h1 className="text-[1rem] font-black text-[#1E212B] md:text-[1.7rem] lg:text-[2rem]">
