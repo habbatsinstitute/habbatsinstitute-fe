@@ -6,15 +6,31 @@ import { LuPlay, LuSearch, LuUser2 } from "react-icons/lu";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { BiNews } from "react-icons/bi";
 import { Button, Footer, Input, Navbar } from "@/components";
-import { getAccessToken } from "@/lib";
+import {
+  TGetNewsResponse,
+  TNewsItems,
+  api,
+  formatDate,
+  getAccessToken,
+} from "@/lib";
 
 export const Home: FC = (): ReactElement => {
+  const [news, setNews] = useState<TNewsItems[]>([]);
   const [isLoggin] = useState(getAccessToken() ? true : false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [search, setSearch] = useState<string>("");
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   const navigate = useNavigate();
+
+  const getNews = async () => {
+    const { data } = await api.get<TGetNewsResponse>("/news");
+    setNews(data?.data);
+  };
+
+  useEffect(() => {
+    getNews();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,31 +47,6 @@ export const Home: FC = (): ReactElement => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const trends = [
-    {
-      title: "Si Kuning Kunyit Kaya Manfaat",
-      description:
-        "Kunyit telah dikenal untuk merawat kulit dan membantu menyembuhkan luka..",
-      image: "/images/turmeric.png",
-      label: "Tanaman Herbal",
-      posted: "17 jan 2024",
-    },
-    {
-      title: "Khasiat Kulit Manggis untuk Cegah Kanker, Benarkah?",
-      description: "Masyarakat Indonesia sudah tidak asing..",
-      image: "/images/mangosteen.png",
-      label: "Diet dan Nutrisi",
-      posted: "08 jan 2024",
-    },
-    {
-      title: "Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.",
-      description: "Tingkat keberhasilan pengobatan kanker..",
-      image: "/images/mannotriose.png",
-      label: "Teknologi Pengobatan",
-      posted: "02 jan 2024",
-    },
-  ];
 
   return (
     <main className="flex flex-col overflow-x-hidden overflow-y-hidden bg-[url('/backgrounds/white.jpg')] font-inter">
@@ -225,45 +216,54 @@ export const Home: FC = (): ReactElement => {
         </div>
       </section>
 
-      <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-light-2 md:gap-0">
-        <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
-        <h1 className="container text-[2rem] font-bold text-font-black-1">
-          News Trend
-        </h1>
-        <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
-          {trends.map((trend, index) => (
-            <section
-              className="flex min-h-[400px] w-full flex-col justify-between md:w-[30%]"
-              key={index}
-            >
-              <section className="flex flex-col pt-1">
-                <img
-                  src={trend.image}
-                  alt="trend"
-                  className=" rounded-md object-cover"
-                />
-                <section className="flex items-center gap-1">
-                  <img src="/icons/folder.png" alt="folder" />
-                  <p>{trend.label}</p>
+      {news.length > 0 && (
+        <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-light-2 md:gap-0">
+          <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
+          <h1 className="container text-[2rem] font-bold text-font-black-1">
+            News Trend
+          </h1>
+          <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
+            {news.slice(0, 3).map((news, index) => (
+              <section
+                className="flex min-h-[400px] w-full flex-col justify-between md:w-[30%]"
+                key={index}
+              >
+                <section className="flex flex-col pt-1">
+                  <img
+                    src={news.images}
+                    alt="news"
+                    className="h-[250px] w-full rounded-md object-cover md:h-[150px] xl:h-[250px]"
+                  />
+                  <section className="flex items-center gap-1">
+                    <img src="/icons/folder.png" alt="folder" />
+                    <p>{news.category}</p>
+                  </section>
+                  <h5 className="text-[#707075]">
+                    Posted - {formatDate(news.created_at)}
+                  </h5>
                 </section>
-                <h5 className="text-[#707075]">Posted - {trend.posted}</h5>
+                <section className="flex flex-col gap-2 pt-2">
+                  <h3 className="text-base font-bold text-font-black-1">
+                    {news.title}
+                  </h3>
+                  <p className="text-sm">
+                    {news.description.substring(0, 100)}...
+                  </p>
+                  <div className="pt-1 md:pt-0">
+                    <Button
+                      onClick={() => navigate(`/news/${news.id}`)}
+                      className="flex items-center justify-center gap-2 bg-bright-2 font-bold text-font-black-3 hover:bg-green-400"
+                    >
+                      Lebih lengkap
+                      <FaArrowRightLong className="pt-1 text-[#1E212B]" />
+                    </Button>
+                  </div>
+                </section>
               </section>
-              <section className="flex flex-col gap-2 pt-2">
-                <h3 className="text-lg font-bold text-font-black-1">
-                  {trend.title}
-                </h3>
-                <p>{trend.description}</p>
-                <div className="pt-1 md:pt-0">
-                  <Button className="flex items-center justify-center gap-2 bg-bright-2 font-bold text-font-black-3 hover:bg-green-400">
-                    Lebih lengkap
-                    <FaArrowRightLong className="pt-1 text-[#1E212B]" />
-                  </Button>
-                </div>
-              </section>
-            </section>
-          ))}
+            ))}
+          </section>
         </section>
-      </section>
+      )}
 
       <section className="flex min-h-[400px] flex-col justify-evenly gap-5 bg-light-2 py-10 md:gap-0 md:py-0">
         <div className="container h-[1px] w-4/5 bg-[rgb(54,55,60)] md:w-[95%]" />
