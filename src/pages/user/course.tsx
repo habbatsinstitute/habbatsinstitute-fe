@@ -19,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Textarea,
+  TrendCourse,
 } from "@/components";
 import {
   TCourseItems,
@@ -145,6 +146,7 @@ export const Course: FC = (): ReactElement => {
         }
       />
 
+      {/* Category */}
       <section className="container mb-10 mt-24 flex min-h-[450px] flex-row-reverse md:mb-0 md:mt-16">
         <section className="flex w-full flex-col justify-center gap-3 md:gap-2 lg:w-[45%]">
           <h1 className="pb-0 text-[1.8rem] font-bold text-[#1E1E1E] md:pb-2 md:text-[2.7rem] lg:text-[2rem]">
@@ -189,52 +191,7 @@ export const Course: FC = (): ReactElement => {
         </section>
       </section>
 
-      <section className="z-10 flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-20 md:gap-0 md:pt-0">
-        <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
-        <h1 className="container text-[2rem] font-bold text-font-black-1">
-          Trending Course
-        </h1>
-        {courses.length > 0 && (
-          <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
-            {courses.slice(0, 3).map((course, index) => (
-              <section
-                className="group flex w-full flex-col rounded-md bg-light-2 p-3 py-3 shadow-lg hover:cursor-pointer hover:bg-emerald-100 md:w-[29.5%]"
-                onClick={() => {
-                  navigate(`/courses/${course.id}`);
-                }}
-                key={index}
-              >
-                <section className="flex flex-col py-2">
-                  <video
-                    controls
-                    onContextMenu={(e) => e.preventDefault()}
-                    controlsList="nodownload"
-                    className="max-h-[200px] w-full rounded-md object-fill"
-                    preload="metadata"
-                  >
-                    <source src={course.media_file} />
-                  </video>
-                  <section className="flex items-center gap-1">
-                    <UserRound className="p-1" />
-                    <p className="text-sm">{course.author}</p>
-                  </section>
-                  <h5 className="text-[#707075]">
-                    Posted - {formatDate(course.created_at)}
-                  </h5>
-                </section>
-                <section className="flex flex-col gap-2 pt-2">
-                  <h3 className="break-words text-base font-bold text-font-black-1 md:text-base">
-                    {course.title}
-                  </h3>
-                  <p className="break-words text-sm">
-                    {course.description.substring(0, 100)}...
-                  </p>
-                </section>
-              </section>
-            ))}
-          </section>
-        )}
-      </section>
+      <TrendCourse />
 
       {courses.length > 0 && (
         <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-10">
