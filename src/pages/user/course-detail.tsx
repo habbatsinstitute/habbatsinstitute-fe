@@ -1,141 +1,158 @@
-import { FC, ReactElement, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { FC, Fragment, ReactElement, useEffect, useState } from "react";
+import { useParams } from "react-router";
+import LoadingBar from "react-top-loading-bar";
 import { UserRound } from "lucide-react";
-import { Button, Navbar, Footer } from "@/components";
+import {
+  Navbar,
+  Footer,
+  Consultant,
+  CourseCard,
+  Skeleton,
+  LoadingCourseCard,
+} from "@/components";
 import {
   TCourseItems,
-  TGetCourseResponse,
+  TGetCourseByIdResponse,
   api,
   formatDate,
-  getAccessToken,
-  useGetCourseById,
+  useGetCourse,
 } from "@/lib";
 
 export const CourseDetail: FC = (): ReactElement => {
-  const [courses, setCourses] = useState<TCourseItems[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [course, setCourse] = useState<TCourseItems>({
+    author: "",
+    created_at: "",
+    description: "",
+    id: 0,
+    media_file: "",
+    title: "",
+    user_id: 0,
+    views: 0,
+  });
 
   const id = useParams();
 
-  const { data, refetch } = useGetCourseById(id?.id);
+  const { data: getAllCourses, isFetching } = useGetCourse();
 
-  const navigate = useNavigate();
-
-  const getCourse = async () => {
-    const { data } = await api.get<TGetCourseResponse>("/courses");
-    setCourses(data?.data);
+  const getCourseById = async () => {
+    try {
+      setLoading(true);
+      setProgress(30);
+      const { data } = await api.get<TGetCourseByIdResponse>(
+        `/courses/${id.id}`,
+      );
+      setProgress(50);
+      setCourse(data?.data);
+      setProgress(70);
+    } catch (error) {
+      setCourse({
+        author: "",
+        created_at: "",
+        description: "",
+        id: 0,
+        media_file: "",
+        title: "",
+        user_id: 0,
+        views: 0,
+      });
+    } finally {
+      setProgress(100);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    getCourse();
-  }, []);
+    getCourseById();
+  }, [id.id]);
 
-  useEffect(() => {
-    refetch();
-  }, [refetch, id.id]);
+  if (id.id === course.id.toString()) {
+    window.scrollTo(0, 0);
+  }
 
   return (
     <main className="flex flex-col overflow-x-visible font-inter">
       <Navbar className="bg-white" />
 
+      {/* Video */}
       <section className="container mt-24 flex min-h-[400px] flex-wrap justify-between">
         <div className="flex w-full flex-col gap-1 lg:w-[70%]">
-          <div className="h-[200px] md:h-[400px]">
-            <video
-              controls
-              onContextMenu={(e) => e.preventDefault()}
-              controlsList="nodownload"
-              className="h-full w-full rounded-md object-fill"
-              preload="metadata"
-            >
-              {data?.data && <source src={data?.data.media_file} />}
-            </video>
-          </div>
-          <h1 className="text-[1rem] font-black text-[#1E212B] md:text-[1.7rem] lg:text-[2rem]">
-            {data?.data.title}
+          {loading ? (
+            <Skeleton className="h-[200px] bg-slate-500 md:h-[400px]" />
+          ) : (
+            <div className="h-[200px] md:h-[400px]">
+              <video
+                controls
+                onContextMenu={(e) => e.preventDefault()}
+                controlsList="nodownload"
+                className="h-full w-full rounded-md"
+                preload="metadata"
+              >
+                {course?.media_file && <source src={course?.media_file} />}
+              </video>
+            </div>
+          )}
+
+          <h1 className="break-words text-[1rem] font-black text-[#1E212B] md:text-[1.7rem] lg:text-[2rem]">
+            {course?.title}
           </h1>
           <div className="flex items-center gap-1">
             <UserRound className="p-1" />
             <p className="text-sm">
-              {`${data?.data.author} ${formatDate(data?.data.created_at as string)}`}
+              {`${course?.author} ${formatDate(course?.created_at as string)} ${
+                course?.views === 0
+                  ? "(Belum ditonton)"
+                  : `(${course?.views}x ditonton)`
+              }`}
             </p>
           </div>
 
-          <div className="mt-3 whitespace-pre-wrap text-font-black-2">
-            {data?.data.description}
+          <div className="mt-3 whitespace-pre-wrap break-words text-font-black-2">
+            {course?.description}
           </div>
         </div>
 
+        {/* Course List */}
         <div className="mt-20 flex w-full flex-wrap gap-7 lg:mt-0 lg:w-[25%] lg:gap-10">
-          {courses.slice(0, 3).map((course, index) => (
-            <section
-              className="flex w-full flex-col rounded-md bg-light-2 p-3 py-4 shadow-lg hover:cursor-pointer hover:bg-emerald-100 md:w-[30%] lg:w-full"
-              onClick={() => {
-                navigate(`/courses/${course.id}`);
-              }}
-              key={index}
-            >
-              <section className="flex flex-col py-2">
-                <video
-                  controls
-                  onContextMenu={(e) => e.preventDefault()}
-                  controlsList="nodownload"
-                  className="h-full w-full rounded-md object-fill"
-                  preload="metadata"
-                >
-                  <source src={course.media_file} />
-                </video>
-                <section className="flex items-center gap-1">
-                  <UserRound className="p-1" />
-                  <p className="text-sm">{course.author}</p>
-                </section>
-                <h5 className="text-[#707075]">
-                  Posted - {formatDate(course.created_at)}
-                </h5>
-              </section>
-              <section className="flex flex-col gap-2 pt-2">
-                <h3 className="text-lg font-bold text-font-black-1 md:text-base">
-                  {course.title}
-                </h3>
-                <div className="whitespace-pre-wrap">
-                  {course.description.substring(0, 100)}...
-                </div>
-              </section>
-            </section>
-          ))}
+          <h1 className="flex text-lg font-bold md:hidden">List courses</h1>
+          {isFetching ? (
+            <Fragment>
+              <LoadingCourseCard className="w-full md:w-[45%] lg:w-full" />
+              <LoadingCourseCard className="w-full md:w-[45%] lg:w-full" />
+              <LoadingCourseCard className="w-full md:w-[45%] lg:w-full" />
+            </Fragment>
+          ) : (
+            getAllCourses?.data
+              .sort(() => Math.random() - 0.5)
+              .slice(0, 3)
+              .map((course, index) => (
+                <CourseCard
+                  key={index}
+                  author={course.author}
+                  created_at={course.created_at}
+                  description={course.description}
+                  href={course.id}
+                  title={course.title}
+                  video={course.media_file}
+                  views={course.views}
+                  className="w-full md:w-[45%] lg:w-full"
+                />
+              ))
+          )}
         </div>
       </section>
 
-      <section className="flex min-h-[200px] flex-col justify-end gap-5 bg-white pt-20 md:min-h-[400px] md:pt-0 lg:pt-56">
-        <div className="flex h-[250px] bg-[url('/backgrounds/green.png')] bg-cover lg:h-[300px]">
-          <div className="container flex">
-            <div className="flex w-full flex-col justify-center gap-3 md:w-1/2">
-              <h3 className="text-base font-bold text-font-black-3 md:text-lg lg:text-2xl">
-                Dapatkan konsultasi kesehatan yang terpercaya dengan tim ahli
-                medis kami, siap membantu Anda menemukan solusi terbaik untuk
-                kesehatan Anda.
-              </h3>
-              <div>
-                <Button
-                  onClick={() =>
-                    getAccessToken() ? navigate("/courses") : navigate("/login")
-                  }
-                >
-                  Konsultasi Sekarang
-                </Button>
-              </div>
-            </div>
-            <div className="hidden w-1/2 items-center justify-center md:flex">
-              <img
-                src="/illustrations/doctor.png"
-                alt="doctor"
-                className="relative scale-90 md:bottom-[12%] lg:bottom-[21%] xl:bottom-[27.5%]"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Consultant */}
+      <Consultant className="bg-white pt-32 lg:pt-64" />
 
       <Footer className="z-10" />
+
+      <LoadingBar
+        color="#10b981"
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+      />
     </main>
   );
 };

@@ -1,5 +1,6 @@
 import { FC, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
+import { twMerge } from "tailwind-merge";
 import { UserRound } from "lucide-react";
 import { Skeleton } from "..";
 import { formatDate } from "@/lib";
@@ -13,6 +14,12 @@ interface CourseCardProps {
   description: string;
   views: number;
   href: string | number;
+  className?: string;
+}
+
+interface CourseCardLoadingProps {
+  key?: number;
+  className?: string;
 }
 
 export const CourseCard: FC<CourseCardProps> = ({ ...props }): ReactElement => {
@@ -20,7 +27,10 @@ export const CourseCard: FC<CourseCardProps> = ({ ...props }): ReactElement => {
 
   return (
     <section
-      className="group flex w-full flex-col rounded-md bg-light-2 p-3 py-3 shadow-lg hover:cursor-pointer hover:bg-emerald-100 md:w-[29.5%]"
+      className={twMerge(
+        "group flex w-full flex-col rounded-md border bg-light-2 p-3 py-3 shadow-lg hover:cursor-pointer hover:border-emerald-300 hover:bg-emerald-100 md:w-[29.5%]",
+        props.className,
+      )}
       onClick={() => {
         navigate(`/courses/${props.href}`);
       }}
@@ -59,9 +69,20 @@ export const CourseCard: FC<CourseCardProps> = ({ ...props }): ReactElement => {
   );
 };
 
-export const LoadingCourseCard: FC = (): ReactElement => {
+export const LoadingCourseCard: FC<CourseCardLoadingProps> = ({
+  className,
+  key,
+}): ReactElement => {
   return (
-    <section className="flex min-h-[300px] w-full flex-col justify-between md:w-[30%]">
+    <section
+      key={key}
+      className={
+        (twMerge(
+          "flex min-h-[300px] w-full flex-col justify-between md:w-[30%]",
+        ),
+        className)
+      }
+    >
       <section className="flex flex-col pt-1">
         <Skeleton className="h-[200px] w-full rounded-md bg-slate-500 md:h-[150px] xl:h-[250px]" />
         <section className="flex items-center gap-1 py-1">
