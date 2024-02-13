@@ -1,8 +1,13 @@
 import { FC, Fragment, ReactElement, useEffect, useState } from "react";
 import { LoadingNewsCard, NewsCard } from "..";
 import { TGetNewsResponse, TNewsItems, api } from "@/lib";
+import { twMerge } from "tailwind-merge";
 
-export const TrendNews: FC = (): ReactElement => {
+interface TrendNewsProps {
+  className?: string;
+}
+
+export const TrendNews: FC<TrendNewsProps> = ({ className }): ReactElement => {
   const [news, setNews] = useState<TNewsItems[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +28,12 @@ export const TrendNews: FC = (): ReactElement => {
   }, []);
 
   return (
-    <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-light-2 pt-10 md:gap-0 md:pt-0">
+    <section
+      className={twMerge(
+        "flex min-h-[600px] flex-col justify-evenly gap-5 bg-light-2 pt-10 md:gap-0 md:pt-0",
+        className,
+      )}
+    >
       <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
       <h1 className="container text-[2rem] font-bold text-font-black-1">
         News Trend

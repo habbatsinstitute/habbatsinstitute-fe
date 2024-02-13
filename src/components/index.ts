@@ -1,3 +1,4 @@
+export * from "./chatbot";
 export * from "./consultant";
 export * from "./course-card";
 export * from "./data-table";

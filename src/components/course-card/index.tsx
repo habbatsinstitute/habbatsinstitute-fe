@@ -31,7 +31,7 @@ export const CourseCard: FC<CourseCardProps> = ({ ...props }): ReactElement => {
           controls
           onContextMenu={(e) => e.preventDefault()}
           controlsList="nodownload"
-          className="rounded-mdl max-h-[200px] w-full"
+          className="h-[200px] w-full rounded-md md:h-[170px] lg:h-[200px]"
           preload="metadata"
         >
           <source src={props.video} />
@@ -40,8 +40,13 @@ export const CourseCard: FC<CourseCardProps> = ({ ...props }): ReactElement => {
           <UserRound className="p-1" />
           <p className="text-sm">{props.author}</p>
         </section>
-        <h5 className="text-[#707075]">
-          Posted - {formatDate(props.created_at)}
+        <h5 className="text-xs text-[#707075]">
+          Posted - {formatDate(props.created_at)}{" "}
+        </h5>
+        <h5 className="text-xs text-[#707075]">
+          {props.views === 0
+            ? "(Belum ditonton)"
+            : `(${props.views}x ditonton)`}
         </h5>
       </section>
       <section className="flex flex-col gap-2 pt-2">
@@ -66,9 +71,7 @@ export const LoadingCourseCard: FC = (): ReactElement => {
         <h5 className="text-[#707075]">
           <Skeleton className="h-[15px] w-[100px] bg-slate-500" />
         </h5>
-      </section>
-      <section className="flex flex-col gap-2 pt-2">
-        <Skeleton className="h-[30px] w-4/5 bg-slate-500" />
+        <Skeleton className="mt-1 h-[30px] w-4/5 bg-slate-500" />
       </section>
     </section>
   );
