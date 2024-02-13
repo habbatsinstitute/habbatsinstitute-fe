@@ -1,5 +1,5 @@
 import { FC, Fragment, ReactElement, useEffect, useState } from "react";
-import { CourseCard, LoadingCourseCard } from "..";
+import { CourseCard, LoadingNewsCard } from "..";
 import { TCourseItems, TGetCourseResponse, api } from "@/lib";
 
 export const TrendCourse: FC = (): ReactElement => {
@@ -31,9 +31,9 @@ export const TrendCourse: FC = (): ReactElement => {
       <section className="container flex flex-wrap gap-10 md:gap-8 xl:gap-14">
         {loading ? (
           <Fragment>
-            <LoadingCourseCard />
-            <LoadingCourseCard />
-            <LoadingCourseCard />
+            <LoadingNewsCard />
+            <LoadingNewsCard />
+            <LoadingNewsCard />
           </Fragment>
         ) : course.length === 0 ? (
           <div className="flex min-h-[400px] w-full flex-col items-center justify-center">

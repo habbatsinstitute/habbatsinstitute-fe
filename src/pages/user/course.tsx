@@ -6,7 +6,7 @@ import {
   Consultant,
   CourseCard,
   Footer,
-  LoadingCourseCard,
+  LoadingNewsCard,
   Navbar,
   Pagination,
   PaginationContent,
@@ -149,9 +149,9 @@ export const Course: FC = (): ReactElement => {
         <section className="container flex flex-wrap gap-10 md:gap-8 xl:gap-14">
           {loading ? (
             <Fragment>
-              <LoadingCourseCard />
-              <LoadingCourseCard />
-              <LoadingCourseCard />
+              <LoadingNewsCard />
+              <LoadingNewsCard />
+              <LoadingNewsCard />
             </Fragment>
           ) : courses.length === 0 ? (
             <div className="flex min-h-[400px] w-full flex-col items-center justify-center">
