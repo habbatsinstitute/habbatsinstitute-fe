@@ -1,8 +1,8 @@
-import { FC, ReactElement, useEffect, useState } from "react";
-import { NewsCard } from "..";
+import { FC, Fragment, ReactElement, useEffect, useState } from "react";
+import { LoadingNewsCard, NewsCard } from "..";
 import { TGetNewsResponse, TNewsItems, api } from "@/lib";
 
-export const Trend: FC = (): ReactElement => {
+export const TrendNews: FC = (): ReactElement => {
   const [news, setNews] = useState<TNewsItems[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -10,7 +10,7 @@ export const Trend: FC = (): ReactElement => {
     try {
       setLoading(true);
       const { data } = await api.get<TGetNewsResponse>("/news");
-      setNews(data.data);
+      setNews(data?.data);
     } catch (error) {
       setNews([]);
     } finally {
@@ -29,7 +29,13 @@ export const Trend: FC = (): ReactElement => {
         News Trend
       </h1>
       <section className="container flex flex-wrap gap-10 md:gap-8 xl:gap-14">
-        {news.length === 0 ? (
+        {loading ? (
+          <Fragment>
+            <LoadingNewsCard />
+            <LoadingNewsCard />
+            <LoadingNewsCard />
+          </Fragment>
+        ) : news.length === 0 ? (
           <div className="flex min-h-[400px] w-full flex-col items-center justify-center">
             <img
               src="/illustrations/news-not-found.png"
@@ -51,7 +57,6 @@ export const Trend: FC = (): ReactElement => {
                 description={item.description}
                 views={item.views}
                 href={item.id}
-                loading={loading}
               />
             ))
         )}

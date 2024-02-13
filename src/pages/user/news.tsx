@@ -12,6 +12,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
+  TrendNews,
 } from "@/components";
 import {
   TGetNewsResponse,
@@ -86,6 +87,7 @@ export const News: FC = (): ReactElement => {
         }
       />
 
+      {/* Category */}
       <section className="mt-32 flex flex-col justify-evenly gap-10 pb-10">
         <div className="container mt-3 flex flex-row-reverse flex-wrap-reverse justify-between gap-10 md:mt-0 md:flex-wrap md:gap-0">
           <div className="flex w-full flex-col justify-evenly gap-5 md:w-[45%] md:gap-3">
@@ -126,54 +128,8 @@ export const News: FC = (): ReactElement => {
         </div>
       </section>
 
-      {news.length > 0 && (
-        <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-10 md:gap-0 md:pt-0">
-          <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
-          <h1 className="container text-[2rem] font-bold text-font-black-1">
-            News Trend
-          </h1>
-          <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
-            {news.slice(0, 3).map((trend, index) => (
-              <section
-                className="flex min-h-[400px] w-full flex-col md:w-[29.5%]"
-                key={index}
-              >
-                <section className="flex flex-col pt-1">
-                  <img
-                    src={trend.images}
-                    alt="trend"
-                    className="h-[250px] w-full rounded-md object-cover md:h-[150px] xl:h-[250px]"
-                  />
-                  <section className="flex items-center gap-1">
-                    <img src="/icons/folder.png" alt="folder" />
-                    <p>{trend.category}</p>
-                  </section>
-                  <h5 className="text-[#707075]">
-                    Posted - {formatDate(trend.created_at)}
-                  </h5>
-                </section>
-                <section className="flex flex-col gap-2 pt-2">
-                  <h3 className="breaks-words text-base font-bold text-font-black-1">
-                    {trend.title}
-                  </h3>
-                  <p className="break-words text-sm">
-                    {trend.description.substring(0, 100)}...
-                  </p>
-                  <div className="pt-1 md:pt-0">
-                    <Button
-                      onClick={() => navigate(`/news/${trend.id}`)}
-                      className="flex items-center justify-center gap-2 bg-bright-2 font-bold text-font-black-3 hover:bg-green-400"
-                    >
-                      Lebih lengkap
-                      <FaArrowRightLong className="pt-1 text-[#1E212B]" />
-                    </Button>
-                  </div>
-                </section>
-              </section>
-            ))}
-          </section>
-        </section>
-      )}
+      {/* Trending News */}
+      <TrendNews />
 
       {news.length && (
         <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-10">

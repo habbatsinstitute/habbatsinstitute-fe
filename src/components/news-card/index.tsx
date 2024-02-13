@@ -13,36 +13,12 @@ interface NewsCardProps {
   description: string;
   views: number;
   href: string | number;
-  loading: boolean;
 }
 
 export const NewsCard: FC<NewsCardProps> = ({ ...props }): ReactElement => {
   const navigate = useNavigate();
 
-  return props.loading ? (
-    <section
-      className="flex min-h-[300px] w-full flex-col justify-between md:w-[30%]"
-      key={props.key}
-    >
-      <section className="flex flex-col pt-1">
-        <Skeleton className="h-[250px] w-full rounded-md bg-slate-500 md:h-[150px] xl:h-[250px]" />
-        <section className="flex items-center gap-1 py-1">
-          <Skeleton className="h-[15px] w-[70px] bg-slate-500" />
-          <Skeleton className="h-[15px] w-[100px] bg-slate-500" />
-        </section>
-        <h5 className="text-[#707075]">
-          <Skeleton className="h-[15px] w-[150px] bg-slate-500" />
-        </h5>
-      </section>
-      <section className="flex flex-col gap-2 pt-2">
-        <Skeleton className="h-[30px] w-full bg-slate-500" />
-        <Skeleton className="h-[35px] w-full bg-slate-500" />
-        <div className="pt-1 md:pt-0">
-          <Skeleton className="h-[30px] w-[100px] bg-slate-500" />
-        </div>
-      </section>
-    </section>
-  ) : (
+  return (
     <section
       className="flex min-h-[300px] w-full flex-col justify-between md:w-[30%]"
       key={props.key}
@@ -75,6 +51,30 @@ export const NewsCard: FC<NewsCardProps> = ({ ...props }): ReactElement => {
             Lebih lengkap
             <FaArrowRightLong className="pt-1 text-[#1E212B]" />
           </Button>
+        </div>
+      </section>
+    </section>
+  );
+};
+
+export const LoadingNewsCard: FC = (): ReactElement => {
+  return (
+    <section className="flex min-h-[300px] w-full flex-col justify-between md:w-[30%]">
+      <section className="flex flex-col pt-1">
+        <Skeleton className="h-[250px] w-full rounded-md bg-slate-500 md:h-[150px] xl:h-[250px]" />
+        <section className="flex items-center gap-1 py-1">
+          <Skeleton className="h-[15px] w-[70px] bg-slate-500" />
+          <Skeleton className="h-[15px] w-[100px] bg-slate-500" />
+        </section>
+        <h5 className="text-[#707075]">
+          <Skeleton className="h-[15px] w-[150px] bg-slate-500" />
+        </h5>
+      </section>
+      <section className="flex flex-col gap-2 pt-2">
+        <Skeleton className="h-[30px] w-full bg-slate-500" />
+        <Skeleton className="h-[35px] w-full bg-slate-500" />
+        <div className="pt-1 md:pt-0">
+          <Skeleton className="h-[30px] w-[100px] bg-slate-500" />
         </div>
       </section>
     </section>

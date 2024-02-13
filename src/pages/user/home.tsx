@@ -4,7 +4,15 @@ import { motion } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
 import { LuPlay, LuSearch, LuUser2 } from "react-icons/lu";
 import { BiNews } from "react-icons/bi";
-import { Button, Footer, Input, Navbar, Skeleton, Trend } from "@/components";
+import {
+  Button,
+  Consultant,
+  Footer,
+  Input,
+  Navbar,
+  Skeleton,
+  TrendNews,
+} from "@/components";
 import {
   TCourseItems,
   TGetCourseResponse,
@@ -195,7 +203,7 @@ export const Home: FC = (): ReactElement => {
                 <div className="container flex items-center gap-2">
                   <LuUser2 className="text-bright-1" />
                   <p className="font-black-2 break-words text-sm md:text-base">
-                    {`${course.author} ${formatDate(course.created_at)}`}
+                    {`${course.author} ${formatDate(course.created_at)} ${course.views === 0 ? "(Belum ditonton)" : `(${course.views}x ditonton)`}`}
                   </p>
                 </div>
                 <div className="container flex w-full justify-end">
@@ -245,7 +253,7 @@ export const Home: FC = (): ReactElement => {
       </section>
 
       {/* News Trend */}
-      <Trend />
+      <TrendNews />
 
       {/* Category */}
       <section className="flex min-h-[400px] flex-col justify-evenly gap-5 bg-light-2 py-10 md:gap-0 md:py-0">
@@ -296,35 +304,7 @@ export const Home: FC = (): ReactElement => {
       </section>
 
       {/* Consultant */}
-      <section className="flex min-h-[200px] flex-col justify-end gap-5 bg-light-2 md:min-h-[400px]">
-        <div className="flex h-[250px] bg-[url('/backgrounds/green.png')] bg-cover lg:h-[300px]">
-          <div className="container flex">
-            <div className="flex w-full flex-col justify-center gap-3 md:w-1/2">
-              <h3 className="text-base font-bold text-font-black-3 md:text-lg lg:text-2xl">
-                Dapatkan konsultasi kesehatan yang terpercaya dengan tim ahli
-                medis kami, siap membantu Anda menemukan solusi terbaik untuk
-                kesehatan Anda.
-              </h3>
-              <div>
-                <Button
-                  onClick={() =>
-                    getAccessToken() ? navigate("/courses") : navigate("/login")
-                  }
-                >
-                  Konsultasi Sekarang
-                </Button>
-              </div>
-            </div>
-            <div className="hidden w-1/2 items-center justify-center md:flex">
-              <img
-                src="/illustrations/doctor.png"
-                alt="doctor"
-                className="relative scale-90 md:bottom-[12%] lg:bottom-[21%] xl:bottom-[27.5%]"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      <Consultant />
 
       <Footer className="z-10" />
     </main>
