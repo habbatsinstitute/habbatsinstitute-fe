@@ -1,10 +1,11 @@
-import { FC, ReactElement, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { FaArrowRightLong } from "react-icons/fa6";
+import { FC, Fragment, ReactElement, useEffect, useState } from "react";
 import {
   Button,
+  Consultant,
   Footer,
+  LoadingNewsCard,
   Navbar,
+  NewsCard,
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -14,18 +15,12 @@ import {
   PaginationPrevious,
   TrendNews,
 } from "@/components";
-import {
-  TGetNewsResponse,
-  TNewsItems,
-  TPaging,
-  api,
-  formatDate,
-  getAccessToken,
-} from "@/lib";
+import { TGetNewsResponse, TNewsItems, TPaging, api } from "@/lib";
 
 export const News: FC = (): ReactElement => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [news, setNews] = useState<TNewsItems[]>([]);
+  const [loading, setLoading] = useState(false);
   const [paging, setPaging] = useState<TPaging>({
     previous_page: 0,
     current_page: 1,
@@ -40,6 +35,7 @@ export const News: FC = (): ReactElement => {
     pageSize: number = 9,
   ) => {
     try {
+      setLoading(true);
       const { data } = await api.get<TGetNewsResponse>("/news", {
         params: {
           page,
@@ -50,10 +46,10 @@ export const News: FC = (): ReactElement => {
       setPaging(data?.pagination);
     } catch (error) {
       setNews([]);
+    } finally {
+      setLoading(false);
     }
   };
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     getNews();
@@ -131,55 +127,39 @@ export const News: FC = (): ReactElement => {
       {/* Trending News */}
       <TrendNews />
 
-      {news.length && (
-        <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-10">
-          <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
-          <h1 className="container text-[2rem] font-bold text-font-black-1">
-            All News
-          </h1>
-          <section className="container flex flex-wrap justify-between gap-10">
-            {news.map((trend, index) => (
-              <section
-                className="flex min-h-[400px] w-full flex-col md:w-[29.5%]"
-                key={index}
-              >
-                <section className="flex flex-col pt-1">
-                  <img
-                    src={trend.images}
-                    alt="trend"
-                    className="h-[250px] w-full rounded-md object-cover md:h-[150px] xl:h-[250px]"
-                  />
-                  <section className="flex items-center gap-1">
-                    <img src="/icons/folder.png" alt="folder" />
-                    <p>{trend.category}</p>
-                  </section>
-                  <h5 className="text-[#707075]">
-                    Posted - {formatDate(trend.created_at)}
-                  </h5>
-                </section>
-                <section className="flex flex-col gap-2 pt-2">
-                  <h3 className="break-words text-base font-bold text-font-black-1">
-                    {trend.title}
-                  </h3>
-                  <p className="break-words text-sm">
-                    {trend.description.substring(0, 100)}...
-                  </p>
-                  <div className="pt-1 md:pt-0">
-                    <Button
-                      onClick={() => navigate(`/news/${trend.id}`)}
-                      className="flex items-center justify-center gap-2 bg-bright-2 font-bold text-font-black-3 hover:bg-green-400"
-                    >
-                      Lebih lengkap
-                      <FaArrowRightLong className="pt-1 text-[#1E212B]" />
-                    </Button>
-                  </div>
-                </section>
-              </section>
-            ))}
-          </section>
+      {/* All News */}
+      <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-white pt-10">
+        <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
+        <h1 className="container text-[2rem] font-bold text-font-black-1">
+          All News
+        </h1>
+        <section className="container flex flex-wrap justify-between gap-10">
+          {loading ? (
+            <Fragment>
+              <LoadingNewsCard />
+              <LoadingNewsCard />
+              <LoadingNewsCard />
+            </Fragment>
+          ) : news.length === 0 ? (
+            <div className="flex min-h-[400px] w-full flex-col items-center justify-center">
+              <img
+                src="/illustrations/news-not-found.png"
+                alt="news not found"
+                className="h-[300px]"
+              />
+              <p>Belum ada news</p>
+            </div>
+          ) : (
+            news
+              .slice(0, 9)
+              .map((item, index) => (
+                <NewsCard {...item} href={item.id} key={index} />
+              ))
+          )}
         </section>
-      )}
+      </section>
 
+      {/* Pagination */}
       {paging.total_data > 9 && (
         <section className="flex w-full justify-end bg-white py-10">
           <Pagination>
@@ -282,35 +262,8 @@ export const News: FC = (): ReactElement => {
         </section>
       )}
 
-      <section className="flex min-h-[200px] flex-col justify-end gap-5 bg-white pt-20 md:min-h-[400px] md:pt-0 lg:pt-64">
-        <div className="flex h-[250px] bg-[url('/backgrounds/green.png')] bg-cover lg:h-[300px]">
-          <div className="container flex">
-            <div className="flex w-full flex-col justify-center gap-3 md:w-1/2">
-              <h3 className="text-base font-bold text-font-black-3 md:text-lg lg:text-2xl">
-                Dapatkan konsultasi kesehatan yang terpercaya dengan tim ahli
-                medis kami, siap membantu Anda menemukan solusi terbaik untuk
-                kesehatan Anda.
-              </h3>
-              <div>
-                <Button
-                  onClick={() =>
-                    getAccessToken() ? navigate("/courses") : navigate("/login")
-                  }
-                >
-                  Konsultasi Sekarang
-                </Button>
-              </div>
-            </div>
-            <div className="hidden w-1/2 items-center justify-center md:flex">
-              <img
-                src="/illustrations/doctor.png"
-                alt="doctor"
-                className="relative scale-90 md:bottom-[12%] lg:bottom-[21%] xl:bottom-[27.5%]"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Consultant */}
+      <Consultant className="bg-white pt-32 lg:pt-64" />
 
       <Footer className="z-10" />
     </main>

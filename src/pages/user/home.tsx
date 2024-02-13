@@ -304,7 +304,7 @@ export const Home: FC = (): ReactElement => {
       </section>
 
       {/* Consultant */}
-      <Consultant />
+      <Consultant className="md:pt-32" />
 
       <Footer className="z-10" />
     </main>
