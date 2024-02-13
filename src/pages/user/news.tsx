@@ -133,7 +133,7 @@ export const News: FC = (): ReactElement => {
         <h1 className="container text-[2rem] font-bold text-font-black-1">
           All News
         </h1>
-        <section className="container flex flex-wrap justify-between gap-10">
+        <section className="container flex flex-wrap gap-10 md:gap-8 xl:gap-14">
           {loading ? (
             <Fragment>
               <LoadingNewsCard />
