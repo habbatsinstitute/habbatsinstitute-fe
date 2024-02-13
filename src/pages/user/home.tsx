@@ -1,11 +1,11 @@
-import { FC, ReactElement, useEffect, useState } from "react";
+import { FC, Fragment, ReactElement, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
 import { LuPlay, LuSearch, LuUser2 } from "react-icons/lu";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { BiNews } from "react-icons/bi";
-import { Button, Footer, Input, Navbar } from "@/components";
+import { Button, Footer, Input, Navbar, Skeleton } from "@/components";
 import {
   TCourseItems,
   TGetCourseResponse,
@@ -19,6 +19,7 @@ import {
 export const Home: FC = (): ReactElement => {
   const [news, setNews] = useState<TNewsItems[]>([]);
   const [courses, setCourses] = useState<TCourseItems[]>([]);
+  const [loading, setLoading] = useState(false);
   const [isLoggin] = useState(getAccessToken() ? true : false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [search, setSearch] = useState<string>("");
@@ -32,8 +33,15 @@ export const Home: FC = (): ReactElement => {
   };
 
   const getCourses = async () => {
-    const { data } = await api.get<TGetCourseResponse>("/courses");
-    setCourses(data?.data);
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetCourseResponse>("/courses");
+      setCourses(data?.data);
+    } catch (error) {
+      setCourses([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -124,29 +132,67 @@ export const Home: FC = (): ReactElement => {
       </section>
 
       {/* Course Preview */}
-      {courses.length > 0 && (
-        <section className="z-10 flex min-h-[700px] flex-col justify-evenly gap-10 bg-dark-2 py-20 xl:gap-0 xl:py-0">
-          <div className="container h-[2px] w-4/5 bg-dark-3 md:w-[95%]" />
-          <section className="container mt-2 flex items-center justify-center xl:justify-between">
-            <div className="hidden h-[90px] w-[200px] place-items-center rounded-md bg-dark-3 text-font-white xl:grid">
-              <h3>Course for You</h3>
+      <section className="z-10 flex min-h-[700px] flex-col justify-evenly gap-10 bg-dark-2 py-20 xl:gap-0 xl:py-0">
+        <div className="container h-[2px] w-4/5 bg-dark-3 md:w-[95%]" />
+        <section className="container mt-2 flex items-center justify-center xl:justify-between">
+          <div className="hidden h-[90px] w-[200px] place-items-center rounded-md bg-dark-3 text-font-white xl:grid">
+            <h3>Course for You</h3>
+          </div>
+          <h1 className="w-11/12 font-bold text-font-white md:w-4/5 lg:text-[1.3rem]">
+            Dapatkan akses ke informasi terkini tentang pengembangan{" "}
+            <span className="text-bright-1">obat-obatan herbal</span>,{" "}
+            <span className="text-bright-1">teknologi ekstraksi terbaru</span>,
+            dan <span className="text-bright-1">penelitian-penelitian</span>{" "}
+            terkait yang sedang berlangsung.{" "}
+          </h1>
+        </section>
+        <section className="container flex flex-wrap justify-center gap-10 xl:justify-between xl:gap-0">
+          {loading ? (
+            <Fragment>
+              <div className="flex h-[400px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]">
+                <Skeleton className="h-[55%] w-[90%] bg-slate-500" />
+                <div className="container">
+                  <Skeleton className="h-5 w-[120px] bg-slate-500" />
+                </div>
+                <div className="container flex items-center gap-2">
+                  <Skeleton className="h-5 w-[70px] bg-slate-500" />
+                </div>
+                <div className="container flex w-full justify-end">
+                  <Skeleton className="h-10 w-[150px] bg-slate-500" />
+                </div>
+              </div>
+              <div className="flex h-[400px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]">
+                <Skeleton className="h-[55%] w-[90%] bg-slate-500" />
+                <div className="container">
+                  <Skeleton className="h-5 w-[120px] bg-slate-500" />
+                </div>
+                <div className="container flex items-center gap-2">
+                  <Skeleton className="h-5 w-[70px] bg-slate-500" />
+                </div>
+                <div className="container flex w-full justify-end">
+                  <Skeleton className="h-10 w-[150px] bg-slate-500" />
+                </div>
+              </div>
+            </Fragment>
+          ) : courses.length === 0 ? (
+            <div className="flex h-[400px] w-full flex-col items-center justify-center gap-3">
+              <img
+                src="/illustrations/course-not-found.png"
+                alt="course not found"
+                className="w-[300px]"
+              />
+              <p className="text-font-white">
+                Kelas kursus belum tersedia, cek kembali.
+              </p>
             </div>
-            <h1 className="w-11/12 font-bold text-font-white md:w-4/5 lg:text-[1.3rem]">
-              Dapatkan akses ke informasi terkini tentang pengembangan{" "}
-              <span className="text-bright-1">obat-obatan herbal</span>,{" "}
-              <span className="text-bright-1">teknologi ekstraksi terbaru</span>
-              , dan <span className="text-bright-1">penelitian-penelitian</span>{" "}
-              terkait yang sedang berlangsung.{" "}
-            </h1>
-          </section>
-          <section className="container flex flex-wrap justify-center gap-10 xl:justify-between xl:gap-0">
-            {courses.slice(0, 2).map((course, index) => (
+          ) : (
+            courses.slice(0, 2).map((course, index) => (
               <div
                 key={index}
-                className="flex h-[500px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:h-[400px] md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]"
+                className="flex h-[400px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]"
               >
                 <video
-                  className="h-[60%] w-[83%] bg-slate-700 md:w-[90%]"
+                  className="h-[55%] w-[90%] bg-slate-700"
                   controls={isLoggin}
                   onContextMenu={(e) => e.preventDefault()}
                   controlsList="nodownload"
@@ -155,21 +201,19 @@ export const Home: FC = (): ReactElement => {
                   <source src={course.media_file} />
                 </video>
                 <div className="container">
-                  <h1 className="text-base font-bold text-font-white md:text-lg">
+                  <h1 className="line-clamp-2 break-words text-base font-bold text-font-white md:text-lg">
                     {course.title}
                   </h1>
                 </div>
                 <div className="container flex items-center gap-2">
                   <LuUser2 className="text-bright-1" />
-                  <p className="font-black-2 text-sm md:text-base">
+                  <p className="font-black-2 break-words text-sm md:text-base">
                     {`${course.author} ${formatDate(course.created_at)}`}
                   </p>
                 </div>
                 <div className="container flex w-full justify-end">
                   <Button
-                    onClick={() => {
-                      navigate(`/courses/${course.id}`);
-                    }}
+                    onClick={() => navigate(`/courses/${course.id}`)}
                     className="flex items-center gap-1 bg-bright-1 font-bold text-font-black-1 hover:bg-font-black-1 hover:text-white"
                   >
                     <LuPlay />
@@ -177,11 +221,12 @@ export const Home: FC = (): ReactElement => {
                   </Button>
                 </div>
               </div>
-            ))}
-          </section>
+            ))
+          )}
         </section>
-      )}
+      </section>
 
+      {/* About us */}
       <section className="flex min-h-[400px] flex-col justify-evenly gap-5 bg-white py-20">
         <div className="container">
           <img src="/images/about-us.png" alt="about us" />
@@ -212,6 +257,7 @@ export const Home: FC = (): ReactElement => {
         </div>
       </section>
 
+      {/* News Trend */}
       {news.length > 0 && (
         <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-light-2 md:gap-0">
           <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
@@ -261,6 +307,7 @@ export const Home: FC = (): ReactElement => {
         </section>
       )}
 
+      {/* Category */}
       <section className="flex min-h-[400px] flex-col justify-evenly gap-5 bg-light-2 py-10 md:gap-0 md:py-0">
         <div className="container h-[1px] w-4/5 bg-[rgb(54,55,60)] md:w-[95%]" />
         <div className="container mt-3 flex flex-wrap justify-between gap-10 md:mt-0 md:gap-0">
@@ -308,6 +355,7 @@ export const Home: FC = (): ReactElement => {
         </div>
       </section>
 
+      {/* Consultant */}
       <section className="flex min-h-[200px] flex-col justify-end gap-5 bg-light-2 md:min-h-[400px]">
         <div className="flex h-[250px] bg-[url('/backgrounds/green.png')] bg-cover lg:h-[300px]">
           <div className="container flex">
