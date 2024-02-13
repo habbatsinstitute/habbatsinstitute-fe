@@ -3,21 +3,17 @@ import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
 import { LuPlay, LuSearch, LuUser2 } from "react-icons/lu";
-import { FaArrowRightLong } from "react-icons/fa6";
 import { BiNews } from "react-icons/bi";
-import { Button, Footer, Input, Navbar, Skeleton } from "@/components";
+import { Button, Footer, Input, Navbar, Skeleton, Trend } from "@/components";
 import {
   TCourseItems,
   TGetCourseResponse,
-  TGetNewsResponse,
-  TNewsItems,
   api,
   formatDate,
   getAccessToken,
 } from "@/lib";
 
 export const Home: FC = (): ReactElement => {
-  const [news, setNews] = useState<TNewsItems[]>([]);
   const [courses, setCourses] = useState<TCourseItems[]>([]);
   const [loading, setLoading] = useState(false);
   const [isLoggin] = useState(getAccessToken() ? true : false);
@@ -26,11 +22,6 @@ export const Home: FC = (): ReactElement => {
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   const navigate = useNavigate();
-
-  const getNews = async () => {
-    const { data } = await api.get<TGetNewsResponse>("/news");
-    setNews(data?.data);
-  };
 
   const getCourses = async () => {
     try {
@@ -43,10 +34,6 @@ export const Home: FC = (): ReactElement => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    getNews();
-  }, []);
 
   useEffect(() => {
     getCourses();
@@ -258,54 +245,7 @@ export const Home: FC = (): ReactElement => {
       </section>
 
       {/* News Trend */}
-      {news.length > 0 && (
-        <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-light-2 md:gap-0">
-          <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
-          <h1 className="container text-[2rem] font-bold text-font-black-1">
-            News Trend
-          </h1>
-          <section className="container flex flex-wrap justify-between gap-10 md:gap-0">
-            {news.slice(0, 3).map((news, index) => (
-              <section
-                className="flex min-h-[400px] w-full flex-col justify-between md:w-[30%]"
-                key={index}
-              >
-                <section className="flex flex-col pt-1">
-                  <img
-                    src={news.images}
-                    alt="news"
-                    className="h-[250px] w-full rounded-md object-cover md:h-[150px] xl:h-[250px]"
-                  />
-                  <section className="flex items-center gap-1">
-                    <img src="/icons/folder.png" alt="folder" />
-                    <p>{news.category}</p>
-                  </section>
-                  <h5 className="text-[#707075]">
-                    Posted - {formatDate(news.created_at)}
-                  </h5>
-                </section>
-                <section className="flex flex-col gap-2 pt-2">
-                  <h3 className="text-base font-bold text-font-black-1">
-                    {news.title}
-                  </h3>
-                  <p className="text-sm">
-                    {news.description.substring(0, 100)}...
-                  </p>
-                  <div className="pt-1 md:pt-0">
-                    <Button
-                      onClick={() => navigate(`/news/${news.id}`)}
-                      className="flex items-center justify-center gap-2 bg-bright-2 font-bold text-font-black-3 hover:bg-green-400"
-                    >
-                      Lebih lengkap
-                      <FaArrowRightLong className="pt-1 text-[#1E212B]" />
-                    </Button>
-                  </div>
-                </section>
-              </section>
-            ))}
-          </section>
-        </section>
-      )}
+      <Trend />
 
       {/* Category */}
       <section className="flex min-h-[400px] flex-col justify-evenly gap-5 bg-light-2 py-10 md:gap-0 md:py-0">

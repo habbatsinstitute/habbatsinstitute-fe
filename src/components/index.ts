@@ -5,6 +5,7 @@ export * from "./layouts";
 export * from "./loading";
 export * from "./middleware";
 export * from "./navbar";
+export * from "./news-card";
 export * from "./providers";
 export * from "./sidebar";
 export * from "./trend";

@@ -1,65 +1,60 @@
-import { FC, ReactElement } from "react";
-import { FaArrowRightLong } from "react-icons/fa6";
-import { Button } from "..";
+import { FC, ReactElement, useEffect, useState } from "react";
+import { NewsCard } from "..";
+import { TGetNewsResponse, TNewsItems, api } from "@/lib";
 
 export const Trend: FC = (): ReactElement => {
-  const trends = [
-    {
-      title: "Si Kuning Kunyit Kaya Manfaat",
-      description:
-        "Kunyit telah dikenal untuk merawat kulit dan membantu menyembuhkan luka..",
-      image: "/images/turmeric.png",
-      label: "Tanaman Herbal",
-      posted: "17 jan 2024",
-    },
-    {
-      title: "Khasiat Kulit Manggis untuk Cegah Kanker, Benarkah?",
-      description: "Masyarakat Indonesia sudah tidak asing..",
-      image: "/images/mangosteen.png",
-      label: "Diet dan Nutrisi",
-      posted: "08 jan 2024",
-    },
-    {
-      title: "Isolat Senyawa Aktif Mannotriose Alternatif Pengobatan Kanker.",
-      description: "Tingkat keberhasilan pengobatan kanker..",
-      image: "/images/mannotriose.png",
-      label: "Teknologi Pengobatan",
-      posted: "02 jan 2024",
-    },
-  ];
+  const [news, setNews] = useState<TNewsItems[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const getNews = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetNewsResponse>("/news");
+      setNews(data.data);
+    } catch (error) {
+      setNews([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getNews();
+  }, []);
 
   return (
-    <section className="container flex h-[25%] w-full flex-col bg-white">
-      <hr className="h-[2px] w-full bg-[#36373C]" />
-      <h1 className="mt-7 text-[2rem] font-bold text-font-black-1">
+    <section className="flex min-h-[600px] flex-col justify-evenly gap-5 bg-light-2 pt-10 md:gap-0 md:pt-0">
+      <div className="container h-[1px] w-4/5 bg-[#36373C] md:w-[95%]" />
+      <h1 className="container text-[2rem] font-bold text-font-black-1">
         News Trend
       </h1>
-      <section className="mt-10 flex w-full justify-between gap-10">
-        {trends.map((trend, index) => (
-          <section className="flex h-[470px] w-[30%] flex-col" key={index}>
+      <section className="container flex flex-wrap gap-10 md:gap-8 xl:gap-14">
+        {news.length === 0 ? (
+          <div className="flex min-h-[400px] w-full flex-col items-center justify-center">
             <img
-              src={trend.image}
-              alt="trend"
-              className="rounded-md object-cover"
+              src="/illustrations/news-not-found.png"
+              alt="news not found"
+              className="h-[300px]"
             />
-            <section className="flex h-[65%] flex-col pt-1">
-              <section className="flex items-center gap-1">
-                <img src="/icons/folder.png" alt="folder" />
-                <p>{trend.label}</p>
-              </section>
-              <h5 className="text-[#707075]">Posted - {trend.posted}</h5>
-            </section>
-            <section className="flex h-[35%] flex-col gap-3">
-              <h3 className="text-lg font-bold text-font-black-1">
-                {trend.title}
-              </h3>
-              <p>{trend.description}</p>
-              <Button className="flex w-[35%] items-center justify-evenly bg-bright-2 font-bold text-font-black-3 hover:bg-green-400">
-                Lebih lengkap <FaArrowRightLong className="text-[#1E212B]" />
-              </Button>
-            </section>
-          </section>
-        ))}
+            <p>Belum ada trending news</p>
+          </div>
+        ) : (
+          news
+            .slice(0, 3)
+            .map((item, index) => (
+              <NewsCard
+                key={index}
+                images={item.images}
+                category={item.category}
+                created_at={item.created_at}
+                title={item.title}
+                description={item.description}
+                views={item.views}
+                href={item.id}
+                loading={loading}
+              />
+            ))
+        )}
       </section>
     </section>
   );

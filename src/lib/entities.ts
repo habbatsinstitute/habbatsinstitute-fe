@@ -46,6 +46,7 @@ export type TCourseItems = {
   title: string;
   description: string;
   author: string;
+  views: number;
   created_at: Date | string;
 };
 
@@ -110,6 +111,7 @@ export type TNewsItems = {
   images: string;
   title: string;
   description: string;
+  views: number;
   created_at: Date | string;
 };
 
