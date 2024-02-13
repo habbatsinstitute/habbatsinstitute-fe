@@ -49,7 +49,7 @@ export const NewsCard: FC<NewsCardProps> = ({ ...props }): ReactElement => {
             className="flex items-center justify-center gap-2 bg-bright-2 font-bold text-font-black-3 hover:bg-green-400"
           >
             Lebih lengkap
-            <FaArrowRightLong className="pt-1 text-[#1E212B]" />
+            <FaArrowRightLong className="text-[#1E212B]" />
           </Button>
         </div>
       </section>

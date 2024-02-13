@@ -136,6 +136,7 @@ export type TGetNewsByIdResponses = {
     images: string;
     title: string;
     description: string;
+    views: number;
     created_at: string;
   };
   message: string;
