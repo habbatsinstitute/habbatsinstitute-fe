@@ -34,18 +34,25 @@ import {
 } from "@/components";
 import {
   TGetAllUsersResponse,
+  TGetUserByIdResponse,
   TPaging,
   TUser,
   api,
   cn,
-  useGetUserById,
   useRemoveUser,
   useUpdateUser,
 } from "@/lib";
 
 export const DashboardUsersManage: FC = (): ReactElement => {
   const [users, setUsers] = useState<TUser[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [usersById, setUsersById] = useState<TUser>({
+    expiry_date: "",
+    id: 0,
+    username: "",
+    role_id: 0,
+  });
+  const [loadingUsers, setLoadingUsers] = useState<boolean>(false);
+  const [loadingUsersById, setLoadingUsersById] = useState<boolean>(false);
   const [date, setDate] = useState<Date>();
   const [form, setForm] = useState({
     username: "",
@@ -63,11 +70,6 @@ export const DashboardUsersManage: FC = (): ReactElement => {
 
   const { id } = useParams();
 
-  const {
-    data: getUserById,
-    refetch: refetchUserById,
-    isFetching: isFetchUserById,
-  } = useGetUserById(id);
   const { mutate: update, isPending: isPendingUpdate } = useUpdateUser(id);
   const { mutate: remove, isPending: isPendingRemove } = useRemoveUser();
 
@@ -78,7 +80,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
     pageSize: number = 5,
   ) => {
     try {
-      setLoading(true);
+      setLoadingUsers(true);
       const { data } = await api.get<TGetAllUsersResponse>("/users", {
         params: {
           page,
@@ -90,7 +92,24 @@ export const DashboardUsersManage: FC = (): ReactElement => {
     } catch (error) {
       setUsers([]);
     } finally {
-      setLoading(false);
+      setLoadingUsers(false);
+    }
+  };
+
+  const getUsersById = async () => {
+    try {
+      setLoadingUsersById(true);
+      const { data } = await api.get<TGetUserByIdResponse>(`/users/${id}`);
+      setUsersById(data?.data);
+    } catch (error) {
+      setUsersById({
+        expiry_date: "",
+        id: 0,
+        username: "",
+        role_id: 0,
+      });
+    } finally {
+      setLoadingUsersById(false);
     }
   };
 
@@ -99,14 +118,17 @@ export const DashboardUsersManage: FC = (): ReactElement => {
   }, []);
 
   useEffect(() => {
-    refetchUserById();
+    getUsersById();
+  }, [id]);
+
+  useEffect(() => {
     setForm({
-      username: getUserById?.data?.username as string,
+      username: usersById?.username,
       password: "",
       confirmation_password: "",
     });
-    setDate(getUserById?.data?.expiry_date as Date);
-  }, [setForm, getUserById?.data, id, refetchUserById]);
+    setDate(usersById.expiry_date as Date);
+  }, [usersById]);
 
   const handlePageChange = (page: number) => {
     getUsers(page);
@@ -127,7 +149,6 @@ export const DashboardUsersManage: FC = (): ReactElement => {
 
     update(formData, {
       onSuccess: () => {
-        getUsers();
         toast.success("Data user berhasil diupdate", {
           position: "top-center",
           autoClose: 1000,
@@ -177,9 +198,9 @@ export const DashboardUsersManage: FC = (): ReactElement => {
             onClick={() => {
               navigate(`/dashboard/users/manage/${cell.row.original.id}`);
             }}
-            disabled={isFetchUserById || isPendingUpdate || isPendingRemove}
+            disabled={loadingUsersById || isPendingUpdate || isPendingRemove}
           >
-            {isFetchUserById || isPendingUpdate || isPendingRemove ? (
+            {loadingUsersById || isPendingUpdate || isPendingRemove ? (
               <Loader2 className="w-4 animate-spin" />
             ) : (
               <Fragment>
@@ -225,7 +246,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
                   ? "border-red-400 placeholder:text-red-400"
                   : ""
               }
-              disabled={isFetchUserById}
+              disabled={loadingUsersById}
               onChange={(e) => {
                 setForm((prev) => ({
                   ...prev,
@@ -267,7 +288,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
                   password: e.target.value,
                 }));
               }}
-              disabled={isFetchUserById}
+              disabled={loadingUsersById}
             />
             {form.password.length >= 1 && form.password.length <= 8 && (
               <section className="w-full">
@@ -305,7 +326,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
                   confirmation_password: e.target.value,
                 }));
               }}
-              disabled={isFetchUserById}
+              disabled={loadingUsersById}
             />
             {form.confirmation_password.length >= 1 &&
               form.confirmation_password.length <= 8 && (
@@ -340,7 +361,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
-                  disabled={isFetchUserById}
+                  disabled={loadingUsersById}
                   className={cn(
                     "w-full justify-start text-left font-normal",
                     !date && "text-muted-foreground",
@@ -367,10 +388,10 @@ export const DashboardUsersManage: FC = (): ReactElement => {
             <Button
               size={"sm"}
               type="button"
-              disabled={isPendingUpdate || isPendingRemove || isFetchUserById}
+              disabled={isPendingUpdate || isPendingRemove || loadingUsersById}
               onClick={() => navigate("/dashboard/users")}
             >
-              {isFetchUserById || isPendingUpdate || isPendingRemove ? (
+              {loadingUsersById || isPendingUpdate || isPendingRemove ? (
                 <LuLoader2 className="w-14 animate-spin" />
               ) : (
                 "Cancel"
@@ -384,10 +405,10 @@ export const DashboardUsersManage: FC = (): ReactElement => {
                   className="flex gap-1"
                   type="button"
                   disabled={
-                    isPendingUpdate || isPendingRemove || isFetchUserById
+                    isPendingUpdate || isPendingRemove || loadingUsersById
                   }
                 >
-                  {isFetchUserById || isPendingUpdate || isPendingRemove ? (
+                  {loadingUsersById || isPendingUpdate || isPendingRemove ? (
                     <LuLoader2 className="w-14 animate-spin" />
                   ) : (
                     <Fragment>
@@ -407,9 +428,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
                   <AlertDialogDescription className="text-dark-3">
                     <div className="h-full w-[450px] break-words">
                       Anda akan menghapus data username{" "}
-                      <span className="font-bold">
-                        "{getUserById?.data.username}"
-                      </span>
+                      <span className="font-bold">"{usersById.username}"</span>
                     </div>
                   </AlertDialogDescription>
                 </AlertDialogHeader>
@@ -420,7 +439,6 @@ export const DashboardUsersManage: FC = (): ReactElement => {
                     onClick={() =>
                       remove(id, {
                         onSuccess: () => {
-                          getUsers();
                           toast.success("Data user berhasil dihapus", {
                             position: "top-center",
                             autoClose: 1000,
@@ -461,7 +479,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
               type="submit"
               className="gap-1 bg-bright-2 font-bold text-font-black-3 hover:bg-bright-1"
               disabled={
-                isFetchUserById ||
+                loadingUsersById ||
                 isPendingUpdate ||
                 isPendingRemove ||
                 !date ||
@@ -471,10 +489,10 @@ export const DashboardUsersManage: FC = (): ReactElement => {
                 form.password !== form.confirmation_password
               }
             >
-              {(isPendingRemove || isFetchUserById || isPendingUpdate) && (
+              {(isPendingRemove || loadingUsersById || isPendingUpdate) && (
                 <LuLoader2 className="mx-7 w-full animate-spin" />
               )}
-              {!isPendingRemove && !isFetchUserById && !isPendingUpdate && (
+              {!isPendingRemove && !loadingUsersById && !isPendingUpdate && (
                 <Fragment>
                   Save <LuSave className="text-lg" />
                 </Fragment>
@@ -484,9 +502,9 @@ export const DashboardUsersManage: FC = (): ReactElement => {
         </form>
 
         <section className="flex h-full w-full flex-col py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
-          <DataTable columns={columns} data={users} loading={loading} />
+          <DataTable columns={columns} data={users} loading={loadingUsers} />
 
-          {!loading && paging.total_data > 5 && (
+          {!loadingUsers && paging.total_data > 5 && (
             <section className="mt-3 flex w-full justify-end">
               <Pagination>
                 <PaginationContent className="flex-wrap">
