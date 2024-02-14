@@ -202,11 +202,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                         </h3>
                         <Avatar>
                           <AvatarImage
-                            src="https://github.com/shadcn.png"
-                            alt="@shadcn"
+                            src="https://www.reshot.com/preview-assets/icons/QPA7WZL42C/hoody-QPA7WZL42C.svg"
+                            alt="admin"
                           />
                           <AvatarFallback>
-                            <Skeleton className="h-10 w-10 rounded-full bg-slate-300" />
+                            <Skeleton className="h-10 w-10 rounded-full bg-emerald-200" />
                           </AvatarFallback>
                         </Avatar>
                       </section>
@@ -259,9 +259,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                     Hello, {data?.data.username}
                   </h3>
                   <img
-                    src="/icons/avatar.png"
+                    src="https://www.reshot.com/preview-assets/icons/QPA7WZL42C/hoody-QPA7WZL42C.svg"
                     alt="avatar"
-                    className="boder-black w-7 rounded-full border border-black p-1 md:w-10"
+                    className="w-7 rounded-full p-1 md:w-10"
                   />
                 </section>
               </PopoverTrigger>
@@ -303,9 +303,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                     Hello, {data?.data.username}
                   </h3>
                   <img
-                    src="/icons/avatar.png"
+                    src="https://www.reshot.com/preview-assets/icons/QPA7WZL42C/hoody-QPA7WZL42C.svg"
                     alt="avatar"
-                    className="boder-black w-7 rounded-full border border-black p-1 md:w-10"
+                    className="w-7 rounded-full p-1 md:w-10"
                   />
                 </section>
               </PopoverTrigger>

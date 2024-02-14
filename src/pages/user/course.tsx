@@ -285,7 +285,7 @@ export const Course: FC = (): ReactElement => {
       )}
 
       {/* Consultant */}
-      <Consultant className="bg-white pt-5 md:pt-28" />
+      <Consultant className="bg-white pt-5 md:pt-28 lg:pt-48" />
 
       {/* Trend News */}
       <TrendNews className="pb-14" />

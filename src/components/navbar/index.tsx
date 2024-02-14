@@ -270,7 +270,7 @@ export const Navbar: FC<{ className?: string }> = ({
                 "
                     >
                       {isLoading ? (
-                        <Skeleton className="h-7 w-24 bg-slate-300" />
+                        <Skeleton className="h-7 w-24 bg-emerald-200" />
                       ) : (
                         <h3 className="text-base font-normal ">
                           Hello, {data?.data.username.substring(0, 9)}
@@ -278,17 +278,17 @@ export const Navbar: FC<{ className?: string }> = ({
                       )}
                       <Avatar>
                         <AvatarImage
-                          src="https://github.com/shadcn.png"
-                          alt="@shadcn"
+                          src="https://www.reshot.com/preview-assets/icons/F3N5JXHBEG/user-F3N5JXHBEG.svg"
+                          alt="user"
                         />
                         <AvatarFallback>
-                          <Skeleton className="h-10 w-10 rounded-full bg-slate-300" />
+                          <Skeleton className="h-10 w-10 rounded-full bg-emerald-200" />
                         </AvatarFallback>
                       </Avatar>
                     </section>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-slate-300">
+                        <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-emerald-200">
                           <LuUser />
                           Profile User
                         </div>
@@ -515,7 +515,7 @@ export const Navbar: FC<{ className?: string }> = ({
                 <PopoverTrigger>
                   <section className="flex items-center justify-center gap-3 rounded-md px-2">
                     {isLoading ? (
-                      <Skeleton className="h-7 w-24 bg-slate-300" />
+                      <Skeleton className="h-7 w-24 bg-emerald-200" />
                     ) : (
                       <h3 className="text-base font-normal ">
                         Hello, {data?.data.username.substring(0, 9)}
@@ -523,11 +523,11 @@ export const Navbar: FC<{ className?: string }> = ({
                     )}
                     <Avatar>
                       <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
+                        src="https://www.reshot.com/preview-assets/icons/F3N5JXHBEG/user-F3N5JXHBEG.svg"
+                        alt="user"
                       />
                       <AvatarFallback>
-                        <Skeleton className="h-10 w-10 rounded-full bg-slate-300" />
+                        <Skeleton className="h-10 w-10 rounded-full bg-emerald-200" />
                       </AvatarFallback>
                     </Avatar>
                   </section>
@@ -536,7 +536,7 @@ export const Navbar: FC<{ className?: string }> = ({
                   <section className="flex w-full flex-col gap-2 text-slate-700">
                     <Dialog>
                       <DialogTrigger asChild>
-                        <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-slate-300">
+                        <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-emerald-200">
                           <LuUser />
                           Profile User
                         </div>
@@ -683,7 +683,7 @@ export const Navbar: FC<{ className?: string }> = ({
 
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-slate-300">
+                        <div className="flex items-center justify-center gap-3 py-1 hover:cursor-pointer hover:bg-emerald-200">
                           <LuLogOut />
                           Logout
                         </div>
