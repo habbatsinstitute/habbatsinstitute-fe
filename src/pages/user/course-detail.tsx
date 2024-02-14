@@ -92,7 +92,7 @@ export const CourseDetail: FC = (): ReactElement => {
       <section className="container mt-24 flex min-h-[400px] flex-wrap justify-between">
         <div className="flex w-full flex-col gap-1 lg:w-[70%]">
           {loadingCourseById ? (
-            <Skeleton className="h-[200px] bg-slate-500 md:h-[400px]" />
+            <Skeleton className="h-[200px] bg-emerald-200 md:h-[400px]" />
           ) : (
             <div className="h-[200px] md:h-[400px]">
               <video

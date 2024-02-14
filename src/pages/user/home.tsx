@@ -145,27 +145,27 @@ export const Home: FC = (): ReactElement => {
           {loading ? (
             <Fragment>
               <div className="flex h-[400px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]">
-                <Skeleton className="h-[55%] w-[90%] bg-slate-500" />
+                <Skeleton className="h-[55%] w-[90%] bg-emerald-300" />
                 <div className="container">
-                  <Skeleton className="h-5 w-[120px] bg-slate-500" />
+                  <Skeleton className="h-5 w-[120px] bg-emerald-300" />
                 </div>
                 <div className="container flex items-center gap-2">
-                  <Skeleton className="h-5 w-[70px] bg-slate-500" />
+                  <Skeleton className="h-5 w-[70px] bg-emerald-300" />
                 </div>
                 <div className="container flex w-full justify-end">
-                  <Skeleton className="h-10 w-[150px] bg-slate-500" />
+                  <Skeleton className="h-10 w-[150px] bg-emerald-300" />
                 </div>
               </div>
               <div className="flex h-[400px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]">
-                <Skeleton className="h-[55%] w-[90%] bg-slate-500" />
+                <Skeleton className="h-[55%] w-[90%] bg-emerald-300" />
                 <div className="container">
-                  <Skeleton className="h-5 w-[120px] bg-slate-500" />
+                  <Skeleton className="h-5 w-[120px] bg-emerald-300" />
                 </div>
                 <div className="container flex items-center gap-2">
-                  <Skeleton className="h-5 w-[70px] bg-slate-500" />
+                  <Skeleton className="h-5 w-[70px] bg-emerald-300" />
                 </div>
                 <div className="container flex w-full justify-end">
-                  <Skeleton className="h-10 w-[150px] bg-slate-500" />
+                  <Skeleton className="h-10 w-[150px] bg-emerald-300" />
                 </div>
               </div>
             </Fragment>

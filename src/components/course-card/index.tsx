@@ -85,15 +85,15 @@ export const LoadingCourseCard: FC<CourseCardLoadingProps> = ({
       }
     >
       <section className="flex flex-col pt-1">
-        <Skeleton className="h-[200px] w-full rounded-md bg-slate-500 md:h-[150px] xl:h-[250px]" />
+        <Skeleton className="h-[200px] w-full rounded-md bg-emerald-200 md:h-[150px] xl:h-[250px]" />
         <section className="flex items-center gap-1 py-1">
-          <Skeleton className="h-[15px] w-[20px] bg-slate-500" />
-          <Skeleton className="h-[15px] w-[50px] bg-slate-500" />
+          <Skeleton className="h-[15px] w-[20px] bg-emerald-200" />
+          <Skeleton className="h-[15px] w-[50px] bg-emerald-200" />
         </section>
         <h5 className="text-[#707075]">
-          <Skeleton className="h-[15px] w-[100px] bg-slate-500" />
+          <Skeleton className="h-[15px] w-[100px] bg-emerald-200" />
         </h5>
-        <Skeleton className="mt-1 h-[30px] w-4/5 bg-slate-500" />
+        <Skeleton className="mt-1 h-[30px] w-4/5 bg-emerald-200" />
       </section>
     </section>
   );

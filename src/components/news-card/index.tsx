@@ -61,20 +61,20 @@ export const LoadingNewsCard: FC = (): ReactElement => {
   return (
     <section className="flex min-h-[300px] w-full flex-col justify-between md:w-[30%]">
       <section className="flex flex-col pt-1">
-        <Skeleton className="h-[250px] w-full rounded-md bg-slate-500 md:h-[150px] xl:h-[250px]" />
+        <Skeleton className="h-[250px] w-full rounded-md bg-emerald-200 md:h-[150px] xl:h-[250px]" />
         <section className="flex items-center gap-1 py-1">
-          <Skeleton className="h-[15px] w-[70px] bg-slate-500" />
-          <Skeleton className="h-[15px] w-[100px] bg-slate-500" />
+          <Skeleton className="h-[15px] w-[70px] bg-emerald-200" />
+          <Skeleton className="h-[15px] w-[100px] bg-emerald-200" />
         </section>
         <h5 className="text-[#707075]">
-          <Skeleton className="h-[15px] w-[150px] bg-slate-500" />
+          <Skeleton className="h-[15px] w-[150px] bg-emerald-200" />
         </h5>
       </section>
       <section className="flex flex-col gap-2 pt-2">
-        <Skeleton className="h-[30px] w-full bg-slate-500" />
-        <Skeleton className="h-[35px] w-full bg-slate-500" />
+        <Skeleton className="h-[30px] w-full bg-emerald-200" />
+        <Skeleton className="h-[35px] w-full bg-emerald-200" />
         <div className="pt-1 md:pt-0">
-          <Skeleton className="h-[30px] w-[100px] bg-slate-500" />
+          <Skeleton className="h-[30px] w-[100px] bg-emerald-200" />
         </div>
       </section>
     </section>
