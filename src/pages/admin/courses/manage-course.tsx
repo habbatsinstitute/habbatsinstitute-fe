@@ -165,7 +165,6 @@ export const DashboardCourseManage: FC = (): ReactElement => {
 
     update(formData, {
       onSuccess: () => {
-        getCourses();
         toast.success("Data course berhasil diupdate", {
           position: "top-center",
           autoClose: 1000,

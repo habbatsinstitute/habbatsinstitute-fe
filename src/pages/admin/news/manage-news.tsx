@@ -44,21 +44,31 @@ import {
   PaginationPrevious,
 } from "@/components";
 import {
+  TGetNewsByIdResponses,
   TGetNewsResponse,
   TNewsItems,
   TPaging,
   api,
   newsSchema,
   useGetCategories,
-  useGetNewsById,
   useRemoveNews,
   useUpdateNews,
 } from "@/lib";
 
 export const DashboardNewsManage: FC = (): ReactElement => {
   const [news, setNews] = useState<TNewsItems[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [newsById, setNewsById] = useState<TNewsItems>({
+    id: 0,
+    title: "",
+    category: "",
+    description: "",
+    created_at: "",
+    images: "",
+    user_id: 0,
+    views: 0,
+  });
+  const [loadingNews, setLoadingNews] = useState<boolean>(false);
+  const [loadingNewsById, setLoadingNewsById] = useState<boolean>(false);
   const [paging, setPaging] = useState<TPaging>({
     previous_page: 0,
     current_page: 1,
@@ -67,6 +77,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
     total_page: 0,
     total_data: 0,
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const id = useParams();
 
@@ -86,11 +97,6 @@ export const DashboardNewsManage: FC = (): ReactElement => {
   };
 
   const { data: categories } = useGetCategories();
-  const {
-    data: getNewsById,
-    refetch: refetchNewsById,
-    isFetching: isFetchingNewsById,
-  } = useGetNewsById(id?.id);
   const { mutate: update, isPending: isPendingUpdate } = useUpdateNews(id?.id);
   const { mutate: remove, isPending: isPendingRemove } = useRemoveNews();
 
@@ -101,7 +107,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
     pageSize: number = 5,
   ) => {
     try {
-      setLoading(true);
+      setLoadingNews(true);
       const { data } = await api.get<TGetNewsResponse>("/news", {
         params: {
           page,
@@ -113,7 +119,28 @@ export const DashboardNewsManage: FC = (): ReactElement => {
     } catch (error) {
       setNews([]);
     } finally {
-      setLoading(false);
+      setLoadingNews(false);
+    }
+  };
+
+  const getNewsById = async () => {
+    try {
+      setLoadingNewsById(true);
+      const { data } = await api.get<TGetNewsByIdResponses>(`/news/${id?.id}`);
+      setNewsById(data.data);
+    } catch (error) {
+      setNewsById({
+        id: 0,
+        title: "",
+        category: "",
+        description: "",
+        created_at: "",
+        images: "",
+        user_id: 0,
+        views: 0,
+      });
+    } finally {
+      setLoadingNewsById(false);
     }
   };
 
@@ -122,9 +149,14 @@ export const DashboardNewsManage: FC = (): ReactElement => {
   }, []);
 
   useEffect(() => {
-    refetchNewsById();
-    form.reset(getNewsById?.data);
-  }, [form, form.reset, refetchNewsById, id?.id]);
+    getNewsById();
+  }, [id?.id]);
+
+  useEffect(() => {
+    form.reset(newsById);
+  }, [form, newsById]);
+
+  console.log(newsById);
 
   const handlePageChange = (page: number) => {
     getNews(page);
@@ -142,7 +174,6 @@ export const DashboardNewsManage: FC = (): ReactElement => {
 
     update(formData, {
       onSuccess: () => {
-        getNews();
         toast.success("Data news berhasil diupdate", {
           position: "top-center",
           autoClose: 1000,
@@ -192,9 +223,9 @@ export const DashboardNewsManage: FC = (): ReactElement => {
             onClick={() => {
               navigate(`/dashboard/news/manage/${cell.row.original.id}`);
             }}
-            disabled={isFetchingNewsById || isPendingUpdate || isPendingRemove}
+            disabled={loadingNewsById || isPendingUpdate || isPendingRemove}
           >
-            {isFetchingNewsById || isPendingUpdate || isPendingRemove ? (
+            {loadingNewsById || isPendingUpdate || isPendingRemove ? (
               <Loader2 className="w-4 animate-spin" />
             ) : (
               <Fragment>
@@ -250,9 +281,9 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                 </Label>
                 <label
                   htmlFor="image"
-                  className={`relative grid w-32 place-items-center rounded-md bg-[#0F172A] pt-1 text-sm text-white hover:bg-slate-700 ${isPendingUpdate || isPendingRemove || isFetchingNewsById ? "cursor-not-allowed opacity-30 hover:bg-[#0F172A]" : "cursor-pointer"}`}
+                  className={`relative grid w-32 place-items-center rounded-md bg-[#0F172A] pt-1 text-sm text-white hover:bg-slate-700 ${isPendingUpdate || isPendingRemove || loadingNewsById ? "cursor-not-allowed opacity-30 hover:bg-[#0F172A]" : "cursor-pointer"}`}
                 >
-                  {isFetchingNewsById || isPendingUpdate || isPendingRemove ? (
+                  {loadingNewsById || isPendingUpdate || isPendingRemove ? (
                     <LuLoader2 className="animate-spin" />
                   ) : (
                     "Browse file"
@@ -264,7 +295,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                     className="sr-only"
                     onChange={handleFileChange}
                     disabled={
-                      isPendingUpdate || isPendingRemove || isFetchingNewsById
+                      isPendingUpdate || isPendingRemove || loadingNewsById
                     }
                   />
                 </label>
@@ -308,9 +339,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                             : ""
                         }
                         disabled={
-                          isPendingUpdate ||
-                          isPendingRemove ||
-                          isFetchingNewsById
+                          isPendingUpdate || isPendingRemove || loadingNewsById
                         }
                         {...field}
                       />
@@ -340,16 +369,14 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                       disabled={
-                        isPendingUpdate || isPendingRemove || isFetchingNewsById
+                        isPendingUpdate || isPendingRemove || loadingNewsById
                       }
                     >
                       <FormControl>
                         <SelectTrigger
                           className={`h-9 w-full focus:ring-0 focus:ring-offset-0 ${form.formState.errors.category ? "border-red-400 text-red-400" : ""}`}
                         >
-                          <SelectValue
-                            placeholder={getNewsById?.data?.category}
-                          />
+                          <SelectValue placeholder={newsById?.category} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -389,9 +416,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                         placeholder="Type your message here"
                         className={`h-full resize-none focus-visible:ring-1 focus-visible:ring-blue-300 focus-visible:ring-offset-0 ${form.formState.errors.description ? "border-red-400 placeholder:text-red-400" : ""}`}
                         disabled={
-                          isPendingUpdate ||
-                          isPendingRemove ||
-                          isFetchingNewsById
+                          isPendingUpdate || isPendingRemove || loadingNewsById
                         }
                         {...field}
                       />
@@ -412,11 +437,9 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                 size={"sm"}
                 type="button"
                 onClick={() => navigate("/dashboard/news")}
-                disabled={
-                  isPendingUpdate || isPendingRemove || isFetchingNewsById
-                }
+                disabled={isPendingUpdate || isPendingRemove || loadingNewsById}
               >
-                {isFetchingNewsById || isPendingUpdate || isPendingRemove ? (
+                {loadingNewsById || isPendingUpdate || isPendingRemove ? (
                   <LuLoader2 className="w-14 animate-spin" />
                 ) : (
                   "Cancel"
@@ -430,12 +453,10 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                     variant={"destructive"}
                     className="flex gap-1"
                     disabled={
-                      isPendingUpdate || isPendingRemove || isFetchingNewsById
+                      isPendingUpdate || isPendingRemove || loadingNewsById
                     }
                   >
-                    {isFetchingNewsById ||
-                    isPendingUpdate ||
-                    isPendingRemove ? (
+                    {loadingNewsById || isPendingUpdate || isPendingRemove ? (
                       <LuLoader2 className="w-14 animate-spin" />
                     ) : (
                       <Fragment>
@@ -455,9 +476,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                     <AlertDialogDescription className="text-dark-3">
                       <div className="h-full w-[450px] break-words">
                         Anda akan menghapus data news dengan judul{" "}
-                        <span className="font-bold">
-                          "{getNewsById?.data.title}"
-                        </span>
+                        <span className="font-bold">"{newsById?.title}"</span>
                       </div>
                     </AlertDialogDescription>
                   </AlertDialogHeader>
@@ -469,7 +488,6 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                       onClick={() =>
                         remove(id?.id, {
                           onSuccess: () => {
-                            getNews();
                             toast.success("Data news berhasil dihapus", {
                               position: "top-center",
                               autoClose: 1000,
@@ -512,7 +530,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                   !form.formState.isValid ||
                   isPendingUpdate ||
                   isPendingRemove ||
-                  isFetchingNewsById ||
+                  loadingNewsById ||
                   (selectedFile !== null &&
                     selectedFile?.type !== "image/jpg" &&
                     selectedFile?.type !== "image/jpeg" &&
@@ -520,23 +538,21 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                   (selectedFile !== null && selectedFile?.size > 2000000)
                 }
               >
-                {(isPendingRemove || isFetchingNewsById || isPendingUpdate) && (
+                {(isPendingRemove || loadingNewsById || isPendingUpdate) && (
                   <LuLoader2 className="mx-7 w-full animate-spin" />
                 )}
-                {!isPendingRemove &&
-                  !isFetchingNewsById &&
-                  !isPendingUpdate && (
-                    <Fragment>
-                      Save <LuSave className="text-lg" />
-                    </Fragment>
-                  )}
+                {!isPendingRemove && !loadingNewsById && !isPendingUpdate && (
+                  <Fragment>
+                    Save <LuSave className="text-lg" />
+                  </Fragment>
+                )}
               </Button>
             </section>
           </section>
           <section className="flex h-full w-full flex-col py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
-            <DataTable columns={columns} data={news} loading={loading} />
+            <DataTable columns={columns} data={news} loading={loadingNews} />
 
-            {!loading && paging.total_data > 5 && (
+            {!loadingNews && paging.total_data > 5 && (
               <section className="mt-3 flex w-full justify-end">
                 <Pagination>
                   <PaginationContent className="flex-wrap">
