@@ -14,6 +14,7 @@ interface CourseCardProps {
   description: string;
   views: number;
   href: string | number;
+  control?: boolean;
   className?: string;
 }
 
@@ -28,7 +29,7 @@ export const CourseCard: FC<CourseCardProps> = ({ ...props }): ReactElement => {
   return (
     <section
       className={twMerge(
-        "group flex w-full flex-col rounded-md border bg-light-2 p-3 py-3 shadow-lg hover:cursor-pointer hover:border-emerald-300 hover:bg-emerald-100 md:w-[29.5%]",
+        "group flex w-full flex-col rounded-md border bg-light-2 p-3 py-3 shadow-lg hover:cursor-pointer hover:border-emerald-300 hover:bg-emerald-100 hover:shadow-emerald-100 md:w-[29.5%]",
         props.className,
       )}
       onClick={() => {
@@ -38,10 +39,10 @@ export const CourseCard: FC<CourseCardProps> = ({ ...props }): ReactElement => {
     >
       <section className="flex flex-col py-2">
         <video
-          controls
+          controls={props.control}
           onContextMenu={(e) => e.preventDefault()}
           controlsList="nodownload"
-          className="h-[200px] w-full rounded-md md:h-[170px] lg:h-[200px]"
+          className="h-[200px] w-full rounded-md md:h-[170px] lg:h-[150px]"
           preload="metadata"
         >
           <source src={props.video} />

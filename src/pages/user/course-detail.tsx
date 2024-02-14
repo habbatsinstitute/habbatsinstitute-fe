@@ -13,15 +13,14 @@ import {
 import {
   TCourseItems,
   TGetCourseByIdResponse,
+  TGetCourseResponse,
   api,
   formatDate,
-  useGetCourse,
 } from "@/lib";
 
 export const CourseDetail: FC = (): ReactElement => {
-  const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [course, setCourse] = useState<TCourseItems>({
+  const [courses, setCourses] = useState<TCourseItems[]>([]);
+  const [courseById, setCourseById] = useState<TCourseItems>({
     author: "",
     created_at: "",
     description: "",
@@ -31,23 +30,36 @@ export const CourseDetail: FC = (): ReactElement => {
     user_id: 0,
     views: 0,
   });
+  const [loadingCourse, setLoadingCourse] = useState(false);
+  const [loadingCourseById, setLoadingCourseById] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const id = useParams();
 
-  const { data: getAllCourses, isFetching } = useGetCourse();
+  const getCourse = async () => {
+    try {
+      setLoadingCourse(true);
+      const { data } = await api.get<TGetCourseResponse>("/courses");
+      setCourses(data?.data);
+    } catch (error) {
+      setCourses([]);
+    } finally {
+      setLoadingCourse(false);
+    }
+  };
 
   const getCourseById = async () => {
     try {
-      setLoading(true);
+      setLoadingCourseById(true);
       setProgress(30);
       const { data } = await api.get<TGetCourseByIdResponse>(
         `/courses/${id.id}`,
       );
       setProgress(50);
-      setCourse(data?.data);
+      setCourseById(data?.data);
       setProgress(70);
     } catch (error) {
-      setCourse({
+      setCourseById({
         author: "",
         created_at: "",
         description: "",
@@ -59,17 +71,18 @@ export const CourseDetail: FC = (): ReactElement => {
       });
     } finally {
       setProgress(100);
-      setLoading(false);
+      setLoadingCourseById(false);
     }
   };
 
   useEffect(() => {
-    getCourseById();
-  }, [id.id]);
+    getCourse();
+  }, []);
 
-  if (id.id === course.id.toString()) {
+  useEffect(() => {
     window.scrollTo(0, 0);
-  }
+    getCourseById();
+  }, [id?.id]);
 
   return (
     <main className="flex flex-col overflow-x-visible font-inter">
@@ -78,7 +91,7 @@ export const CourseDetail: FC = (): ReactElement => {
       {/* Video */}
       <section className="container mt-24 flex min-h-[400px] flex-wrap justify-between">
         <div className="flex w-full flex-col gap-1 lg:w-[70%]">
-          {loading ? (
+          {loadingCourseById ? (
             <Skeleton className="h-[200px] bg-slate-500 md:h-[400px]" />
           ) : (
             <div className="h-[200px] md:h-[400px]">
@@ -89,55 +102,60 @@ export const CourseDetail: FC = (): ReactElement => {
                 className="h-full w-full rounded-md"
                 preload="metadata"
               >
-                {course?.media_file && <source src={course?.media_file} />}
+                {courseById?.media_file && (
+                  <source src={courseById?.media_file} />
+                )}
               </video>
             </div>
           )}
 
           <h1 className="break-words text-[1rem] font-black text-[#1E212B] md:text-[1.7rem] lg:text-[2rem]">
-            {course?.title}
+            {courseById?.title}
           </h1>
           <div className="flex items-center gap-1">
             <UserRound className="p-1" />
             <p className="text-sm">
-              {`${course?.author} ${formatDate(course?.created_at as string)} ${
-                course?.views === 0
+              {`${courseById?.author} ${formatDate(courseById?.created_at as string)} ${
+                courseById?.views === 0
                   ? "(Belum ditonton)"
-                  : `(${course?.views}x ditonton)`
+                  : `(${courseById?.views}x ditonton)`
               }`}
             </p>
           </div>
 
           <div className="mt-3 whitespace-pre-wrap break-words text-font-black-2">
-            {course?.description}
+            {courseById?.description}
           </div>
         </div>
 
         {/* Course List */}
         <div className="mt-20 flex w-full flex-wrap gap-7 lg:mt-0 lg:w-[25%] lg:gap-10">
           <h1 className="flex text-lg font-bold md:hidden">List courses</h1>
-          {isFetching ? (
+          {loadingCourse || loadingCourseById ? (
             <Fragment>
               <LoadingCourseCard className="w-full md:w-[45%] lg:w-full" />
               <LoadingCourseCard className="w-full md:w-[45%] lg:w-full" />
               <LoadingCourseCard className="w-full md:w-[45%] lg:w-full" />
             </Fragment>
           ) : (
-            getAllCourses?.data
+            courses
+              ?.filter((course) => course.id !== courseById?.id)
               .sort(() => Math.random() - 0.5)
               .slice(0, 3)
               .map((course, index) => (
-                <CourseCard
-                  key={index}
-                  author={course.author}
-                  created_at={course.created_at}
-                  description={course.description}
-                  href={course.id}
-                  title={course.title}
-                  video={course.media_file}
-                  views={course.views}
-                  className="w-full md:w-[45%] lg:w-full"
-                />
+                <div className="w-full">
+                  <CourseCard
+                    key={index}
+                    author={course.author}
+                    created_at={course.created_at}
+                    description={course.description}
+                    href={course.id}
+                    title={course.title}
+                    video={course.media_file}
+                    views={course.views}
+                    className="w-full md:w-[45%] lg:w-full"
+                  />
+                </div>
               ))
           )}
         </div>
