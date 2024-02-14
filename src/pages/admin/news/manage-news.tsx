@@ -124,7 +124,7 @@ export const DashboardNewsManage: FC = (): ReactElement => {
   useEffect(() => {
     refetchNewsById();
     form.reset(getNewsById?.data);
-  }, [form, form.reset, getNewsById?.data, id, refetchNewsById]);
+  }, [form, form.reset, refetchNewsById, id?.id]);
 
   const handlePageChange = (page: number) => {
     getNews(page);
@@ -453,10 +453,12 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                       </span>
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-dark-3">
-                      Anda akan menghapus data news dengan judul{" "}
-                      <span className="font-bold">
-                        "{getNewsById?.data.title}"
-                      </span>
+                      <div className="h-full w-[450px] break-words">
+                        Anda akan menghapus data news dengan judul{" "}
+                        <span className="font-bold">
+                          "{getNewsById?.data.title}"
+                        </span>
+                      </div>
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

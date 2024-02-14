@@ -38,20 +38,30 @@ import {
 } from "@/components";
 import {
   TCourseItems,
+  TGetCourseByIdResponse,
   TGetCourseResponse,
   TPaging,
   api,
   courseSchema,
   formatDate,
-  useGetCourseById,
   useRemoveCourse,
   useUpdateCourse,
 } from "@/lib";
 
 export const DashboardCourseManage: FC = (): ReactElement => {
   const [courses, setCourses] = useState<TCourseItems[]>([]);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [courseByid, setCourseById] = useState<TCourseItems>({
+    author: "",
+    created_at: "",
+    description: "",
+    id: 0,
+    media_file: "",
+    title: "",
+    user_id: 0,
+    views: 0,
+  });
+  const [loadingCourse, setLoadingCourse] = useState<boolean>(false);
+  const [loadingCourseById, setLoadingCourseById] = useState<boolean>(false);
   const [paging, setPaging] = useState<TPaging>({
     previous_page: 0,
     current_page: 1,
@@ -60,6 +70,7 @@ export const DashboardCourseManage: FC = (): ReactElement => {
     total_page: 0,
     total_data: 0,
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const id = useParams();
 
@@ -77,11 +88,6 @@ export const DashboardCourseManage: FC = (): ReactElement => {
     setSelectedFile(file || null);
   };
 
-  const {
-    data: courseById,
-    refetch: refetchCourseById,
-    isFetching: isFetchingCourseById,
-  } = useGetCourseById(id?.id);
   const { mutate: update, isPending: isPendingUpdate } = useUpdateCourse(
     id?.id,
   );
@@ -94,7 +100,7 @@ export const DashboardCourseManage: FC = (): ReactElement => {
     pageSize: number = 5,
   ) => {
     try {
-      setLoading(true);
+      setLoadingCourse(true);
       const { data } = await api.get<TGetCourseResponse>("/courses", {
         params: {
           page,
@@ -106,7 +112,30 @@ export const DashboardCourseManage: FC = (): ReactElement => {
     } catch (error) {
       setCourses([]);
     } finally {
-      setLoading(false);
+      setLoadingCourse(false);
+    }
+  };
+
+  const getCourseById = async () => {
+    try {
+      setLoadingCourseById(true);
+      const { data } = await api.get<TGetCourseByIdResponse>(
+        `/courses/${id?.id}`,
+      );
+      setCourseById(data?.data);
+    } catch (error) {
+      setCourseById({
+        author: "",
+        created_at: "",
+        description: "",
+        id: 0,
+        media_file: "",
+        title: "",
+        user_id: 0,
+        views: 0,
+      });
+    } finally {
+      setLoadingCourseById(false);
     }
   };
 
@@ -115,9 +144,12 @@ export const DashboardCourseManage: FC = (): ReactElement => {
   }, []);
 
   useEffect(() => {
-    refetchCourseById();
-    form.reset(courseById?.data);
-  }, [form, form.reset, courseById?.data, id, refetchCourseById]);
+    getCourseById();
+  }, [id?.id]);
+
+  useEffect(() => {
+    form.reset(courseByid);
+  }, [courseByid, form]);
 
   const handlePageChange = (page: number) => {
     getCourses(page);
@@ -125,7 +157,6 @@ export const DashboardCourseManage: FC = (): ReactElement => {
 
   function onSubmit(values: z.infer<typeof courseSchema>) {
     const formData = new FormData();
-
     formData.append("title", values.title);
     formData.append("description", values.description);
     if (selectedFile) {
@@ -184,11 +215,9 @@ export const DashboardCourseManage: FC = (): ReactElement => {
             onClick={() => {
               navigate(`/dashboard/courses/manage/${cell.row.original.id}`);
             }}
-            disabled={
-              isFetchingCourseById || isPendingUpdate || isPendingRemove
-            }
+            disabled={loadingCourseById || isPendingUpdate || isPendingRemove}
           >
-            {isFetchingCourseById || isPendingUpdate || isPendingRemove ? (
+            {loadingCourseById || isPendingUpdate || isPendingRemove ? (
               <Loader2 className="w-4 animate-spin" />
             ) : (
               <Fragment>
@@ -232,11 +261,9 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                 </Label>
                 <label
                   htmlFor="video"
-                  className={`relative grid w-32 place-items-center rounded-md bg-[#0F172A] pt-2 text-sm text-white hover:bg-slate-700 ${isPendingUpdate || isPendingRemove || isFetchingCourseById ? "cursor-not-allowed opacity-30 hover:bg-[#0F172A]" : "cursor-pointer"}`}
+                  className={`relative grid w-32 place-items-center rounded-md bg-[#0F172A] pt-2 text-sm text-white hover:bg-slate-700 ${isPendingUpdate || isPendingRemove || loadingCourseById ? "cursor-not-allowed opacity-30 hover:bg-[#0F172A]" : "cursor-pointer"}`}
                 >
-                  {isFetchingCourseById ||
-                  isPendingUpdate ||
-                  isPendingRemove ? (
+                  {loadingCourseById || isPendingUpdate || isPendingRemove ? (
                     <LuLoader2 className="animate-spin" />
                   ) : (
                     "Browse file"
@@ -248,7 +275,7 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                     className="sr-only"
                     onChange={handleFileChange}
                     disabled={
-                      isPendingUpdate || isPendingRemove || isFetchingCourseById
+                      isPendingUpdate || isPendingRemove || loadingCourseById
                     }
                   />
                 </label>
@@ -288,9 +315,7 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                           : ""
                       }
                       disabled={
-                        isPendingUpdate ||
-                        isPendingRemove ||
-                        isFetchingCourseById
+                        isPendingUpdate || isPendingRemove || loadingCourseById
                       }
                       {...field}
                     />
@@ -318,9 +343,7 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                       placeholder="Type your message here"
                       className={`h-14 resize-none focus-visible:ring-1 focus-visible:ring-blue-300 focus-visible:ring-offset-0 ${form.formState.errors.description ? "border-red-400 placeholder:text-red-400" : ""}`}
                       disabled={
-                        isPendingUpdate ||
-                        isPendingRemove ||
-                        isFetchingCourseById
+                        isPendingUpdate || isPendingRemove || loadingCourseById
                       }
                       {...field}
                     />
@@ -345,10 +368,10 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                 type="button"
                 onClick={() => navigate("/dashboard/courses")}
                 disabled={
-                  isPendingUpdate || isPendingRemove || isFetchingCourseById
+                  isPendingUpdate || isPendingRemove || loadingCourseById
                 }
               >
-                {isFetchingCourseById || isPendingUpdate || isPendingRemove ? (
+                {loadingCourseById || isPendingUpdate || isPendingRemove ? (
                   <LuLoader2 className="w-14 animate-spin" />
                 ) : (
                   "Cancel"
@@ -361,12 +384,10 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                     variant={"destructive"}
                     className="flex gap-1"
                     disabled={
-                      isPendingUpdate || isPendingRemove || isFetchingCourseById
+                      isPendingUpdate || isPendingRemove || loadingCourseById
                     }
                   >
-                    {isFetchingCourseById ||
-                    isPendingUpdate ||
-                    isPendingRemove ? (
+                    {loadingCourseById || isPendingUpdate || isPendingRemove ? (
                       <LuLoader2 className="w-14 animate-spin" />
                     ) : (
                       <Fragment>
@@ -384,10 +405,10 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                       </span>
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-dark-3">
-                      Anda akan menghapus data course dengan judul{" "}
-                      <span className="font-bold">
-                        "{courseById?.data.title}"
-                      </span>
+                      <div className="h-full w-[450px] break-words">
+                        Anda akan menghapus data course dengan judul{" "}
+                        <span className="font-bold">"{courseByid.title}"</span>
+                      </div>
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -397,7 +418,6 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                       onClick={() =>
                         remove(id?.id, {
                           onSuccess: () => {
-                            getCourses();
                             toast.success("Data course berhasil dihapus", {
                               position: "top-center",
                               autoClose: 1000,
@@ -440,32 +460,28 @@ export const DashboardCourseManage: FC = (): ReactElement => {
                   !form.formState.isValid ||
                   isPendingUpdate ||
                   isPendingRemove ||
-                  isFetchingCourseById ||
+                  loadingCourseById ||
                   (selectedFile !== null &&
                     selectedFile?.type !== "video/mp4") ||
                   (selectedFile !== null && selectedFile?.size > 100000000)
                 }
               >
-                {(isPendingRemove ||
-                  isFetchingCourseById ||
-                  isPendingUpdate) && (
+                {(isPendingRemove || loadingCourseById || isPendingUpdate) && (
                   <LuLoader2 className="mx-7 w-full animate-spin" />
                 )}
-                {!isPendingRemove &&
-                  !isFetchingCourseById &&
-                  !isPendingUpdate && (
-                    <Fragment>
-                      Save <LuSave className="text-lg" />
-                    </Fragment>
-                  )}
+                {!isPendingRemove && !loadingCourseById && !isPendingUpdate && (
+                  <Fragment>
+                    Save <LuSave className="text-lg" />
+                  </Fragment>
+                )}
               </Button>
             </section>
           </form>
         </Form>
         <section className="flex h-full w-full flex-col py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
-          <DataTable columns={columns} data={courses} loading={loading} />
+          <DataTable columns={columns} data={courses} loading={loadingCourse} />
 
-          {!loading && paging.total_data > 5 && (
+          {!loadingCourse && paging.total_data > 5 && (
             <section className="mt-3 flex w-full justify-end">
               <Pagination>
                 <PaginationContent className="flex-wrap">

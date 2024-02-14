@@ -126,8 +126,12 @@ export const DashboardCourseGet: FC = (): ReactElement => {
                   </span>
                 </AlertDialogTitle>
                 <AlertDialogDescription className="text-dark-3">
-                  Anda akan menghapus data course dengan judul{" "}
-                  <span className="font-bold">"{cell.row.original.title}"</span>
+                  <div className="h-full w-[450px] break-words">
+                    Anda akan menghapus data course dengan judul{" "}
+                    <span className="font-bold">
+                      "{cell.row.original.title}"
+                    </span>
+                  </div>
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
