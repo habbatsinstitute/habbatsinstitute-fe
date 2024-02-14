@@ -60,7 +60,7 @@ export const CourseCard: FC<CourseCardProps> = ({ ...props }): ReactElement => {
             : `(${props.views}x ditonton)`}
         </h5>
       </section>
-      <section className="flex flex-col gap-2 pt-2">
+      <section className="flex flex-col gap-2">
         <h3 className="line-clamp-2 break-words text-base font-bold text-font-black-1 md:text-base">
           {props.title}
         </h3>
