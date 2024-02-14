@@ -140,7 +140,6 @@ export const CourseDetail: FC = (): ReactElement => {
           ) : (
             courses
               ?.filter((course) => course.id !== courseById?.id)
-              .sort(() => Math.random() - 0.5)
               .slice(0, 3)
               .map((course, index) => (
                 <div className="w-full">
