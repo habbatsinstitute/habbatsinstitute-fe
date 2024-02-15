@@ -10,6 +10,7 @@ export * from "./input";
 export * from "./label";
 export * from "./pagination";
 export * from "./popover";
+export * from "./scroll-area";
 export * from "./select";
 export * from "./sheet";
 export * from "./skeleton";

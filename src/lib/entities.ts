@@ -202,3 +202,8 @@ export type TSendQuestion = {
   };
   message: string;
 };
+
+export type TSearchNews = {
+  data: TNewsItems[];
+  message: string;
+};

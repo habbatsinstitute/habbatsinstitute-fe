@@ -16,6 +16,8 @@ import {
 import {
   TCourseItems,
   TGetCourseResponse,
+  TNewsItems,
+  TSearchNews,
   api,
   formatDate,
   getAccessToken,
@@ -27,7 +29,8 @@ export const Home: FC = (): ReactElement => {
   const [isLoggin] = useState(getAccessToken() ? true : false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [search, setSearch] = useState<string>("");
-  const [isInputFocused, setIsInputFocused] = useState(false);
+  const [responseSearch, setResponseSearch] = useState<TNewsItems[]>([]);
+  const [loadingSearch, setLoadingSearch] = useState(false);
 
   const navigate = useNavigate();
 
@@ -43,9 +46,28 @@ export const Home: FC = (): ReactElement => {
     }
   };
 
+  const searchNews = async () => {
+    try {
+      setLoadingSearch(true);
+      const { data } = await api.get<TSearchNews>(
+        `/news/searching/?title=${search}`,
+      );
+
+      setResponseSearch(data.data);
+    } catch (error) {
+      setLoadingSearch(false);
+    } finally {
+      setLoadingSearch(false);
+    }
+  };
+
   useEffect(() => {
     getCourses();
   }, []);
+
+  useEffect(() => {
+    searchNews();
+  }, [search]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,26 +107,55 @@ export const Home: FC = (): ReactElement => {
                   type="text"
                   className="bg-white"
                   onChange={(e) => setSearch(e.target.value)}
-                  onFocus={() => setIsInputFocused(true)}
-                  onBlur={() => setIsInputFocused(false)}
                 />
-                {search.length > 0 && search.length <= 30 && isInputFocused && (
+                {search.length > 0 && search.length <= 30 && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
-                    className="absolute top-10 flex min-h-10 w-full flex-col items-center justify-evenly
-                    gap-1 rounded-md border border-slate-300 bg-white"
+                    className="absolute top-10 flex max-h-32 min-h-10 w-full flex-col justify-evenly gap-3 overflow-y-auto rounded-md border border-slate-300 bg-white"
                   >
-                    <div className="flex items-center gap-2 text-xs xl:text-base">
-                      <LuSearch />
-                      <p>Belum ada pencarian, cek kembali</p>
-                    </div>
+                    {loadingSearch ? (
+                      <div className="flex items-center gap-2 py-2 pl-5 text-xs">
+                        <LuSearch />
+                        <p className="line-clamp-1 h-[15px] w-4/5 break-words font-bold">
+                          Loading ...
+                        </p>
+                      </div>
+                    ) : responseSearch.length === 0 ? (
+                      <div className="flex items-center gap-2 py-2 pl-5 text-xs">
+                        <LuSearch />
+                        <p className="line-clamp-1 h-[15px] w-4/5 break-words font-bold">
+                          Tidak ada pencarian
+                        </p>
+                      </div>
+                    ) : (
+                      responseSearch.map((response, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 py-2 pl-5 text-xs hover:cursor-pointer hover:bg-slate-300"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/news/${response.id}`);
+                          }}
+                        >
+                          <LuSearch />
+                          <p className="line-clamp-1 h-[15px] w-4/5 break-words font-bold">
+                            {response.title}
+                          </p>
+                        </div>
+                      ))
+                    )}
                   </motion.div>
                 )}
               </section>
-              <Button>
+              <Button
+                disabled={!search}
+                onClick={() => {
+                  searchNews();
+                }}
+              >
                 <FaSearch />
               </Button>
             </section>
