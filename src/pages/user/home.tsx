@@ -2,7 +2,7 @@ import { FC, Fragment, ReactElement, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
-import { LuPlay, LuSearch, LuUser2 } from "react-icons/lu";
+import { LuFrown, LuLoader2, LuPlay, LuSearch, LuUser2 } from "react-icons/lu";
 import { BiNews } from "react-icons/bi";
 import {
   Button,
@@ -118,14 +118,14 @@ export const Home: FC = (): ReactElement => {
                   >
                     {loadingSearch ? (
                       <div className="flex items-center gap-2 py-2 pl-5 text-xs">
-                        <LuSearch />
+                        <LuLoader2 className="animate-spin" />
                         <p className="line-clamp-1 h-[15px] w-4/5 break-words font-bold">
                           Loading ...
                         </p>
                       </div>
                     ) : responseSearch.length === 0 ? (
                       <div className="flex items-center gap-2 py-2 pl-5 text-xs">
-                        <LuSearch />
+                        <LuFrown />
                         <p className="line-clamp-1 h-[15px] w-4/5 break-words font-bold">
                           Tidak ada pencarian
                         </p>

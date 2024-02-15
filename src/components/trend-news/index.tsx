@@ -14,7 +14,7 @@ export const TrendNews: FC<TrendNewsProps> = ({ className }): ReactElement => {
   const getNews = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get<TGetNewsResponse>("/news");
+      const { data } = await api.get<TGetNewsResponse>("/news/trend");
       setNews(data?.data);
     } catch (error) {
       setNews([]);
