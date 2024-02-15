@@ -45,7 +45,10 @@ export const NewsCard: FC<NewsCardProps> = ({ ...props }): ReactElement => {
         <p className="line-clamp-2 break-words text-sm">{props.description}</p>
         <div className="pt-1 md:pt-0">
           <Button
-            onClick={() => navigate(`/news/${props.href}`)}
+            onClick={() => {
+              window.scrollTo({ top: 0 });
+              navigate(`/news/${props.href}`);
+            }}
             className="flex items-center justify-center gap-2 bg-bright-2 font-bold text-font-black-3 hover:bg-green-400"
           >
             Lebih lengkap
