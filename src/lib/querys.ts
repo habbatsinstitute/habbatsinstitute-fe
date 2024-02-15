@@ -25,6 +25,7 @@ import {
   TUpdateCourseResponse,
   TUpdateNewsResponse,
   TUpdateUserResponse,
+  removeToken,
 } from ".";
 
 export const api = axios.create({
@@ -42,6 +43,27 @@ api.interceptors.request.use(
     return config;
   },
   (error) => Promise.reject(error),
+);
+
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      const responseData = error.response.data;
+      if (
+        responseData &&
+        responseData.status === false &&
+        responseData.message ===
+          "token is not valid - token signature is invalid: signature is invalid"
+      ) {
+        removeToken();
+        window.location.href = "/login";
+      }
+    }
+    return Promise.reject(error);
+  },
 );
 
 export const useGetUserMe = (): UseQueryResult<TGetUserMeResponse> => {

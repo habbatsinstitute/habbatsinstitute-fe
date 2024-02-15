@@ -79,7 +79,6 @@ export const Login: FC = (): ReactElement => {
       onError: (response) => {
         toast.error(`${response.response?.data?.message}`, {
           position: "top-center",
-          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: false,
