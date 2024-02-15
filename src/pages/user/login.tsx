@@ -76,8 +76,8 @@ export const Login: FC = (): ReactElement => {
 
         role === "2" ? navigate("/dashboard") : navigate("/");
       },
-      onError: () => {
-        toast.error("Invalid username atau password", {
+      onError: (response) => {
+        toast.error(`${response.response?.data?.message}`, {
           position: "top-center",
           autoClose: 1000,
           hideProgressBar: true,

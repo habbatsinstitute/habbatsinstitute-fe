@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   UseMutationResult,
   UseQueryResult,
@@ -66,7 +66,10 @@ export const useGetCategories = (): UseQueryResult<TGetCategoriesResponse> => {
   });
 };
 
-export const useLogin = (): UseMutationResult<TLoginResponse> => {
+export const useLogin = (): UseMutationResult<
+  TLoginResponse,
+  AxiosError<{ message: string }>
+> => {
   return useMutation({
     mutationKey: ["login"],
     mutationFn: async (payload: unknown) => {
