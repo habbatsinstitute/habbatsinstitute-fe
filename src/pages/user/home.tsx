@@ -178,99 +178,101 @@ export const Home: FC = (): ReactElement => {
       </section>
 
       {/* Course Preview */}
-      <section className="z-10 flex min-h-[700px] flex-col justify-evenly gap-10 bg-dark-2 py-20 xl:gap-0 xl:py-0">
-        <div className="container h-[2px] w-4/5 bg-dark-3 md:w-[95%]" />
-        <section className="container mt-2 flex items-center justify-center xl:justify-between">
-          <div className="hidden h-[90px] w-[200px] place-items-center rounded-md bg-dark-3 text-font-white xl:grid">
-            <h3>Course for You</h3>
-          </div>
-          <h1 className="w-11/12 font-bold text-font-white md:w-4/5 lg:text-[1.3rem]">
-            Dapatkan akses ke informasi terkini tentang pengembangan{" "}
-            <span className="text-bright-1">obat-obatan herbal</span>,{" "}
-            <span className="text-bright-1">teknologi ekstraksi terbaru</span>,
-            dan <span className="text-bright-1">penelitian-penelitian</span>{" "}
-            terkait yang sedang berlangsung.{" "}
-          </h1>
-        </section>
-        <section className="container flex flex-wrap justify-center gap-10 xl:justify-between xl:gap-0">
-          {loading ? (
-            <Fragment>
-              <div className="flex h-[400px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]">
-                <Skeleton className="h-[55%] w-[90%] bg-emerald-300" />
-                <div className="container">
-                  <Skeleton className="h-5 w-[120px] bg-emerald-300" />
-                </div>
-                <div className="container flex items-center gap-2">
-                  <Skeleton className="h-5 w-[70px] bg-emerald-300" />
-                </div>
-                <div className="container flex w-full justify-end">
-                  <Skeleton className="h-10 w-[150px] bg-emerald-300" />
-                </div>
-              </div>
-              <div className="flex h-[400px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]">
-                <Skeleton className="h-[55%] w-[90%] bg-emerald-300" />
-                <div className="container">
-                  <Skeleton className="h-5 w-[120px] bg-emerald-300" />
-                </div>
-                <div className="container flex items-center gap-2">
-                  <Skeleton className="h-5 w-[70px] bg-emerald-300" />
-                </div>
-                <div className="container flex w-full justify-end">
-                  <Skeleton className="h-10 w-[150px] bg-emerald-300" />
-                </div>
-              </div>
-            </Fragment>
-          ) : courses.length === 0 ? (
-            <div className="flex h-[400px] w-full flex-col items-center justify-center gap-3">
-              <img
-                src="/illustrations/course-not-found.png"
-                alt="course not found"
-                className="w-[300px]"
-              />
-              <p className="text-font-white">
-                Kelas kursus belum tersedia, cek kembali.
-              </p>
+      {courses.length !== 0 && (
+        <section className="z-10 flex min-h-[700px] flex-col justify-evenly gap-10 bg-dark-2 py-20 xl:gap-0 xl:py-0">
+          <div className="container h-[2px] w-4/5 bg-dark-3 md:w-[95%]" />
+          <section className="container mt-2 flex items-center justify-center xl:justify-between">
+            <div className="hidden h-[90px] w-[200px] place-items-center rounded-md bg-dark-3 text-font-white xl:grid">
+              <h3>Course for You</h3>
             </div>
-          ) : (
-            courses.slice(0, 2).map((course, index) => (
-              <div
-                key={index}
-                className="flex h-[400px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]"
-              >
-                <video
-                  className="h-[55%] w-[90%] bg-slate-700"
-                  controls={isLoggin}
-                  onContextMenu={(e) => e.preventDefault()}
-                  controlsList="nodownload"
-                  preload="metadata"
-                >
-                  <source src={course.media_file} />
-                </video>
-                <div className="container">
-                  <h1 className="line-clamp-2 break-words text-base font-bold text-font-white md:text-lg">
-                    {course.title}
-                  </h1>
+            <h1 className="w-11/12 font-bold text-font-white md:w-4/5 lg:text-[1.3rem]">
+              Dapatkan akses ke informasi terkini tentang pengembangan{" "}
+              <span className="text-bright-1">obat-obatan herbal</span>,{" "}
+              <span className="text-bright-1">teknologi ekstraksi terbaru</span>
+              , dan <span className="text-bright-1">penelitian-penelitian</span>{" "}
+              terkait yang sedang berlangsung.{" "}
+            </h1>
+          </section>
+          <section className="container flex flex-wrap justify-center gap-10 xl:justify-between xl:gap-0">
+            {loading ? (
+              <Fragment>
+                <div className="flex h-[400px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]">
+                  <Skeleton className="h-[55%] w-[90%] bg-emerald-300" />
+                  <div className="container">
+                    <Skeleton className="h-5 w-[120px] bg-emerald-300" />
+                  </div>
+                  <div className="container flex items-center gap-2">
+                    <Skeleton className="h-5 w-[70px] bg-emerald-300" />
+                  </div>
+                  <div className="container flex w-full justify-end">
+                    <Skeleton className="h-10 w-[150px] bg-emerald-300" />
+                  </div>
                 </div>
-                <div className="container flex items-center gap-2">
-                  <LuUser2 className="text-bright-1" />
-                  <p className="font-black-2 break-words text-sm md:text-base">
-                    {`${course.author} ${formatDate(course.created_at)} ${course.views === 0 ? "(Belum ditonton)" : `(${course.views}x ditonton)`}`}
-                  </p>
+                <div className="flex h-[400px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]">
+                  <Skeleton className="h-[55%] w-[90%] bg-emerald-300" />
+                  <div className="container">
+                    <Skeleton className="h-5 w-[120px] bg-emerald-300" />
+                  </div>
+                  <div className="container flex items-center gap-2">
+                    <Skeleton className="h-5 w-[70px] bg-emerald-300" />
+                  </div>
+                  <div className="container flex w-full justify-end">
+                    <Skeleton className="h-10 w-[150px] bg-emerald-300" />
+                  </div>
                 </div>
-                <div className="container flex w-full justify-end">
-                  <Button
-                    onClick={() => navigate(`/courses/${course.id}`)}
-                    className="flex items-center gap-1 bg-bright-1 font-bold text-font-black-1 hover:bg-font-black-1 hover:text-white"
-                  >
-                    <LuPlay />
-                    Lihat Course
-                  </Button>
-                </div>
+              </Fragment>
+            ) : courses.length === 0 ? (
+              <div className="flex h-[400px] w-full flex-col items-center justify-center gap-3">
+                <img
+                  src="/illustrations/course-not-found.png"
+                  alt="course not found"
+                  className="w-[300px]"
+                />
+                <p className="text-font-white">
+                  Kelas kursus belum tersedia, cek kembali.
+                </p>
               </div>
-            ))
-          )}
+            ) : (
+              courses.slice(0, 2).map((course, index) => (
+                <div
+                  key={index}
+                  className="flex h-[400px] w-[92%] flex-col items-center justify-evenly gap-2 rounded-md bg-dark-3 py-5 md:w-[80%] md:gap-0 lg:w-[40%] lg:py-2 xl:w-[45%]"
+                >
+                  <video
+                    className="h-[55%] w-[90%] bg-slate-700"
+                    controls={isLoggin}
+                    onContextMenu={(e) => e.preventDefault()}
+                    controlsList="nodownload"
+                    preload="metadata"
+                  >
+                    <source src={course.media_file} />
+                  </video>
+                  <div className="container">
+                    <h1 className="line-clamp-2 break-words text-base font-bold text-font-white md:text-lg">
+                      {course.title}
+                    </h1>
+                  </div>
+                  <div className="container flex items-center gap-2">
+                    <LuUser2 className="text-bright-1" />
+                    <p className="font-black-2 break-words text-sm md:text-base">
+                      {`${course.author} ${formatDate(course.created_at)} ${course.views === 0 ? "(Belum ditonton)" : `(${course.views}x ditonton)`}`}
+                    </p>
+                  </div>
+                  <div className="container flex w-full justify-end">
+                    <Button
+                      onClick={() => navigate(`/courses/${course.id}`)}
+                      className="flex items-center gap-1 bg-bright-1 font-bold text-font-black-1 hover:bg-font-black-1 hover:text-white"
+                    >
+                      <LuPlay />
+                      Lihat Course
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
+          </section>
         </section>
-      </section>
+      )}
 
       {/* About us */}
       <section className="flex min-h-[400px] flex-col justify-evenly gap-5 bg-white py-20">
