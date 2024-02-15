@@ -82,8 +82,6 @@ export const NewsDetail: FC = (): ReactElement => {
     getNews();
   }, []);
 
-  const randomNews = news[Math.floor(Math.random() * (news.length ?? 0))];
-
   return (
     <main className="flex flex-col overflow-x-visible font-inter">
       <Navbar className="bg-white" />
@@ -148,17 +146,24 @@ export const NewsDetail: FC = (): ReactElement => {
 
       {news.length > 0 && (
         <div className="container mb-10 mt-10 flex justify-end xl:w-1/2">
-          {loadingNews ? (
+          {loadingNews || loadingNewsById ? (
             <Skeleton className="h-[50px] w-1/2 bg-emerald-200" />
           ) : (
-            <Button
-              variant={"outline"}
-              onClick={() => {
-                navigate(`/news/${randomNews?.id}`);
-              }}
-            >
-              {randomNews?.title.substring(0, 30)}... <FaArrowRightLong />
-            </Button>
+            news
+              .filter((news) => news.id !== newsById.id)
+              .slice(0, 1)
+              .map((news, index) => (
+                <Button
+                  key={index}
+                  variant={"outline"}
+                  onClick={() => {
+                    window.scrollTo({ top: 0 });
+                    navigate(`/news/${news.id}`);
+                  }}
+                >
+                  {news.title.substring(0, 30)}... <FaArrowRightLong />
+                </Button>
+              ))
           )}
         </div>
       )}
