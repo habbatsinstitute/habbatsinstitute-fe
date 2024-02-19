@@ -10,28 +10,31 @@ interface SEOProps {
 }
 
 export function SEO({
-  title,
-  description,
-  image,
-  type,
-  siteName,
-  url,
+  title = "Habbats Institute",
+  description = "",
+  image = "",
+  type = "website",
+  url = "https://www.habbatsinstitute.id",
 }: SEOProps) {
   return (
     <Helmet>
       <title>{title}</title>
-      <meta property="og:description" content={description} />
-      <meta name="twitter:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:image:type" content="image/jpeg" />
-      <meta property="og:image:width" content="300" />
-      <meta property="og:image:height" content="300" />
-      <meta name="twitter:image" content={image} />
-      <meta property="og:type" content={type} />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta property="og:site_name" content={siteName} />
+      {/* HTML Meta Tags */}
+      <meta name="description" content={description} />
+
       <meta property="og:url" content={url} />
-      <link rel="canonical" href={url} />
+      <meta property="og:type" content={type} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={image} />
+
+      {/* Twitter Meta Tags */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta property="twitter:domain" content="habbatsinstitute.id" />
+      <meta property="twitter:url" content={url} />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={image} />
     </Helmet>
   );
 }
