@@ -262,7 +262,10 @@ export const DashboardNewsManage: FC = (): ReactElement => {
                     : "text-[#0F172A]"
                 } hover:cursor-default`}
               >
-                Image Cover
+                Image Cover{" "}
+                <span className="text-xs font-bold text-red-500">
+                  (max 2 MB)*
+                </span>
               </h2>
               <section className="flex h-8 w-full justify-between gap-3">
                 <Label

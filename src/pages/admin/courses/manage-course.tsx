@@ -249,7 +249,10 @@ export const DashboardCourseManage: FC = (): ReactElement => {
               <h2
                 className={`text-sm ${(selectedFile && selectedFile?.type !== "video/mp4") || (selectedFile && selectedFile?.size > 100000000) ? "text-red-400" : "text-[#0F172A]"} hover:cursor-default`}
               >
-                Videos
+                Videos{" "}
+                <span className="text-xs font-bold text-red-500">
+                  (max 100 MB)*
+                </span>
               </h2>
               <section className="flex h-10 w-full justify-between gap-3">
                 <Label
