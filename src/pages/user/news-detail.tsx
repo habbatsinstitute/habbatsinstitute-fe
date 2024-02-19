@@ -10,6 +10,7 @@ import {
   TrendNews,
   Consultant,
   Skeleton,
+  SEO,
 } from "@/components";
 import {
   TGetNewsByIdResponses,
@@ -84,6 +85,13 @@ export const NewsDetail: FC = (): ReactElement => {
 
   return (
     <main className="flex flex-col overflow-x-visible font-inter">
+      <SEO
+        title={newsById.title}
+        description={newsById.description}
+        image={newsById.images}
+        type="website"
+      />
+
       <Navbar className="bg-white" />
 
       {/* Header */}

@@ -7,6 +7,7 @@ import { Loader, QueryProvider } from "./components";
 import { getAccessToken, getUserRole } from "./lib";
 import "react-toastify/dist/ReactToastify.css";
 import "./tailwind.css";
+import { HelmetProvider } from "react-helmet-async";
 
 if (getAccessToken() && getUserRole() === "2") {
   const path = window.location.pathname.startsWith("/dashboard")
@@ -26,11 +27,13 @@ if (
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <QueryProvider>
-      <Suspense fallback={<Loader />}>
-        <RouterProvider router={router} />
-        <ToastContainer />
-      </Suspense>
-    </QueryProvider>
+    <HelmetProvider>
+      <QueryProvider>
+        <Suspense fallback={<Loader />}>
+          <RouterProvider router={router} />
+          <ToastContainer />
+        </Suspense>
+      </QueryProvider>
+    </HelmetProvider>
   </React.StrictMode>,
 );
