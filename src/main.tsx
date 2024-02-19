@@ -25,9 +25,11 @@ if (
   router.navigate("/");
 }
 
+const helmetContext = {};
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <HelmetProvider>
+    <HelmetProvider context={helmetContext}>
       <QueryProvider>
         <Suspense fallback={<Loader />}>
           <RouterProvider router={router} />
