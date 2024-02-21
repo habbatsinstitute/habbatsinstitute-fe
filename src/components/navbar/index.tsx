@@ -13,7 +13,9 @@ import {
   LuLogIn,
   LuLogOut,
   LuMenu,
+  LuMessageSquare,
   LuNewspaper,
+  LuShoppingCart,
   LuUser,
 } from "react-icons/lu";
 import { GoBook } from "react-icons/go";
@@ -140,7 +142,7 @@ export const Navbar: FC<{ className?: string }> = ({
           />
         </section>
         {/* Mobile */}
-        <section className="flex text-white md:hidden">
+        <section className="flex text-white lg:hidden">
           <Sheet>
             <SheetTrigger asChild>
               <h1 className="flex items-center justify-center gap-3 text-base font-bold text-black md:text-xl">
@@ -241,6 +243,50 @@ export const Navbar: FC<{ className?: string }> = ({
                     About Us
                   </Link>
 
+                  <div
+                    className={clsx(
+                      "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
+                    )}
+                    onClick={() =>
+                      toast.warn("This feature is still in development", {
+                        position: "top-center",
+                        autoClose: 1000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                        transition: Slide,
+                      })
+                    }
+                  >
+                    <LuShoppingCart />
+                    Products
+                  </div>
+
+                  <div
+                    className={clsx(
+                      "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
+                    )}
+                    onClick={() =>
+                      toast.warn("This feature is still in development", {
+                        position: "top-center",
+                        autoClose: 1000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                        transition: Slide,
+                      })
+                    }
+                  >
+                    <LuMessageSquare />
+                    Community
+                  </div>
+
                   {!getAccessToken() && (
                     <Link
                       to="/login"
@@ -264,7 +310,7 @@ export const Navbar: FC<{ className?: string }> = ({
                 </section>
 
                 {getAccessToken() && (
-                  <section className="flex h-[20%] flex-col justify-center gap-5">
+                  <section className="flex h-[20%] flex-col justify-center gap-3">
                     <section
                       className="flex flex-row-reverse items-center justify-center gap-3 px-2 py-1
                 "
@@ -473,7 +519,7 @@ export const Navbar: FC<{ className?: string }> = ({
           </Sheet>
         </section>
         {/* MD - Desktop */}
-        <section className="hidden md:flex">
+        <section className="hidden lg:flex">
           <ul className="flex gap-5 font-bold">
             <li>
               <Link
@@ -508,6 +554,46 @@ export const Navbar: FC<{ className?: string }> = ({
               >
                 About Us
               </Link>
+            </li>
+            <li>
+              <div
+                className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:cursor-pointer hover:bg-dark-1 hover:text-bright-1`}
+                onClick={() => {
+                  toast.warn("This feature is still in development", {
+                    position: "top-center",
+                    autoClose: 1000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Slide,
+                  });
+                }}
+              >
+                Products
+              </div>
+            </li>
+            <li>
+              <div
+                className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:cursor-pointer hover:bg-dark-1 hover:text-bright-1`}
+                onClick={() => {
+                  toast.warn("This feature is still in development", {
+                    position: "top-center",
+                    autoClose: 1000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Slide,
+                  });
+                }}
+              >
+                Community
+              </div>
             </li>
 
             {getAccessToken() ? (
