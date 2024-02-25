@@ -89,9 +89,7 @@ export const NewsDetail: FC = (): ReactElement => {
         title={newsById.title}
         description={newsById.description}
         image={newsById.images}
-        siteName="Habbats Institute"
-        type="article"
-        url={`https://habbatsinstitute.com/user/news-detail/${id?.id}`}
+        url={`https://www.habbatsinstitute.id/news/${newsById.id}`}
       />
 
       <Navbar className="bg-white" />
