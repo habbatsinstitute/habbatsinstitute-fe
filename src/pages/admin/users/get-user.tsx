@@ -2,7 +2,7 @@ import { FC, ReactElement, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ColumnDef } from "@tanstack/react-table";
 import { Slide, toast } from "react-toastify";
-import { LuRefreshCcw, LuTrash } from "react-icons/lu";
+import { LuRefreshCcw, LuSearch, LuTrash, LuX } from "react-icons/lu";
 import { MdOutlineAddBox } from "react-icons/md";
 import {
   AdminLayout,
@@ -17,6 +17,7 @@ import {
   AlertDialogTrigger,
   Button,
   DataTable,
+  Input,
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -45,6 +46,7 @@ export const DashboardUsersGet: FC = (): ReactElement => {
     total_page: 0,
     total_data: 0,
   });
+  const [search, setSearch] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -71,9 +73,28 @@ export const DashboardUsersGet: FC = (): ReactElement => {
     }
   };
 
+  const searchUsers = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetAllUsersResponse>(
+        `/users/find?username=${search}`,
+      );
+      setUsers(data?.data);
+      setPaging(data?.pagination);
+    } catch (error) {
+      setUsers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getUsers();
   }, []);
+
+  useEffect(() => {
+    searchUsers();
+  }, [search]);
 
   const handlePageChange = (page: number) => {
     getUsers(page);
@@ -188,22 +209,61 @@ export const DashboardUsersGet: FC = (): ReactElement => {
   return (
     <AdminLayout>
       <section className="flex min-h-[400px] w-full flex-col py-10 md:py-0 md:pt-2">
-        <section className="flex w-full gap-3">
-          <Button
-            onClick={() => navigate("/dashboard/users/add")}
-            className="flex w-36 items-center justify-center gap-1 bg-bright-1 text-font-black-1 hover:bg-bright-2"
-          >
-            <MdOutlineAddBox className="text-xl" />
-            Add User
-          </Button>
-          <Button
-            onClick={() => {
-              getUsers();
-            }}
-            className="flex items-center justify-center gap-1 bg-emerald-300 text-black hover:bg-emerald-400"
-          >
-            <LuRefreshCcw className={`${loading && "animate-spin"} text-xl`} />
-          </Button>
+        <section className="flex w-full flex-wrap justify-between gap-3">
+          <div className="flex gap-3">
+            <Button
+              onClick={() => navigate("/dashboard/users/add")}
+              className="flex w-36 items-center justify-center gap-1 bg-bright-1 text-font-black-1 hover:bg-bright-2"
+            >
+              <MdOutlineAddBox className="text-xl" />
+              Add User
+            </Button>
+            <Button
+              onClick={() => {
+                getUsers();
+              }}
+              className="flex items-center justify-center gap-1 bg-emerald-300 text-black hover:bg-emerald-400"
+            >
+              <LuRefreshCcw
+                className={`${loading && "animate-spin"} text-xl`}
+              />
+            </Button>
+          </div>
+
+          <div className="flex w-full items-center gap-3 md:w-1/2 xl:w-[30%]">
+            <div className="relative flex w-full items-center">
+              <LuSearch className="absolute ml-3 text-slate-500" />
+              <div className="w-full">
+                <Input
+                  type="text"
+                  placeholder="Cari pengguna"
+                  className="pl-9 pr-7"
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                  }}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === "Enter" || (e.key === "Enter" && e.ctrlKey)) {
+                      searchUsers();
+                    }
+                  }}
+                  value={search}
+                />
+              </div>
+              {search.length >= 1 && (
+                <LuX
+                  onClick={() => setSearch("")}
+                  className="absolute right-0 mr-3 text-slate-700 hover:cursor-pointer hover:text-slate-950"
+                />
+              )}
+            </div>
+            <Button
+              className="h-[90%] bg-slate-800"
+              disabled={!search}
+              onClick={() => searchUsers()}
+            >
+              <LuSearch />
+            </Button>
+          </div>
         </section>
 
         <section className="mt-3 min-h-[400px] w-full">

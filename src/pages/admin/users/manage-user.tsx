@@ -4,7 +4,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Slide, toast } from "react-toastify";
 import { format } from "date-fns";
 import { CalendarIcon, Loader2 } from "lucide-react";
-import { LuTrash, LuSave, LuPenLine, LuLoader2 } from "react-icons/lu";
+import {
+  LuTrash,
+  LuSave,
+  LuPenLine,
+  LuLoader2,
+  LuSearch,
+  LuX,
+} from "react-icons/lu";
 import {
   AdminLayout,
   AlertDialog,
@@ -67,6 +74,7 @@ export const DashboardUsersManage: FC = (): ReactElement => {
     total_page: 0,
     total_data: 0,
   });
+  const [search, setSearch] = useState<string>("");
 
   const { id } = useParams();
 
@@ -113,6 +121,21 @@ export const DashboardUsersManage: FC = (): ReactElement => {
     }
   };
 
+  const searchUsers = async () => {
+    try {
+      setLoadingUsers(true);
+      const { data } = await api.get<TGetAllUsersResponse>(
+        `/users/find?username=${search}`,
+      );
+      setUsers(data?.data);
+      setPaging(data?.pagination);
+    } catch (error) {
+      setUsers([]);
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -129,6 +152,10 @@ export const DashboardUsersManage: FC = (): ReactElement => {
     });
     setDate(usersById.expiry_date as Date);
   }, [usersById]);
+
+  useEffect(() => {
+    searchUsers();
+  }, [search]);
 
   const handlePageChange = (page: number) => {
     getUsers(page);
@@ -501,7 +528,42 @@ export const DashboardUsersManage: FC = (): ReactElement => {
           </section>
         </form>
 
-        <section className="flex h-full w-full flex-col py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
+        <section className="flex h-full w-full flex-col gap-3 py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
+          <div className="flex w-full items-center gap-3">
+            <div className="relative flex w-full items-center">
+              <LuSearch className="absolute ml-3 text-slate-500" />
+              <div className="w-full">
+                <Input
+                  type="text"
+                  placeholder="Cari pengguna"
+                  className="pl-9 pr-7"
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                  }}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === "Enter" || (e.key === "Enter" && e.ctrlKey)) {
+                      searchUsers();
+                    }
+                  }}
+                  value={search}
+                />
+              </div>
+              {search.length >= 1 && (
+                <LuX
+                  onClick={() => setSearch("")}
+                  className="absolute right-0 mr-3 text-slate-700 hover:cursor-pointer hover:text-slate-950"
+                />
+              )}
+            </div>
+            <Button
+              className="bg-slate-800"
+              disabled={!search}
+              onClick={() => searchUsers()}
+            >
+              <LuSearch />
+            </Button>
+          </div>
+
           <DataTable columns={columns} data={users} loading={loadingUsers} />
 
           {!loadingUsers && paging.total_data > 5 && (

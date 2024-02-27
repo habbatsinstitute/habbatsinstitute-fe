@@ -8,7 +8,7 @@ import { Slide, toast } from "react-toastify";
 import { format } from "date-fns";
 import { MdOutlineAddBox } from "react-icons/md";
 import { CalendarIcon, Loader2 } from "lucide-react";
-import { LuPenLine } from "react-icons/lu";
+import { LuPenLine, LuSearch, LuX } from "react-icons/lu";
 import {
   AdminLayout,
   Button,
@@ -54,6 +54,7 @@ export const DashboardUsersCreate: FC = (): ReactElement => {
     total_page: 0,
     total_data: 0,
   });
+  const [search, setSearch] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -90,9 +91,28 @@ export const DashboardUsersCreate: FC = (): ReactElement => {
     }
   };
 
+  const searchUsers = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get<TGetAllUsersResponse>(
+        `/users/find?username=${search}`,
+      );
+      setUsers(data?.data);
+      setPaging(data?.pagination);
+    } catch (error) {
+      setUsers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getUsers();
   }, []);
+
+  useEffect(() => {
+    searchUsers();
+  }, [search]);
 
   const handlePageChange = (page: number) => {
     getUsers(page);
@@ -322,7 +342,42 @@ export const DashboardUsersCreate: FC = (): ReactElement => {
             </section>
           </form>
         </Form>
-        <section className="flex h-full w-full flex-col py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
+        <section className="flex h-full w-full flex-col gap-3 py-10 md:mt-10 lg:py-0 xl:mt-0 xl:w-[48%]">
+          <div className="flex w-full items-center gap-3">
+            <div className="relative flex w-full items-center">
+              <LuSearch className="absolute ml-3 text-slate-500" />
+              <div className="w-full">
+                <Input
+                  type="text"
+                  placeholder="Cari pengguna"
+                  className="pl-9 pr-7"
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                  }}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === "Enter" || (e.key === "Enter" && e.ctrlKey)) {
+                      searchUsers();
+                    }
+                  }}
+                  value={search}
+                />
+              </div>
+              {search.length >= 1 && (
+                <LuX
+                  onClick={() => setSearch("")}
+                  className="absolute right-0 mr-3 text-slate-700 hover:cursor-pointer hover:text-slate-950"
+                />
+              )}
+            </div>
+            <Button
+              className="bg-slate-800"
+              disabled={!search}
+              onClick={() => searchUsers()}
+            >
+              <LuSearch />
+            </Button>
+          </div>
+
           <DataTable columns={columns} data={users} loading={loading} />
 
           {!loading && paging.total_data > 5 && (
