@@ -57,16 +57,16 @@ import {
 import {
   getAccessToken,
   removeToken,
+  updateUserSchema,
   useGetUserMe,
   useUpdateUser,
-  userSchema,
 } from "@/lib";
 
 export const Navbar: FC<{ className?: string }> = ({
   className,
 }): ReactElement => {
-  const form = useForm<z.infer<typeof userSchema>>({
-    resolver: zodResolver(userSchema),
+  const form = useForm<z.infer<typeof updateUserSchema>>({
+    resolver: zodResolver(updateUserSchema),
     mode: "all",
     defaultValues: {
       username: "",
@@ -81,11 +81,14 @@ export const Navbar: FC<{ className?: string }> = ({
   const { data, refetch, isLoading } = useGetUserMe();
   const { mutate, isPending } = useUpdateUser(data?.data.id);
 
-  function onSubmit(values: z.infer<typeof userSchema>) {
+  function onSubmit(values: z.infer<typeof updateUserSchema>) {
     const formData = new FormData();
 
     formData.append("username", values.username);
-    formData.append("password", values.password);
+
+    if (values.password) {
+      formData.append("password", values.password);
+    }
 
     mutate(formData, {
       onSuccess: () => {

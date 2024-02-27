@@ -63,3 +63,53 @@ export const userSchema = z
     message: "Kata sandi harus sama",
     path: ["confirmation_password"],
   });
+
+export const updateUserSchema = z
+  .object({
+    username: z
+      .string({ required_error: "Username wajib diisi" })
+      .min(6, { message: "Username minimal 6 karakter" })
+      .max(100, { message: "Username maksimal 100 karakter" }),
+    password: z
+      .string()
+      .max(200, { message: "Password maksimal 200 karakter" })
+      .optional()
+      .refine(
+        (password) => {
+          if (password && password.length >= 1) {
+            return password.length >= 8;
+          }
+          return true;
+        },
+        {
+          message: "Password minimal 8 karakter",
+        },
+      ),
+    confirmation_password: z
+      .string()
+      .max(200, { message: "Konfimasi password maksimal 200 karakter" })
+      .optional()
+      .refine(
+        (confirmPassowrd) => {
+          if (confirmPassowrd && confirmPassowrd.length >= 1) {
+            return confirmPassowrd.length >= 8;
+          }
+          return true;
+        },
+        {
+          message: "Konfirmasi password minimal 8 karakter",
+        },
+      ),
+  })
+  .refine(
+    (data) => {
+      if (data.password || data.confirmation_password) {
+        return data.password === data.confirmation_password;
+      }
+      return true;
+    },
+    {
+      message: "Kata sandi harus sama",
+      path: ["confirmation_password"],
+    },
+  );
