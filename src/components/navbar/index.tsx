@@ -15,7 +15,6 @@ import {
   LuMenu,
   LuMessageSquare,
   LuNewspaper,
-  LuShoppingCart,
   LuUser,
 } from "react-icons/lu";
 import { GoBook } from "react-icons/go";
@@ -245,28 +244,6 @@ export const Navbar: FC<{ className?: string }> = ({
                     />
                     About Us
                   </Link>
-
-                  <div
-                    className={clsx(
-                      "flex items-center justify-center gap-2 border-y border-slate-700 py-3 font-semibold",
-                    )}
-                    onClick={() =>
-                      toast.warn("This feature is still in development", {
-                        position: "top-center",
-                        autoClose: 1000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                        transition: Slide,
-                      })
-                    }
-                  >
-                    <LuShoppingCart />
-                    Products
-                  </div>
 
                   <div
                     className={clsx(
@@ -557,26 +534,6 @@ export const Navbar: FC<{ className?: string }> = ({
               >
                 About Us
               </Link>
-            </li>
-            <li>
-              <div
-                className={`flex items-center justify-center gap-1 rounded-md bg-white px-4 py-2 hover:cursor-pointer hover:bg-dark-1 hover:text-bright-1`}
-                onClick={() => {
-                  toast.warn("This feature is still in development", {
-                    position: "top-center",
-                    autoClose: 1000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                    transition: Slide,
-                  });
-                }}
-              >
-                Products
-              </div>
             </li>
             <li>
               <div
