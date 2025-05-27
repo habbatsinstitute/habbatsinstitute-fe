@@ -62,12 +62,7 @@ export const Login: FC = (): ReactElement => {
   const { mutate, isPending } = useLogin();
 
   function onSubmit(values: z.infer<typeof loginSchema>) {
-    const payload = new FormData();
-
-    payload.append("username", values.username);
-    payload.append("password", values.password);
-
-    mutate(payload, {
+    mutate(values, {
       onSuccess: (response) => {
         setAccessToken(response.data.access_token);
         setRefreshToken(response.data.refresh_token);
