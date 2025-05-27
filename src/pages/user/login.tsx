@@ -69,7 +69,7 @@ export const Login: FC = (): ReactElement => {
 
         const role = getUserRole();
 
-        role === "2" ? navigate("/dashboard") : navigate("/");
+        role === 2 ? navigate("/dashboard") : navigate("/");
       },
       onError: (response) => {
         toast.error(`${response.response?.data?.message}`, {

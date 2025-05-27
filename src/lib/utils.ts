@@ -27,7 +27,7 @@ export const formatDateResponse = (createdAt: string | Date): string => {
 type TokenPayload = {
   exp: number;
   iat: number;
-  role_id: string;
+  role_id: number;
   user_id: string;
 };
 
