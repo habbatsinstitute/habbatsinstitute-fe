@@ -179,7 +179,7 @@ export const Home: FC = (): ReactElement => {
       </section>
 
       {/* Course Preview */}
-      {getUserRole() === "1" && (
+      {getUserRole() === 1 && (
         <section className="z-10 flex min-h-[700px] flex-col justify-evenly gap-10 bg-dark-2 py-20 xl:gap-0 xl:py-0">
           <div className="container h-[2px] w-4/5 bg-dark-3 md:w-[95%]" />
           <section className="container mt-2 flex items-center justify-center xl:justify-between">

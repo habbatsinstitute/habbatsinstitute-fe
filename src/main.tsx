@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./tailwind.css";
 import { HelmetProvider } from "react-helmet-async";
 
-if (getAccessToken() && getUserRole() === "2") {
+if (getAccessToken() && getUserRole() === 2) {
   const path = window.location.pathname.startsWith("/dashboard")
     ? window.location.pathname
     : "/dashboard";
@@ -19,7 +19,7 @@ if (getAccessToken() && getUserRole() === "2") {
 
 if (
   getAccessToken() &&
-  getUserRole() === "1" &&
+  getUserRole() === 1 &&
   window.location.pathname === "/login"
 ) {
   router.navigate("/");
