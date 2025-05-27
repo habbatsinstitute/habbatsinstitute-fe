@@ -29,7 +29,7 @@ import {
 } from ".";
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "https://habbats-be.vercel.app/api/v1",
 });
 
 api.interceptors.request.use(
